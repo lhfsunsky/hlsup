@@ -15,7 +15,7 @@
         try {
           const registration = await navigator.serviceWorker.register('sw.js');
           console.log('Service Worker 注册成功:', registration.scope);
-await navigator.serviceWorker.ready;
+	await navigator.serviceWorker.ready;
       console.log('Service Worker 已激活');
         } catch (e) {
           console.error('Service Worker 注册失败:', e);
@@ -34,14 +34,14 @@ await navigator.serviceWorker.ready;
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           video.play().catch(e => {
-            console.warn('自动播放被阻止，需要用户操作后播放', e);
+            console.warn('自动播放被阻止，需要用户操作后播放1', e);
           });
         });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = 'index.m3u8';
         video.addEventListener('loadedmetadata', () => {
           video.play().catch(e => {
-            console.warn('自动播放被阻止，需要用户操作后播放', e);
+            console.warn('自动播放被阻止，需要用户操作后播放2', e);
           });
         });
       } else {
