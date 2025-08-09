@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>Base64 HLS 播放测试</title>
+  <script src="https://lib.baomitu.com/hls.js/latest/hls.min.js"></script>
+</head>
+<body>
+  <h2>Base64 编码 HLS 播放测试</h2>
+  <video id="video" controls width="640" height="360"></video>
+
+  <script>
+    async function registerServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.register('sw.js');
+          console.log('Service Worker 注册成功:', registration.scope);
+        } catch (e) {
+          console.error('Service Worker 注册失败:', e);
+        }
+      } else {
+        console.warn('浏览器不支持 Service Worker');
+      }
+    }
+
+    function startPlayer() {
+      const video = document.getElementById('video');
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource('index.m3u8');  // 这里写正常的 ts 文件名，如 chunk-stream-1.ts
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(e => {
+            console.warn('自动播放被阻止，需要用户操作后播放', e);
+          });
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = 'index.m3u8';
+        video.addEventListener('loadedmetadata', () => {
+          video.play().catch(e => {
+            console.warn('自动播放被阻止，需要用户操作后播放', e);
+          });
+        });
+      } else {
+        alert('您的浏览器不支持 HLS 播放');
+      }
+    }
+
+    (async () => {
+      await registerServiceWorker();
+      startPlayer();
+    })();
+  </script>
+</body>
+</html>
