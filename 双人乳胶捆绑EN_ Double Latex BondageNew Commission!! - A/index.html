@@ -10,46 +10,65 @@
   <video id="video" controls width="640" height="360"></video>
 
   <script>
-  async function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register('sw.js');
-      console.log('Service Worker 注册成功:', registration.scope);
-
-      await navigator.serviceWorker.ready;
-      console.log('Service Worker 已激活');
-    } catch (e) {
-      console.error('Service Worker 注册失败:', e);
-      alert('SW注册失败，详细请看控制台');
-    }
-  } else {
-    console.warn('浏览器不支持 Service Worker');
-  }
-}
-
-
-  function startPlayer() {
-    // 播放逻辑...
-    console.log('播放器启动');
-  }
-
-  (async () => {
-    if (navigator.serviceWorker.controller) {
-      console.log('已由 Service Worker 控制，启动播放器');
-      startPlayer();
-    } else {
-      if (!localStorage.getItem('swRegistered')) {
-        console.log('开始注册 Service Worker');
-        await registerServiceWorker();
-        localStorage.setItem('swRegistered', 'true');
-        console.log('注册完毕，刷新页面使其生效');
-        location.reload();
+    async function registerServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.register('sw.js');
+          console.log('Service Worker 注册成功:', registration.scope);
+        } catch (e) {
+          console.error('Service Worker 注册失败:', e);
+        }
       } else {
-        console.log('已刷新过一次但 SW 尚未控制页面，避免死循环，启动播放器');
-        startPlayer();
+        console.warn('浏览器不支持 Service Worker');
       }
     }
-  })();
-</script>
+
+    function startPlayer() {
+      const video = document.getElementById('video');
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource('index.m3u8');  // 这里写正常的 ts 文件名，如 chunk-stream-1.ts
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(e => {
+            console.warn('自动播放被阻止，需要用户操作后播放', e);
+          });
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = 'index.m3u8';
+        video.addEventListener('loadedmetadata', () => {
+          video.play().catch(e => {
+            console.warn('自动播放被阻止，需要用户操作后播放', e);
+          });
+        });
+      } else {
+        alert('您的浏览器不支持 HLS 播放');
+      }
+    }
+
+    (async () => {
+      // 判断是否已经执行过注册和刷新操作
+      const currentPath = window.location.pathname; // 获取当前路径
+      const storedPath = sessionStorage.getItem('lastPath'); // 获取存储的路径
+      const swRegistered = sessionStorage.getItem('swRegistered'); // 获取是否已注册
+
+      // 第一次加载或者路径发生变化
+      if (!swRegistered) {
+        console.log('第一次加载或路径发生变化，开始注册 Service Worker');
+        await registerServiceWorker(); // 注册 Service Worker
+        sessionStorage.setItem('lastPath', currentPath); // 存储当前路径
+        sessionStorage.setItem('swRegistered', 'true'); // 标记为已注册
+        location.reload(); // 刷新页面
+      } else if (currentPath !== storedPath) {
+        console.log('路径发生变化，重新注册 Service Worker');
+        await registerServiceWorker(); // 重新注册 Service Worker
+        sessionStorage.setItem('lastPath', currentPath); // 更新路径
+        location.reload(); // 刷新页面
+      } else {
+        console.log('路径未发生变化，启动播放器');
+        startPlayer(); // 启动播放器
+      }
+    })();
+  </script>
 </body>
 </html>
