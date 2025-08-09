@@ -59,6 +59,7 @@ async function waitForController(timeout = 5000) {
       await registerServiceWorker();
 await navigator.serviceWorker.ready;
 await waitForController();
+await new Promise(r => setTimeout(r, 2000));
       startPlayer();
     })();
   </script>
