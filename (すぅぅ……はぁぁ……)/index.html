@@ -26,29 +26,22 @@
     }
 
     function startPlayer() {
-      const video = document.getElementById('video');
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-	console.log('m3u8');
-        hls.loadSource('index.m3u8');  // 这里写正常的 ts 文件名，如 chunk-stream-1.ts
-        hls.attachMedia(video);
-	console.log('t1');
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          video.play().catch(e => {
-            console.warn('自动播放被阻止，需要用户操作后播放1', e);
-          });
-        });
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = 'index.m3u8';console.log('t2');
-        video.addEventListener('loadedmetadata', () => {
-          video.play().catch(e => {
-            console.warn('自动播放被阻止，需要用户操作后播放2', e);
-          });
-        });
-      } else {
-        alert('您的浏览器不支持 HLS 播放');
-      }
-    }
+  const video = document.getElementById('video');
+  if (Hls.isSupported()) {
+    const hls = new Hls();
+    console.log('m3u8 加载开始');
+    hls.loadSource('index.m3u8');
+    hls.attachMedia(video);
+    console.log('m3u8 加载函数调用完成');
+    hls.on(Hls.Events.FRAG_LOADING, (event, data) => {
+      console.log('TS片段请求开始:', data.url);
+    });
+    hls.on(Hls.Events.FRAG_LOADED, (event, data) => {
+      console.log('TS片段请求完成:', data.url);
+    });
+  }
+}
+
 
 
     (async () => {
