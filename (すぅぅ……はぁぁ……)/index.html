@@ -47,7 +47,7 @@ await navigator.serviceWorker.ready;
         alert('您的浏览器不支持 HLS 播放');
       }
     }
-async function waitForController(timeout = 1000) {
+async function waitForController(timeout = 5000) {
   const start = Date.now();
   while (!navigator.serviceWorker.controller) {
     if (Date.now() - start > timeout) break;
