@@ -47,12 +47,27 @@
     }
 
     (async () => {
-      // 每次都清除之前的标记，重新注册 Service Worker
-      localStorage.removeItem('swRegistered');
-      
-      console.log('开始注册 Service Worker');
-      await registerServiceWorker(); // 注册 Service Worker
-      location.reload(); // 注册完成后刷新页面
+      // 判断是否已经执行过注册和刷新操作
+      const currentPath = window.location.pathname; // 获取当前路径
+      const storedPath = sessionStorage.getItem('lastPath'); // 获取存储的路径
+      const swRegistered = sessionStorage.getItem('swRegistered'); // 获取是否已注册
+
+      // 第一次加载或者路径发生变化
+      if (!swRegistered) {
+        console.log('第一次加载或路径发生变化，开始注册 Service Worker');
+        await registerServiceWorker(); // 注册 Service Worker
+        sessionStorage.setItem('lastPath', currentPath); // 存储当前路径
+        sessionStorage.setItem('swRegistered', 'true'); // 标记为已注册
+        location.reload(); // 刷新页面
+      } else if (currentPath !== storedPath) {
+        console.log('路径发生变化，重新注册 Service Worker');
+        await registerServiceWorker(); // 重新注册 Service Worker
+        sessionStorage.setItem('lastPath', currentPath); // 更新路径
+        location.reload(); // 刷新页面
+      } else {
+        console.log('路径未发生变化，启动播放器');
+        startPlayer(); // 启动播放器
+      }
     })();
   </script>
 </body>
