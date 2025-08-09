@@ -29,7 +29,6 @@ await navigator.serviceWorker.ready;
       const video = document.getElementById('video');
       if (Hls.isSupported()) {
         const hls = new Hls();
-	await waitForController();
         hls.loadSource('index.m3u8');  // 这里写正常的 ts 文件名，如 chunk-stream-1.ts
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -51,6 +50,7 @@ await navigator.serviceWorker.ready;
 
     (async () => {
       await registerServiceWorker();
+await navigator.serviceWorker.ready;
       startPlayer();
     })();
   </script>
