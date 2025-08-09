@@ -52,9 +52,13 @@
 
 
     (async () => {
+console.log('开始1');
       await registerServiceWorker();
+console.log('结束1');
 await navigator.serviceWorker.ready;
+console.log('结束2');
       startPlayer();
+console.log('结束3');
     })();
   </script>
 </body>
