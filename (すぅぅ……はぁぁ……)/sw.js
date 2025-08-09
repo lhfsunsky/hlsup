@@ -1,5 +1,5 @@
 const fileMap = {
-  'index.m3u8': 'https://i0.hdslb.com/bfs/openplatform/9393a21d2ad6460bab5c6318f27290c16d3609e9.txt',
+
   'segment000.ts': 'https://i0.hdslb.com/bfs/openplatform/48ff75826051e2878090db549c4bd50399573273.txt',
   'segment001.ts': 'https://i0.hdslb.com/bfs/openplatform/713ab93a1c2b099136916d61011d9d15af2efff4.txt',
   'segment002.ts': 'https://i0.hdslb.com/bfs/openplatform/76d40e69621a6cd1e50cbbdd9427838b86b66435.txt',
