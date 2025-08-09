@@ -1,16 +1,18 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <title>统一访问子文件夹index</title>
+  <style>
+    ul { list-style-type: none; padding-left: 0; }
+    li { margin: 5px 0; }
+    a { color: blue; text-decoration: underline; cursor: pointer; }
+    a:hover { color: darkblue; }
+  </style>
 </head>
 <body>
   <h1>文件夹列表</h1>
   <ul id="folderList"></ul>
-
-  <div id="content" style="border:1px solid #ccc; margin-top:20px; padding:10px;">
-    这里显示加载的内容
-  </div>
 
   <script>
     fetch('folders.json')
@@ -20,18 +22,9 @@
         folders.forEach(folder => {
           const li = document.createElement('li');
           const a = document.createElement('a');
-          a.href = '#';
           a.textContent = folder;
-          a.onclick = () => {
-            fetch(`${folder}/index.html`)
-              .then(r => r.text())
-              .then(html => {
-                document.getElementById('content').innerHTML = html;
-              })
-              .catch(() => {
-                document.getElementById('content').innerHTML = '加载失败';
-              });
-          };
+          a.href = encodeURIComponent(folder) + '/index.html';  // 中文路径编码
+          a.target = '_blank'; // 新标签页打开
           li.appendChild(a);
           ul.appendChild(li);
         });
