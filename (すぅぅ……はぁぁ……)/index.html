@@ -10,7 +10,7 @@
   <video id="video" controls width="640" height="360"></video>
 
   <script>
-    async function registerServiceWorker() {
+    function registerServiceWorker() {
       if ('serviceWorker' in navigator) {
         try {
           const registration = await navigator.serviceWorker.register('sw.js');
