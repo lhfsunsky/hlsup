@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>统一访问子文件夹index</title>
+</head>
+<body>
+  <h1>文件夹列表</h1>
+  <ul id="folderList"></ul>
+
+  <div id="content" style="border:1px solid #ccc; margin-top:20px; padding:10px;">
+    这里显示加载的内容
+  </div>
+
+  <script>
+    fetch('folders.json')
+      .then(res => res.json())
+      .then(folders => {
+        const ul = document.getElementById('folderList');
+        folders.forEach(folder => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = '#';
+          a.textContent = folder;
+          a.onclick = () => {
+            fetch(`${folder}/index.html`)
+              .then(r => r.text())
+              .then(html => {
+                document.getElementById('content').innerHTML = html;
+              })
+              .catch(() => {
+                document.getElementById('content').innerHTML = '加载失败';
+              });
+          };
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+      })
+      .catch(() => {
+        document.getElementById('folderList').innerText = '无法加载目录列表';
+      });
+  </script>
+</body>
+</html>
