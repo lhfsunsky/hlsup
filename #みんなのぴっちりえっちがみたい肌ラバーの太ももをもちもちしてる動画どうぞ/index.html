@@ -15,8 +15,6 @@
         try {
           const registration = await navigator.serviceWorker.register('sw.js');
           console.log('Service Worker 注册成功:', registration.scope);
-await navigator.serviceWorker.ready;
-      console.log('Service Worker 已激活');
         } catch (e) {
           console.error('Service Worker 注册失败:', e);
         }
@@ -29,7 +27,6 @@ await navigator.serviceWorker.ready;
       const video = document.getElementById('video');
       if (Hls.isSupported()) {
         const hls = new Hls();
-	await waitForController();
         hls.loadSource('index.m3u8');  // 这里写正常的 ts 文件名，如 chunk-stream-1.ts
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -50,8 +47,16 @@ await navigator.serviceWorker.ready;
     }
 
     (async () => {
-      await registerServiceWorker();
-      startPlayer();
+      // 判断是否已经执行过注册和刷新操作
+      if (!sessionStorage.getItem('swRegistered')) {
+        console.log('开始注册 Service Worker');
+        await registerServiceWorker(); // 注册 Service Worker
+        sessionStorage.setItem('swRegistered', 'true'); // 标记为已注册，防止重复刷新
+        location.reload(); // 刷新页面
+      } else {
+        console.log('Service Worker 已注册');
+        startPlayer(); // 页面刷新后启动播放器
+      }
     })();
   </script>
 </body>
