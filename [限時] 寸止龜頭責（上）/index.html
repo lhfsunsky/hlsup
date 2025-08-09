@@ -1,49 +1,73 @@
-<!-- index.html 示例，自动注册 SW，自动刷新确保控制权 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>Service Worker 自动刷新示例</title>
+  <title>Service Worker 自动注册示范</title>
 </head>
 <body>
-  <h2>Service Worker 自动刷新示例</h2>
+  <h1>Service Worker 自动注册示范</h1>
+  <video id="video" controls width="640" height="360"></video>
+
+  <script src="https://lib.baomitu.com/hls.js/latest/hls.min.js"></script>
 
   <script>
-    async function registerServiceWorker() {
-      if ('serviceWorker' in navigator) {
-        try {
-          const registration = await navigator.serviceWorker.register('sw.js');
-          console.log('Service Worker 注册成功:', registration.scope);
-
-          // 监听 controllerchange，自动刷新页面
-          navigator.serviceWorker.addEventListener('controllerchange', () => {
-            console.log('控制器变化，刷新页面');
-            if (!window.location.href.includes('reloaded=true')) {
-              window.location.href = window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'reloaded=true';
-            }
-          });
-
-          // 如果已经有控制器，直接启动逻辑
-          if (navigator.serviceWorker.controller) {
-            console.log('已有 Service Worker 控制页面');
-            startPlayer();
-          }
-        } catch (e) {
-          console.error('Service Worker 注册失败:', e);
-        }
-      } else {
+    async function registerSW() {
+      if (!('serviceWorker' in navigator)) {
         console.warn('浏览器不支持 Service Worker');
+        return;
+      }
+
+      try {
+        const registration = await navigator.serviceWorker.register('sw.js');
+        console.log('Service Worker 注册成功:', registration.scope);
+
+        // 监听控制器变化事件
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          console.log('检测到 SW 控制器变化，刷新页面');
+          if (!window.location.search.includes('swReloaded')) {
+            const connector = window.location.search ? '&' : '?';
+            window.location.href = window.location.href + connector + 'swReloaded=1';
+          }
+        });
+
+        if (navigator.serviceWorker.controller) {
+          // SW 已经控制页面，启动播放器
+          console.log('页面已被 SW 控制，启动播放器');
+          startPlayer();
+        } else {
+          console.log('等待 SW 控制页面...');
+          // 控制器变化后会自动刷新并启动播放器
+        }
+      } catch (e) {
+        console.error('Service Worker 注册失败:', e);
       }
     }
 
     function startPlayer() {
-      console.log('启动播放器逻辑');
-      // 这里写你的 HLS 播放逻辑
+      const video = document.getElementById('video');
+
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource('index.m3u8');
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(e => {
+            console.warn('自动播放被阻止，用户需操作后播放', e);
+          });
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = 'index.m3u8';
+        video.addEventListener('loadedmetadata', () => {
+          video.play().catch(e => {
+            console.warn('自动播放被阻止，用户需操作后播放', e);
+          });
+        });
+      } else {
+        alert('浏览器不支持 HLS 播放');
+      }
     }
 
-    (async () => {
-      await registerServiceWorker();
-    })();
+    registerSW();
   </script>
 </body>
 </html>
