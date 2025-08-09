@@ -2,12 +2,10 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>Base64 HLS 播放测试</title>
-  <script src="https://lib.baomitu.com/hls.js/latest/hls.min.js"></script>
+  <title>Service Worker 立即控制页面示例</title>
 </head>
 <body>
-  <h2>Base64 编码 HLS 播放测试</h2>
-  <video id="video" controls width="640" height="360"></video>
+  <h2>Service Worker 立即控制页面示例</h2>
 
   <script>
     async function registerServiceWorker() {
@@ -15,6 +13,33 @@
         try {
           const registration = await navigator.serviceWorker.register('sw.js');
           console.log('Service Worker 注册成功:', registration.scope);
+
+          if (registration.waiting) {
+            // 有等待激活的 SW，告诉它跳过等待
+            registration.waiting.postMessage({ type: 'skipWaiting' });
+          }
+
+          // 监听控制权切换
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            console.log('新的 Service Worker 已控制页面');
+            // 自动刷新页面使新 SW 生效（避免无限刷新死循环）
+            if (!window.location.href.includes('swReloaded=true')) {
+              window.location.href = window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'swReloaded=true';
+            }
+          });
+
+          // 如果页面还没被控制，等待它
+          if (!navigator.serviceWorker.controller) {
+            console.log('等待 Service Worker 成为 controller...');
+            await new Promise(resolve => {
+              navigator.serviceWorker.addEventListener('controllerchange', () => {
+                resolve();
+              });
+            });
+          }
+
+          console.log('Service Worker 已控制页面');
+          // 这里写你的页面逻辑，例如启动播放器等
         } catch (e) {
           console.error('Service Worker 注册失败:', e);
         }
@@ -23,41 +48,7 @@
       }
     }
 
-    function startPlayer() {
-      const video = document.getElementById('video');
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource('index.m3u8');  // 这里写正常的 ts 文件名，如 chunk-stream-1.ts
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          video.play().catch(e => {
-            console.warn('自动播放被阻止，需要用户操作后播放', e);
-          });
-        });
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = 'index.m3u8';
-        video.addEventListener('loadedmetadata', () => {
-          video.play().catch(e => {
-            console.warn('自动播放被阻止，需要用户操作后播放', e);
-          });
-        });
-      } else {
-        alert('您的浏览器不支持 HLS 播放');
-      }
-    }
-
-    (async () => {
-      // 判断是否已经执行过注册和刷新操作
-      if (!sessionStorage.getItem('swRegistered')) {
-        console.log('开始注册 Service Worker');
-        await registerServiceWorker(); // 注册 Service Worker
-        sessionStorage.setItem('swRegistered', 'true'); // 标记为已注册，防止重复刷新
-        location.reload(); // 刷新页面
-      } else {
-        console.log('Service Worker 已注册');
-        startPlayer(); // 页面刷新后启动播放器
-      }
-    })();
+    registerServiceWorker();
   </script>
 </body>
 </html>
