@@ -2,15 +2,14 @@ const fileMap = {
   'index.m3u8': 'https://i0.hdslb.com/bfs/openplatform/8385deaf5db8341f2eceb36cc3b116fc0ad384a4.txt',
   'segment000.ts': 'https://i0.hdslb.com/bfs/openplatform/98bf17bbd8635dc2121c75b9476efea02a02e440.txt',
 };
+// sw.js 示例（简单激活和接管）
 self.addEventListener('install', event => {
-  console.log('[ServiceWorker] 安装');
-  // 跳过等待，立刻进入激活阶段
-  self.skipWaiting();
+  // 立即激活新 SW，不等待旧 SW 释放控制权
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', event => {
-  console.log('[ServiceWorker] 激活');
-  // 立即接管所有页面
+  // 激活时立即接管所有页面控制权
   event.waitUntil(self.clients.claim());
 });
 
@@ -58,11 +57,5 @@ self.addEventListener('fetch', event => {
           return fetch(event.request);
         })
     );
-  }
-});
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'skipWaiting') {
-    console.log('[ServiceWorker] 收到 skipWaiting 消息');
-    self.skipWaiting();
   }
 });

@@ -1,11 +1,12 @@
+<!-- index.html 示例，自动注册 SW，自动刷新确保控制权 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>Service Worker 立即控制页面示例</title>
+  <title>Service Worker 自动刷新示例</title>
 </head>
 <body>
-  <h2>Service Worker 立即控制页面示例</h2>
+  <h2>Service Worker 自动刷新示例</h2>
 
   <script>
     async function registerServiceWorker() {
@@ -14,32 +15,19 @@
           const registration = await navigator.serviceWorker.register('sw.js');
           console.log('Service Worker 注册成功:', registration.scope);
 
-          if (registration.waiting) {
-            // 有等待激活的 SW，告诉它跳过等待
-            registration.waiting.postMessage({ type: 'skipWaiting' });
-          }
-
-          // 监听控制权切换
+          // 监听 controllerchange，自动刷新页面
           navigator.serviceWorker.addEventListener('controllerchange', () => {
-            console.log('新的 Service Worker 已控制页面');
-            // 自动刷新页面使新 SW 生效（避免无限刷新死循环）
-            if (!window.location.href.includes('swReloaded=true')) {
-              window.location.href = window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'swReloaded=true';
+            console.log('控制器变化，刷新页面');
+            if (!window.location.href.includes('reloaded=true')) {
+              window.location.href = window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'reloaded=true';
             }
           });
 
-          // 如果页面还没被控制，等待它
-          if (!navigator.serviceWorker.controller) {
-            console.log('等待 Service Worker 成为 controller...');
-            await new Promise(resolve => {
-              navigator.serviceWorker.addEventListener('controllerchange', () => {
-                resolve();
-              });
-            });
+          // 如果已经有控制器，直接启动逻辑
+          if (navigator.serviceWorker.controller) {
+            console.log('已有 Service Worker 控制页面');
+            startPlayer();
           }
-
-          console.log('Service Worker 已控制页面');
-          // 这里写你的页面逻辑，例如启动播放器等
         } catch (e) {
           console.error('Service Worker 注册失败:', e);
         }
@@ -48,7 +36,14 @@
       }
     }
 
-    registerServiceWorker();
+    function startPlayer() {
+      console.log('启动播放器逻辑');
+      // 这里写你的 HLS 播放逻辑
+    }
+
+    (async () => {
+      await registerServiceWorker();
+    })();
   </script>
 </body>
 </html>
