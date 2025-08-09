@@ -21,7 +21,7 @@
       })
       .then(() => {
         console.log('Service Worker 已激活');
-        location.reload();
+        
         // 激活完成后启动播放器
         startPlayer();
       })
@@ -58,6 +58,7 @@ console.log('开始1');
 console.log('结束1');
 await navigator.serviceWorker.ready;
 console.log('结束2');
+location.reload();
       startPlayer();
 console.log('结束3');
     })();
