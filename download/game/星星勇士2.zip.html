@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 星星勇士2.zip</title></head>
+<body>
+<h1>下载并恢复文件：星星勇士2.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/e1ff38ddf39403ca072ce127660c8617b535ae84.bin', 'https://i0.hdslb.com/bfs/openplatform/a028ef5650eb1aa8c98fdc155fc4e38a254c4b22.bin', 'https://i0.hdslb.com/bfs/openplatform/be95ed34d5cccf0adacd440e7bc2b639f79914d2.bin', 'https://i0.hdslb.com/bfs/openplatform/5eaabef0a220088507546fbc51a736ef27f7b570.bin', 'https://i0.hdslb.com/bfs/openplatform/8935aa2f874fa64cc66ac8b9b3230864822f7039.bin', 'https://i0.hdslb.com/bfs/openplatform/a7634a623e79860a9a4464e61868ede333c95c9e.bin', 'https://i0.hdslb.com/bfs/openplatform/ead4fe227a54ff0a4b1874f8292933b9802e3aba.bin', 'https://i0.hdslb.com/bfs/openplatform/e0fe14683c5d3340a62cb3c65d22bedee2917cf7.bin', 'https://i0.hdslb.com/bfs/openplatform/f076d01d4df6568f8a31994f5933667fa661f392.bin', 'https://i0.hdslb.com/bfs/openplatform/2783768e81dedd873aef964e23b15bd5b042300a.bin', 'https://i0.hdslb.com/bfs/openplatform/5f7365676e03f443a0348c572644a54c43490f39.bin', 'https://i0.hdslb.com/bfs/openplatform/a17d2376e91a8c4ff3d3b308caf56633c4e8a48a.bin', 'https://i0.hdslb.com/bfs/openplatform/381a6f441d357d7e45e38b7292b38c1728b1c00b.bin', 'https://i0.hdslb.com/bfs/openplatform/ec5c9aeff45181c1ec9d2fe95b61a8a26e4f646e.bin', 'https://i0.hdslb.com/bfs/openplatform/9e02bd0998033eb88c4dea807cd7eb40086c5d43.bin', 'https://i0.hdslb.com/bfs/openplatform/552d3b89ef4c1e0818bce5bb7314dda269338421.bin', 'https://i0.hdslb.com/bfs/openplatform/19a6fc73e21020a85e0aa70848eedd8338fa1d39.bin', 'https://i0.hdslb.com/bfs/openplatform/6328db1a30135f13dbcf87a06c10668a843dd31c.bin', 'https://i0.hdslb.com/bfs/openplatform/b9c2dd784d391a33b5c513b5d0f08730d845629d.bin', 'https://i0.hdslb.com/bfs/openplatform/0d5cef8037a95b35a5b4b83687d33ef89204c496.bin', 'https://i0.hdslb.com/bfs/openplatform/39d2d1cee8c7d9c5b8c39906e0f1b2edd40143af.bin', 'https://i0.hdslb.com/bfs/openplatform/fa71bb884bfde139489dd197a82a49889f74838e.bin', 'https://i0.hdslb.com/bfs/openplatform/cbbdefc229129277aa76f8e533c35afe96482fb7.bin', 'https://i0.hdslb.com/bfs/openplatform/8077bf65e7acd3d399f3dd240d80d46e0e466551.bin', 'https://i0.hdslb.com/bfs/openplatform/565a19edca21940de6847a4cbe93fb15a97b39a1.bin', 'https://i0.hdslb.com/bfs/openplatform/c65c1d40c1065575e1164f26b7172499b9a0193a.bin', 'https://i0.hdslb.com/bfs/openplatform/6111e722f26eff7a507c65b4cef8b381e7b88335.bin', 'https://i0.hdslb.com/bfs/openplatform/8b3e6f76b89093f7be4d0e32bb65253b4cca1c3c.bin', 'https://i0.hdslb.com/bfs/openplatform/e53e52722d4e33fa94e354f476a323bd1e7430aa.bin', 'https://i0.hdslb.com/bfs/openplatform/bfc2ba53e93e8c7b70bbd1d326f946a5ec269716.bin', 'https://i0.hdslb.com/bfs/openplatform/882c2525127f364cf57d29b60c70db5b26951782.bin', 'https://i0.hdslb.com/bfs/openplatform/d9b2760b15322520aa108a137389f3d5409cb93b.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '星星勇士2.zip',
+    types: [{
+      description: '星星勇士2.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

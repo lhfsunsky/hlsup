@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 ShotaxMonstersL2DV01.zip</title></head>
+<body>
+<h1>下载并恢复文件：ShotaxMonstersL2DV01.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/dfba9d8706d0b8a4ebe458d2b5a5bee4064d1f34.bin', 'https://i0.hdslb.com/bfs/openplatform/e14c8613d7280f760d0fc20400a104ea73bb8a97.bin', 'https://i0.hdslb.com/bfs/openplatform/fa69f1ca0ee2a3d7fdd1ba10828dc37d4f3d5cc7.bin', 'https://i0.hdslb.com/bfs/openplatform/52098f742e8ce8aafbbe9b6e486e679d681fa17c.bin', 'https://i0.hdslb.com/bfs/openplatform/9c424d7ab1ac763c753e772a94fe05988d7594e3.bin', 'https://i0.hdslb.com/bfs/openplatform/e954da6a503481480d5fe0f550e42b275acef585.bin', 'https://i0.hdslb.com/bfs/openplatform/def96210853b947a93f8629a2984e7483121565a.bin', 'https://i0.hdslb.com/bfs/openplatform/c7b74bdf6330bf17c79a2204b436af6d69faec7f.bin', 'https://i0.hdslb.com/bfs/openplatform/1cc86b7a6c1aa2242903c16f9259949c966293ec.bin', 'https://i0.hdslb.com/bfs/openplatform/25a67ef1d2ed2bcc719451d074b43a7775431eca.bin', 'https://i0.hdslb.com/bfs/openplatform/04ac626f162b36fc31ecb56fe9668f67a1bfcd08.bin', 'https://i0.hdslb.com/bfs/openplatform/39ef0836bd80733d45006848ecf12b577f64fce2.bin', 'https://i0.hdslb.com/bfs/openplatform/78b4bebe8a52b45e0657165068bb4a77dcd15abc.bin', 'https://i0.hdslb.com/bfs/openplatform/e1b6c1010972bd4cc1354d77e3be1e788402ef47.bin', 'https://i0.hdslb.com/bfs/openplatform/c10c20f77cbdf337ecd5f6268f05cd677dae57c7.bin', 'https://i0.hdslb.com/bfs/openplatform/3b61fd95e2b62328b38e1bb29df68fa08daa9068.bin', 'https://i0.hdslb.com/bfs/openplatform/4e8f6a74d882a24b2e13461a99457ca77a09d320.bin', 'https://i0.hdslb.com/bfs/openplatform/20ab91317569223f5d5386d4f9e66358b85a5c83.bin', 'https://i0.hdslb.com/bfs/openplatform/5c5197ba2e496645d7f4dd4ef6da71abf3071b64.bin', 'https://i0.hdslb.com/bfs/openplatform/9256d77f6fb813e14f9492210061958fcf0ceb9d.bin', 'https://i0.hdslb.com/bfs/openplatform/91f7205fe4e9980ce4470c3a1d650263c23e7c37.bin', 'https://i0.hdslb.com/bfs/openplatform/6bf65520de207f722c79e0909b9410ea154ce742.bin', 'https://i0.hdslb.com/bfs/openplatform/bf21998b99ea6a50e3127df68b11c849e4c70db4.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: 'ShotaxMonstersL2DV01.zip',
+    types: [{
+      description: 'ShotaxMonstersL2DV01.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

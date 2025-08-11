@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 星星勇士3.zip</title></head>
+<body>
+<h1>下载并恢复文件：星星勇士3.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/ce8b8401580ae731ef3d8f6e077511304f192451.bin', 'https://i0.hdslb.com/bfs/openplatform/5b2df7b5868e51b3fad791bd342de2c1655cdeef.bin', 'https://i0.hdslb.com/bfs/openplatform/f07e7540ec7181bae93da72e7ac2b2fd54c22dd7.bin', 'https://i0.hdslb.com/bfs/openplatform/8ac4c717305b5cde5b7f250881f828d063dc5589.bin', 'https://i0.hdslb.com/bfs/openplatform/9395918c51a50d3bbd604470f879181d1fc92d76.bin', 'https://i0.hdslb.com/bfs/openplatform/b2824f4ed8b0944ef5933e0d50d51c728a83d731.bin', 'https://i0.hdslb.com/bfs/openplatform/1ec58f32b8d3ef5ed806577c26c8171c96c95753.bin', 'https://i0.hdslb.com/bfs/openplatform/11b69b2e84d316b2d69535f968171e53c192e95d.bin', 'https://i0.hdslb.com/bfs/openplatform/5396a36f233691cac1d9d502dca0203902f09676.bin', 'https://i0.hdslb.com/bfs/openplatform/26b3a4fdf85244e2d8d4557200c86eeaecf2885a.bin', 'https://i0.hdslb.com/bfs/openplatform/9f6a3367d66133b6822cbc5e3eea4a51012aecca.bin', 'https://i0.hdslb.com/bfs/openplatform/50d96a4616327b535b060bb1542b5d1a0d67d6e6.bin', 'https://i0.hdslb.com/bfs/openplatform/3d729600a25cefd60545175a1d16821e3eb945f2.bin', 'https://i0.hdslb.com/bfs/openplatform/d780b8288aa4b2fa533ad667772e6d6f4a3a9e59.bin', 'https://i0.hdslb.com/bfs/openplatform/134cb8c7f65244f02330dc0a3c797d45f656b9da.bin', 'https://i0.hdslb.com/bfs/openplatform/94e55e77779184641f50d2b94459ea4c9c89e8d8.bin', 'https://i0.hdslb.com/bfs/openplatform/60eb3978e0767520c66f8dd902733378ce7226c6.bin', 'https://i0.hdslb.com/bfs/openplatform/0a70685aada8d078288d86ddb29fa7fbe78dc9e3.bin', 'https://i0.hdslb.com/bfs/openplatform/34706dfdced2d74b40187daaa1d789c284db5a21.bin', 'https://i0.hdslb.com/bfs/openplatform/b0e105b2e2b6dfdc5e8253f343487ee566425a52.bin', 'https://i0.hdslb.com/bfs/openplatform/c4c9ad4d412258001415e4223d03c8c763b833a6.bin', 'https://i0.hdslb.com/bfs/openplatform/455a4b77f69e6f21017e18381f30e303c8cde588.bin', 'https://i0.hdslb.com/bfs/openplatform/20bd9cff523d8ff03815032b53d61245a53b22e6.bin', 'https://i0.hdslb.com/bfs/openplatform/d03c7158e58f22636dc06da77a5cfc9605a58825.bin', 'https://i0.hdslb.com/bfs/openplatform/fce40fcd2ed5121b9f3a0fabd5bce4d4386c4183.bin', 'https://i0.hdslb.com/bfs/openplatform/17cfdb3a8f151eb911fc0b839cd4482247226f98.bin', 'https://i0.hdslb.com/bfs/openplatform/46e29e7f18f07b6d336db262c687b02a2f26b413.bin', 'https://i0.hdslb.com/bfs/openplatform/f0818fffb8df7bc18248732fbbc78cdb6f48e75d.bin', 'https://i0.hdslb.com/bfs/openplatform/d3ba1b32d2e72a9cae99d479d7aa286c69ed742c.bin', 'https://i0.hdslb.com/bfs/openplatform/caf2b76721d9f804114422e404ef9d800cd2b0f8.bin', 'https://i0.hdslb.com/bfs/openplatform/9eeb31d624575aa61e8a65a610b7f7ac79c7fd1a.bin', 'https://i0.hdslb.com/bfs/openplatform/31b31fe67d1da1f8530270ed245751779b96cc12.bin', 'https://i0.hdslb.com/bfs/openplatform/73845f62ac134d99089e93c482ada13ce40f60c3.bin', 'https://i0.hdslb.com/bfs/openplatform/84f01367c172e61bfba827a94002500d067dd5d5.bin', 'https://i0.hdslb.com/bfs/openplatform/6ad930081c9f114532e82b1dc2492e66181237d7.bin', 'https://i0.hdslb.com/bfs/openplatform/c57bc6e6fc425bebaff825805bf30e8d96193ce4.bin', 'https://i0.hdslb.com/bfs/openplatform/592e3bd4da2b87a7918eafb9ab48cfd50530d265.bin', 'https://i0.hdslb.com/bfs/openplatform/68a73397c776a6c7f5da0d1bc3bc92d0bc5aef67.bin', 'https://i0.hdslb.com/bfs/openplatform/8d23d9c689ceba849cfa8e7d6dfec5ae2be14be2.bin', 'https://i0.hdslb.com/bfs/openplatform/3274b5338a8b9578fa6f606c45c30d55d830e539.bin', 'https://i0.hdslb.com/bfs/openplatform/f94bd4f2f95686c5fea7038e6293e9131d530664.bin', 'https://i0.hdslb.com/bfs/openplatform/2e87f0f89a9536e97e91420fb64c1e20846f0cc9.bin', 'https://i0.hdslb.com/bfs/openplatform/9acc4e9f71bc3df8689a3bef279a287599f75c76.bin', 'https://i0.hdslb.com/bfs/openplatform/a68c30f6fee2f07a8869989c1cc235e688089022.bin', 'https://i0.hdslb.com/bfs/openplatform/02974360c15eabe084de3aca0e1fabc44ccbe273.bin', 'https://i0.hdslb.com/bfs/openplatform/cbc9d655918a2a39842d336be755230a0a368768.bin', 'https://i0.hdslb.com/bfs/openplatform/9fae14102cc61900ab7a9f54734981fbe3224da2.bin', 'https://i0.hdslb.com/bfs/openplatform/acf8228fc0af418553ef05b927ec9bd71d1273cb.bin', 'https://i0.hdslb.com/bfs/openplatform/9828ba7d8ad462a251d3cdb77f0c15195b97d4e1.bin', 'https://i0.hdslb.com/bfs/openplatform/20cbf9cb16a310bb14df8861b9f95ca7f4cfa78d.bin', 'https://i0.hdslb.com/bfs/openplatform/4a53a1a331ed1a0549f8ef398f3a74d59788a074.bin', 'https://i0.hdslb.com/bfs/openplatform/85f275336c6665dc21b3810e90706a7009b23686.bin', 'https://i0.hdslb.com/bfs/openplatform/a23152f5437ea75787aab55f75c2c24921c6f732.bin', 'https://i0.hdslb.com/bfs/openplatform/4fa9b4bc1740e27e07b87a78b1b6b648579e0cdc.bin', 'https://i0.hdslb.com/bfs/openplatform/a21bcd83ac64340176e3eb9af37019c2700c597e.bin', 'https://i0.hdslb.com/bfs/openplatform/ebcb129ee8781a067fac8639a5ca2224321f761f.bin', 'https://i0.hdslb.com/bfs/openplatform/1f7826114246bba72e8fbadc4657f8bd91dad0e7.bin', 'https://i0.hdslb.com/bfs/openplatform/36d054dc3ef92968fb636045adabf03ebdf773a5.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '星星勇士3.zip',
+    types: [{
+      description: '星星勇士3.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

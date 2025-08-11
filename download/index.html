@@ -1,0 +1,40 @@
+<!DOCTYPE html> 
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>统一访问子文件夹HTML</title>
+  <style>
+    ul { list-style-type: none; padding-left: 0; }
+    li { margin: 5px 0; }
+    a { color: blue; text-decoration: underline; cursor: pointer; }
+    a:hover { color: darkblue; }
+  </style>
+</head>
+<body>
+  <h1>文件夹列表</h1>
+  <ul id="folderList"></ul>
+
+  <script>
+    fetch('folders.json')
+      .then(res => res.json())
+      .then(folders => {
+        const ul = document.getElementById('folderList');
+        folders.forEach(item => {
+          const folderName = item.folder;
+          item.html_files.forEach(htmlFile => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = `${folderName} / ${htmlFile}`;
+            a.href = encodeURIComponent(folderName) + '/' + encodeURIComponent(htmlFile);
+            a.target = '_blank'; // 新标签页打开
+            li.appendChild(a);
+            ul.appendChild(li);
+          });
+        });
+      })
+      .catch(() => {
+        document.getElementById('folderList').innerText = '无法加载目录列表';
+      });
+  </script>
+</body>
+</html>
