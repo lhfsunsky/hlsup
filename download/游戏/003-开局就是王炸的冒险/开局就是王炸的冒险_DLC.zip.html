@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 003-开局就是王炸的冒险\开局就是王炸的冒险_DLC.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：003-开局就是王炸的冒险\开局就是王炸的冒险_DLC.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/4f975526282160cde8051115cfca1ed999ae66c3.bin', 'https://i0.hdslb.com/bfs/openplatform/a88729193d195fb11f54385bdd2d8d8d2355278b.bin', 'https://i0.hdslb.com/bfs/openplatform/f17a740f2a672a79e6a22641bfb449117cfbb9dc.bin', 'https://i0.hdslb.com/bfs/openplatform/bc8c313669355613728c6d9f282f0fe33761e3ca.bin', 'https://i0.hdslb.com/bfs/openplatform/ec4005427d15ad694b79ebdde676331498f21faf.bin', 'https://i0.hdslb.com/bfs/openplatform/6616dee2030228795a7b5eb72f5e77b6f65fd953.bin', 'https://i0.hdslb.com/bfs/openplatform/e007b47e70baeb2822a8cea52393af8ba3f64b9c.bin', 'https://i0.hdslb.com/bfs/openplatform/774a375ca16bdbc2580c64f723749886b2bf47bc.bin', 'https://i0.hdslb.com/bfs/openplatform/ed409797987a269701c675a058a69def6c15d755.bin', 'https://i0.hdslb.com/bfs/openplatform/5b3e60217b77032619e871a1ae4d721b2159186d.bin', 'https://i0.hdslb.com/bfs/openplatform/7e788c26f4c924d10415783999f339a8c4db370e.bin', 'https://i0.hdslb.com/bfs/openplatform/f8290f978d2c86e964ef891fef8d227500ce01ec.bin', 'https://i0.hdslb.com/bfs/openplatform/647435786b056ca53b9fcb459ee205784cb3a244.bin', 'https://i0.hdslb.com/bfs/openplatform/f22d3fb35fb31b637126aeb9171f80a3e4b7739a.bin', 'https://i0.hdslb.com/bfs/openplatform/f9f5e520745f6a2e0e3f3a8a4655439827ba27a1.bin', 'https://i0.hdslb.com/bfs/openplatform/b592462fe9be526e280daa9d73a27c3411c8bad2.bin', 'https://i0.hdslb.com/bfs/openplatform/936799d802b324466e6439be25aba449de01b162.bin', 'https://i0.hdslb.com/bfs/openplatform/eb325e0b811cb126ab307e20492d71a7e5a80dd6.bin', 'https://i0.hdslb.com/bfs/openplatform/2bbbba2c2486713a5be4831ff69c7b291409cf0e.bin', 'https://i0.hdslb.com/bfs/openplatform/b4b92d4a7b5ff706910e65b4248ceaf2728598c2.bin', 'https://i0.hdslb.com/bfs/openplatform/44aeb9c94ca2aca9eb340a5b43d7708a87a505f3.bin', 'https://i0.hdslb.com/bfs/openplatform/75525a0cc3efbfb70e83f049e832fd14bdc3216b.bin', 'https://i0.hdslb.com/bfs/openplatform/cfc52022c0436151973dd9d8e006033579698089.bin', 'https://i0.hdslb.com/bfs/openplatform/d8c9e95ac50de65e9fe85298d7462012c3902c4e.bin', 'https://i0.hdslb.com/bfs/openplatform/c6d4c85073575121fefcace21f056f38111154b7.bin', 'https://i0.hdslb.com/bfs/openplatform/bcb296732e6f716e96487df22c71d19b0bbf4a8f.bin', 'https://i0.hdslb.com/bfs/openplatform/2bd22a2013a342182ae4b94ac08795c8aec754fa.bin', 'https://i0.hdslb.com/bfs/openplatform/639d81c09475dc30e99169ab068881991b2de0b5.bin', 'https://i0.hdslb.com/bfs/openplatform/8dd3440876a94da86fd46f18b717c2673f729339.bin', 'https://i0.hdslb.com/bfs/openplatform/d4f2f84bb81d862f7b2057768f040d0fe439c451.bin', 'https://i0.hdslb.com/bfs/openplatform/dfd4ba10344735d275e11f1cafbab15e54eba8a9.bin', 'https://i0.hdslb.com/bfs/openplatform/4e2643236b7ab2e6493e0548bc0d8e32002f58b1.bin', 'https://i0.hdslb.com/bfs/openplatform/a631eb4d6da01dd655ed562f9150b6bb1080943a.bin', 'https://i0.hdslb.com/bfs/openplatform/6118a3476afb30e973bc5d159afd285dcac6c28a.bin', 'https://i0.hdslb.com/bfs/openplatform/c65289f98deab8b296c6303866ef3f32321380cb.bin', 'https://i0.hdslb.com/bfs/openplatform/65362c112f86da9bc9f10d9f55e30e694c1dd967.bin', 'https://i0.hdslb.com/bfs/openplatform/77605a203d00311c9e907c233d04d1dc9a24bd0c.bin', 'https://i0.hdslb.com/bfs/openplatform/ab27171bd4aa8d4edfea365043eca8de6594ba4b.bin', 'https://i0.hdslb.com/bfs/openplatform/c3b0a336887db23955ef89d7b1f4e3733bd4ae39.bin', 'https://i0.hdslb.com/bfs/openplatform/cc6f9e90f775e47fffebfe0216bf2f25ca93887e.bin', 'https://i0.hdslb.com/bfs/openplatform/720fd112f12319c91f5c6960d6870b37ae0e4ab9.bin', 'https://i0.hdslb.com/bfs/openplatform/8145e6f15ea7eabc5c5a6044eb8fade9998465fa.bin', 'https://i0.hdslb.com/bfs/openplatform/9bb9de7f79e48c80493c66e421cd60800b318e45.bin', 'https://i0.hdslb.com/bfs/openplatform/5e730f0df6195661f8277713a96540edd0b6f305.bin', 'https://i0.hdslb.com/bfs/openplatform/a286feb61729bc6cfd9e8ec6b12779dff3d2ce8b.bin', 'https://i0.hdslb.com/bfs/openplatform/91b89b4e76dc2a768ed3db46f246934bcccae3b4.bin', 'https://i0.hdslb.com/bfs/openplatform/c019f8d31e75ebddc9c93aa903adab9c35775c8b.bin', 'https://i0.hdslb.com/bfs/openplatform/8da776abb33da04ecfe235a00970d19df4a4ea94.bin', 'https://i0.hdslb.com/bfs/openplatform/0b19c13d4f360f7e93a121abb21b93b636877d7d.bin', 'https://i0.hdslb.com/bfs/openplatform/6fcc52a0bc69fbdeb90e69133e0e2e9391444c07.bin', 'https://i0.hdslb.com/bfs/openplatform/87874d024ab8c1bb78147479191387c9498d75ad.bin', 'https://i0.hdslb.com/bfs/openplatform/54a15b9f08cf529f2a8a033b1783133d6bf495c4.bin', 'https://i0.hdslb.com/bfs/openplatform/695a805ba0064d14ee5336e355076dae7ed4258a.bin', 'https://i0.hdslb.com/bfs/openplatform/bbf56fb30442833fd820d8a1aeac856eb3388c69.bin', 'https://i0.hdslb.com/bfs/openplatform/f803166dea4843b68847a57d4ac5f17758584d4d.bin', 'https://i0.hdslb.com/bfs/openplatform/58c3561376ec9c98db8fbeca4540cd267cbd35c9.bin', 'https://i0.hdslb.com/bfs/openplatform/75bc406ed2e0633c1add90c1027872f1121e646c.bin', 'https://i0.hdslb.com/bfs/openplatform/29a86b8689703cf5f1899b9ec76f488102cb99a5.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '003-开局就是王炸的冒险\开局就是王炸的冒险_DLC.zip',
+    types: [{
+      description: '003-开局就是王炸的冒险\开局就是王炸的冒险_DLC.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

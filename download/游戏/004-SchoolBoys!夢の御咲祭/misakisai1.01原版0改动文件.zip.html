@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 004-SchoolBoys!夢の御咲祭\misakisai1.01原版0改动文件.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：004-SchoolBoys!夢の御咲祭\misakisai1.01原版0改动文件.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/7a6e1618a69b0ed513be86b27a713cf3bdb862c9.bin', 'https://i0.hdslb.com/bfs/openplatform/d1df484e57003cb1dd1622975d19310ce6671fef.bin', 'https://i0.hdslb.com/bfs/openplatform/cb98eda3546f611ce1344978b5ef2a7c8691e57f.bin', 'https://i0.hdslb.com/bfs/openplatform/4bc81650b6c30480f8d2407630e04ddd769aa217.bin', 'https://i0.hdslb.com/bfs/openplatform/4e85d64b03f83355b3df35834d32ca51a57d2b35.bin', 'https://i0.hdslb.com/bfs/openplatform/7d812725e57718e5aac6773935afae441766c5cf.bin', 'https://i0.hdslb.com/bfs/openplatform/6844ea18813c9ed3b428f23bb72f990562138521.bin', 'https://i0.hdslb.com/bfs/openplatform/b645410e029fee15903cb701f16ab9079cf866c2.bin', 'https://i0.hdslb.com/bfs/openplatform/27edc85c680648fc1c543d772680ff12dd3e7400.bin', 'https://i0.hdslb.com/bfs/openplatform/c3200944416b0e314c4cd189f3626deb1509a990.bin', 'https://i0.hdslb.com/bfs/openplatform/70e54d19e5048bed4785b784812cf6fd6cb5f1b8.bin', 'https://i0.hdslb.com/bfs/openplatform/7ef3ea9d6134e861d278565ae9e91eaa01348756.bin', 'https://i0.hdslb.com/bfs/openplatform/99a9cfb36fb0c7cec3ac573435e1ce1396a29ead.bin', 'https://i0.hdslb.com/bfs/openplatform/5d15c756ce3240094d0b07b17f08cf63e55d5360.bin', 'https://i0.hdslb.com/bfs/openplatform/2ef78c7891faf38c4bc501762542839aa4defe72.bin', 'https://i0.hdslb.com/bfs/openplatform/bdf4231e3c9eb06c291558e2c6e4a1f2d87c2c2e.bin', 'https://i0.hdslb.com/bfs/openplatform/5eda9530819ec60228092e48bce8bc83a9f5cc66.bin', 'https://i0.hdslb.com/bfs/openplatform/7db7401c71d95729ea56efa6a832c515564042c8.bin', 'https://i0.hdslb.com/bfs/openplatform/53d2928124f3ee9ef48904675bfeb02be00d1b26.bin', 'https://i0.hdslb.com/bfs/openplatform/64b70fbc2d5fed4646d8e33e6fcd7003dc41e095.bin', 'https://i0.hdslb.com/bfs/openplatform/5d1933dcd84922a521df6da6b0b0e299630ba920.bin', 'https://i0.hdslb.com/bfs/openplatform/6855a1cbab68f75c0ee1d34d5561ff27ad3b8bba.bin', 'https://i0.hdslb.com/bfs/openplatform/c7d686b8defd298ac8207be2da5b32c658fcd0b6.bin', 'https://i0.hdslb.com/bfs/openplatform/94a7e7760b0cf6497aced600b89c4e0bc9482fca.bin', 'https://i0.hdslb.com/bfs/openplatform/f710426075174ae94c6f6127d6844291e764fae8.bin', 'https://i0.hdslb.com/bfs/openplatform/40864175f82eb9b3dc804d0821998b4cda5782b2.bin', 'https://i0.hdslb.com/bfs/openplatform/eea6da7fee42a66b33c5a388bbe6d12defc262d9.bin', 'https://i0.hdslb.com/bfs/openplatform/13ad6ecc19b40f2cc70d72edd186ed94eba05d1f.bin', 'https://i0.hdslb.com/bfs/openplatform/dad6b868ee3f28fdeb99d460dc412aee05f414e9.bin', 'https://i0.hdslb.com/bfs/openplatform/173ff79e499d26bc3a2a8ca3ae8faae9e006652e.bin', 'https://i0.hdslb.com/bfs/openplatform/924017c6ed9bfcb1317d2c6db1c05dacbccb4209.bin', 'https://i0.hdslb.com/bfs/openplatform/2032fdb97d1cb27399763c4f8d068cde531e3f73.bin', 'https://i0.hdslb.com/bfs/openplatform/f4f25d1ef8960b0461c04aaf18a764e8568f9d78.bin', 'https://i0.hdslb.com/bfs/openplatform/59ef6aa8283ba9e1bdd174df3b8194eeba4685c6.bin', 'https://i0.hdslb.com/bfs/openplatform/fd5864dd526d2e72a3d92d1865ea080be7d1c5c2.bin', 'https://i0.hdslb.com/bfs/openplatform/946f6438c48dee0afaf03ac85486b6417e290590.bin', 'https://i0.hdslb.com/bfs/openplatform/51c32e215fda478c36cad4acf7b7fbe11ef1a87c.bin', 'https://i0.hdslb.com/bfs/openplatform/139a33a1191f255860a6abf75ae74ea70c8ad1fa.bin', 'https://i0.hdslb.com/bfs/openplatform/51103a587660c97e92ca17d9175c3f93a9b4f857.bin', 'https://i0.hdslb.com/bfs/openplatform/05d033ba22b3a21b1885ebd8951417a431360479.bin', 'https://i0.hdslb.com/bfs/openplatform/22bee7a950435678de4d4921680e493627987025.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '004-SchoolBoys!夢の御咲祭\misakisai1.01原版0改动文件.zip',
+    types: [{
+      description: '004-SchoolBoys!夢の御咲祭\misakisai1.01原版0改动文件.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

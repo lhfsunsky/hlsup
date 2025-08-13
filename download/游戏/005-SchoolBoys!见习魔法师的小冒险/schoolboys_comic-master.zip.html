@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 005-SchoolBoys!见习魔法师的小冒险\schoolboys_comic-master.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：005-SchoolBoys!见习魔法师的小冒险\schoolboys_comic-master.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/53b6b920f0fa4b6ae0b11f92eb3ac15955ac5141.bin', 'https://i0.hdslb.com/bfs/openplatform/58c6ab000086526abd332cc37a774ff4202f1ca1.bin', 'https://i0.hdslb.com/bfs/openplatform/1f9c3035964acad61ff95a41ce2f97d71ed57327.bin', 'https://i0.hdslb.com/bfs/openplatform/3cfba7d69cbbf04a4a6ece1afbb1995a10525feb.bin', 'https://i0.hdslb.com/bfs/openplatform/ff040c8d524e8327a495d34c63bd750923166ecb.bin', 'https://i0.hdslb.com/bfs/openplatform/65d6b7e61c17b0e494ac493eed8509b2cfe776ed.bin', 'https://i0.hdslb.com/bfs/openplatform/42e33761e7ce99297d47824c462d9272ef9bd0b3.bin', 'https://i0.hdslb.com/bfs/openplatform/7c233025312e2afc1d8adcc6dea8660d96367e44.bin', 'https://i0.hdslb.com/bfs/openplatform/423f19d64bc8b37248798d60581b9e86ff79e4cf.bin', 'https://i0.hdslb.com/bfs/openplatform/8496f3708d9e865fa00f1d23b171214b31426f9d.bin', 'https://i0.hdslb.com/bfs/openplatform/c385bc30c7394d7f34b9f2109ec8798914b66a62.bin', 'https://i0.hdslb.com/bfs/openplatform/a4776e8961ca2104ddcf398cb4671be10e330399.bin', 'https://i0.hdslb.com/bfs/openplatform/5895d208924c76c07c5f8c4f900d04890f56b197.bin', 'https://i0.hdslb.com/bfs/openplatform/1bceaa7534008c6c816c2b96f13398c64a2c1140.bin', 'https://i0.hdslb.com/bfs/openplatform/85660d147919b105aadc823eb8ade5c88a65cc1a.bin', 'https://i0.hdslb.com/bfs/openplatform/6f750950910e7c92958e7a33469d43bc9379c3d2.bin', 'https://i0.hdslb.com/bfs/openplatform/c5a9779b6f844f2dd1a199c2b1a52c1ad7951263.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '005-SchoolBoys!见习魔法师的小冒险\schoolboys_comic-master.zip',
+    types: [{
+      description: '005-SchoolBoys!见习魔法师的小冒险\schoolboys_comic-master.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 004-SchoolBoys!夢の御咲祭\misakisai1.01_已用日语环境解压.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：004-SchoolBoys!夢の御咲祭\misakisai1.01_已用日语环境解压.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/4660f22725f929b657386667e8365484bf72ec77.bin', 'https://i0.hdslb.com/bfs/openplatform/8becc44536b52bfdd4c275249aa76a28bff73492.bin', 'https://i0.hdslb.com/bfs/openplatform/db415a2f8d655d548fe7935adf64184cdd457f3d.bin', 'https://i0.hdslb.com/bfs/openplatform/4e91ec0df93b899082888d53c76ead3a5db6cdd4.bin', 'https://i0.hdslb.com/bfs/openplatform/a61511ca6eeefde5d2f8717e6fe8d242cc1bc205.bin', 'https://i0.hdslb.com/bfs/openplatform/f784674a5f56af7ba75575870496c8850bae9ba8.bin', 'https://i0.hdslb.com/bfs/openplatform/e993bbb923d9c2322f0e16ec5ff81c4a265de1b8.bin', 'https://i0.hdslb.com/bfs/openplatform/ed9f80411c825e9753efac82c64cf32bc782bf53.bin', 'https://i0.hdslb.com/bfs/openplatform/2e5caa066eb8ffc908d7e75626531845cb832377.bin', 'https://i0.hdslb.com/bfs/openplatform/202cea425856a26e55517d7be0b474f12cea6487.bin', 'https://i0.hdslb.com/bfs/openplatform/13d75d919ef908c2d75502210e13beac4fd001ac.bin', 'https://i0.hdslb.com/bfs/openplatform/08a2062e44c6444db0b14bef96ada8264d9e9669.bin', 'https://i0.hdslb.com/bfs/openplatform/af96eb47fbd789c6bd2caa64fa2220f38d76ca0a.bin', 'https://i0.hdslb.com/bfs/openplatform/db15b9893989995c95adc39bda24ab36225130f9.bin', 'https://i0.hdslb.com/bfs/openplatform/bba8450e908c636d209ab511b0b9ef17523c999a.bin', 'https://i0.hdslb.com/bfs/openplatform/d6519e87270b0b0f5a22a456c614c7c30a018f4a.bin', 'https://i0.hdslb.com/bfs/openplatform/c18e70799430802555c04e5bd6be83259eed0bd9.bin', 'https://i0.hdslb.com/bfs/openplatform/f1bb6fbc85f08d64d565c9082f0b91777d4596b5.bin', 'https://i0.hdslb.com/bfs/openplatform/b7e126afd191dd75e976ecab6e45c26159e9a51d.bin', 'https://i0.hdslb.com/bfs/openplatform/bdf03dc3a3107f2f8414a7f811b00c6cf5d0d565.bin', 'https://i0.hdslb.com/bfs/openplatform/63e397ef64fc655a6584678aed6b8058fa646e9a.bin', 'https://i0.hdslb.com/bfs/openplatform/85b205f46bde51e5644bcf267e4223f7c047d31d.bin', 'https://i0.hdslb.com/bfs/openplatform/5541d8a76d01e172a7981f9496a701dad87b71a0.bin', 'https://i0.hdslb.com/bfs/openplatform/2cc9adc75951f522198cc7bf6e02eeed5fe3a041.bin', 'https://i0.hdslb.com/bfs/openplatform/e693a1ee67f7c80b779f5f59890bcc7c3d2800bd.bin', 'https://i0.hdslb.com/bfs/openplatform/299bee078587d66faaf9df2be10e9ddd2a625430.bin', 'https://i0.hdslb.com/bfs/openplatform/7a49b190eb2d581e11e1e06553264a5765b155da.bin', 'https://i0.hdslb.com/bfs/openplatform/7652b2f794024008a172727d77212f27a9164fb5.bin', 'https://i0.hdslb.com/bfs/openplatform/fa37639a174fdcd83f23a486545a5617908a3c77.bin', 'https://i0.hdslb.com/bfs/openplatform/b27ac7e2e6c62b058ee98f22062cd3474e52bb24.bin', 'https://i0.hdslb.com/bfs/openplatform/0075d8d7d1c1c31617bc4dddb300dc284bc8f442.bin', 'https://i0.hdslb.com/bfs/openplatform/7f6c7067b6ba3f9a689225d1e0c2f23f45bc8648.bin', 'https://i0.hdslb.com/bfs/openplatform/eb22e25d07e6a304031d1c74e308950c37c53ad7.bin', 'https://i0.hdslb.com/bfs/openplatform/0a34bf75505814a424eeeaef795947f63d1cecc9.bin', 'https://i0.hdslb.com/bfs/openplatform/5f9c5c007d3968bbc56fc0ebcd0d485a3501cf83.bin', 'https://i0.hdslb.com/bfs/openplatform/352d5a485c3b6ef0336fbf07663175d6bdb16793.bin', 'https://i0.hdslb.com/bfs/openplatform/1f994d5764403b9d176804b2f7d30441558bbc8c.bin', 'https://i0.hdslb.com/bfs/openplatform/694f3330ca7367df626aac1d9a38af4b1f56b276.bin', 'https://i0.hdslb.com/bfs/openplatform/fa322b54e70fbefcafd53658a5d08e78f7056674.bin', 'https://i0.hdslb.com/bfs/openplatform/bf2d2fed181bd6e0a2be4b7fa17094073d95dc2f.bin', 'https://i0.hdslb.com/bfs/openplatform/f0cfdd72340dbd71a7a57c5e7d965559b84e0213.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '004-SchoolBoys!夢の御咲祭\misakisai1.01_已用日语环境解压.zip',
+    types: [{
+      description: '004-SchoolBoys!夢の御咲祭\misakisai1.01_已用日语环境解压.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

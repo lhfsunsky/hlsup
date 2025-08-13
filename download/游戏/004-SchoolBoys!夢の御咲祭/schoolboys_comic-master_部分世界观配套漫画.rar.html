@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 004-SchoolBoys!夢の御咲祭\schoolboys_comic-master_部分世界观配套漫画.rar</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：004-SchoolBoys!夢の御咲祭\schoolboys_comic-master_部分世界观配套漫画.rar</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/341438498cf775479964e3444fe18597eca2013c.bin', 'https://i0.hdslb.com/bfs/openplatform/8d134872df3fe43768136ada8a000e0a806d084f.bin', 'https://i0.hdslb.com/bfs/openplatform/309e1a107e09adc709eb66de5b8f83974bf27b18.bin', 'https://i0.hdslb.com/bfs/openplatform/c6855b257aead96e644001fd1a36d5d66a7b71cf.bin', 'https://i0.hdslb.com/bfs/openplatform/8318796f089770b223748826abad18100683deb0.bin', 'https://i0.hdslb.com/bfs/openplatform/3beb33bee0671cf50175d7bcd71174d5a787200e.bin', 'https://i0.hdslb.com/bfs/openplatform/4a4f88d7e9ddd8df37fac328dda33d9b59e62780.bin', 'https://i0.hdslb.com/bfs/openplatform/275ae8281e7662abb58971e60d69f6a70033032a.bin', 'https://i0.hdslb.com/bfs/openplatform/ebe7bee8a60ce2627959db2be1dcd18ab51c098c.bin', 'https://i0.hdslb.com/bfs/openplatform/9e7cb7c5f61d4ade6578868cce7de8b26a484a4f.bin', 'https://i0.hdslb.com/bfs/openplatform/189cc3c3b92bb9409a6179bc2e6f4ef9e5b7f3d4.bin', 'https://i0.hdslb.com/bfs/openplatform/9ebb1ce39ae4f36a38c7c53ab3ee2da9518bd073.bin', 'https://i0.hdslb.com/bfs/openplatform/536fec3f04045c89791967baaddd7a312fb0d0cd.bin', 'https://i0.hdslb.com/bfs/openplatform/994cb507e5dc3234c7384282ae7ded02bee2888d.bin', 'https://i0.hdslb.com/bfs/openplatform/210cf085f9b8bbd5ed7b6102c7bae919540517f4.bin', 'https://i0.hdslb.com/bfs/openplatform/8ddb7cc3e3a97b113fdb291167dc3e2ade33739c.bin', 'https://i0.hdslb.com/bfs/openplatform/dbe37d10c4713be6c3a81e1a16348b939530c8dc.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '004-SchoolBoys!夢の御咲祭\schoolboys_comic-master_部分世界观配套漫画.rar',
+    types: [{
+      description: '004-SchoolBoys!夢の御咲祭\schoolboys_comic-master_部分世界观配套漫画.rar 文件',
+      accept: {'*/*': ['.rar']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 006-SchoolBoys!世依木守的任务\世依木守的任务.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：006-SchoolBoys!世依木守的任务\世依木守的任务.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/07f4342201810d2695db6afbf1eb3b8c6181115d.bin', 'https://i0.hdslb.com/bfs/openplatform/6849b8f397c3d9d7a3a76028bde77c9dd566ddcf.bin', 'https://i0.hdslb.com/bfs/openplatform/4cbdb39bbcdc246ad74be611ed306f7f78d7e029.bin', 'https://i0.hdslb.com/bfs/openplatform/af80e3a40948e72a003039476d8be35d9954e630.bin', 'https://i0.hdslb.com/bfs/openplatform/b4107c35450edff06f213c369d7b5b6322e9caac.bin', 'https://i0.hdslb.com/bfs/openplatform/f77fd6d1884abdbbef92136bc2fa8aa0e8420b8e.bin', 'https://i0.hdslb.com/bfs/openplatform/a08740b8f6f357e30a8caeb0395357f30809effd.bin', 'https://i0.hdslb.com/bfs/openplatform/941ee261de073119c33eb9d364bba9a9336b9837.bin', 'https://i0.hdslb.com/bfs/openplatform/1ba28615062aa6b7182253fe132dda7787db1ca8.bin', 'https://i0.hdslb.com/bfs/openplatform/df51a7a6f2e0187b9afe33d0680d35ea7aec1ac4.bin', 'https://i0.hdslb.com/bfs/openplatform/e8d4ddea4aa16c7e58b34b49e6e372e7abb99512.bin', 'https://i0.hdslb.com/bfs/openplatform/486b9b0ced7dfa3133fe95942bf8fe516991a04d.bin', 'https://i0.hdslb.com/bfs/openplatform/8ab7daec44658247f74b477f0de27ebc30649bc4.bin', 'https://i0.hdslb.com/bfs/openplatform/6f9719b738981a90d8a45ff03a6bb63f69e9f256.bin', 'https://i0.hdslb.com/bfs/openplatform/7e16ca90b6f168b954d272fd209e0d9135d69d82.bin', 'https://i0.hdslb.com/bfs/openplatform/b61bd533ceec23bbcad9233511785bd2440b688a.bin', 'https://i0.hdslb.com/bfs/openplatform/0904588d32407d64e1cfa193e2d8881d34fba75a.bin', 'https://i0.hdslb.com/bfs/openplatform/d1763d40dc5408c23075ffc7c41f11e6a3a75a56.bin', 'https://i0.hdslb.com/bfs/openplatform/d29fd89e19d43aa950696377090ecf22ffebbd05.bin', 'https://i0.hdslb.com/bfs/openplatform/ba53bc4374d30e8a58656f155c7a9f89051da13b.bin', 'https://i0.hdslb.com/bfs/openplatform/acdfd067620df70a344078710b75defc5910412a.bin', 'https://i0.hdslb.com/bfs/openplatform/d297cf5f92cb983efd021755bde9c8b386f47aad.bin', 'https://i0.hdslb.com/bfs/openplatform/a3a14995f3dfa83d5e83a8655accda88c530e318.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '006-SchoolBoys!世依木守的任务\世依木守的任务.zip',
+    types: [{
+      description: '006-SchoolBoys!世依木守的任务\世依木守的任务.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

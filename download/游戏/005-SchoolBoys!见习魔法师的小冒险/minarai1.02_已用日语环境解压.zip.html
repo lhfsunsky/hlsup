@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 005-SchoolBoys!见习魔法师的小冒险\minarai1.02_已用日语环境解压.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：005-SchoolBoys!见习魔法师的小冒险\minarai1.02_已用日语环境解压.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/e0e676f1fe6f650d461655b34dbae74053e5adfe.bin', 'https://i0.hdslb.com/bfs/openplatform/f6c33bcd0c19d53757e043a7bd2eca25aa66a271.bin', 'https://i0.hdslb.com/bfs/openplatform/cd95eed5181f8235617d313a0c5ed083e72ab461.bin', 'https://i0.hdslb.com/bfs/openplatform/924114202dd47f511fdcaf7c01135be1d9e928b2.bin', 'https://i0.hdslb.com/bfs/openplatform/8c8ce0cf40e5fe5aef774b44b97c93ed17bd5024.bin', 'https://i0.hdslb.com/bfs/openplatform/5e9f7909af96a0e930c7e48fa9a9b07934432410.bin', 'https://i0.hdslb.com/bfs/openplatform/32c44a83b967aee07b250be299f66c9682d6b98d.bin', 'https://i0.hdslb.com/bfs/openplatform/a52d98e7534fd728dd022195c6ae39e2e225c565.bin', 'https://i0.hdslb.com/bfs/openplatform/0c274a829d5be5c5efcc1a93a77fef4fb63a12d7.bin', 'https://i0.hdslb.com/bfs/openplatform/853dd4667155e6c8c1fd4ab4f7b85ffe868138e5.bin', 'https://i0.hdslb.com/bfs/openplatform/7fd9eed1f6eae01fb06998cc9feb2842e180539f.bin', 'https://i0.hdslb.com/bfs/openplatform/cdb453a1b5b394a56917b533558eb8bf90dbd6ab.bin', 'https://i0.hdslb.com/bfs/openplatform/b9fde427f1278fea1742485adb4acf3c5bd54a88.bin', 'https://i0.hdslb.com/bfs/openplatform/87849ac62fd62864b32b935ae275c1a07c5c7fd5.bin', 'https://i0.hdslb.com/bfs/openplatform/ce0e44452fa674151bb07a21f47acb22b59ec33b.bin', 'https://i0.hdslb.com/bfs/openplatform/b8ce94899a6d6190e33c6280608b4e6a30133647.bin', 'https://i0.hdslb.com/bfs/openplatform/fd19dda9b0e1c08ee640f7b344b9c03171b05def.bin', 'https://i0.hdslb.com/bfs/openplatform/ea583e7a89220c1c01bf6933d83d3c85aadefe66.bin', 'https://i0.hdslb.com/bfs/openplatform/00e7e52e2ae026565e192d68498b066b0ed17184.bin', 'https://i0.hdslb.com/bfs/openplatform/2b47c29801c323382d31072fe2a04a9df0ebc5c1.bin', 'https://i0.hdslb.com/bfs/openplatform/26f504a5d03e279c47d0ef649e2815630fb5127f.bin', 'https://i0.hdslb.com/bfs/openplatform/eca4402fc9eaa9ef7c8e117cb0f3ad0d7c14bfd8.bin', 'https://i0.hdslb.com/bfs/openplatform/e7b596a32a8fc09d7cb3e467036f4f1cc071b5ca.bin', 'https://i0.hdslb.com/bfs/openplatform/fe336e4fbfb7acaadd0d46e01e39d14b3faedad2.bin', 'https://i0.hdslb.com/bfs/openplatform/0d5e8f239104bc6de3683315c885be9e3508dd17.bin', 'https://i0.hdslb.com/bfs/openplatform/192bfb3ac89447fe309c5b46164d0a990de32a32.bin', 'https://i0.hdslb.com/bfs/openplatform/be3ca1be0ac91455c2bf4d652bea6843cd2d837c.bin', 'https://i0.hdslb.com/bfs/openplatform/c6c85a77da073b379fb2d990240d51371e0b0567.bin', 'https://i0.hdslb.com/bfs/openplatform/e3e8c8be8a8da4a83127d2c156ec2081929cbde5.bin', 'https://i0.hdslb.com/bfs/openplatform/2b23f84c1ae6dad53b3d04b1c03fe775423bec3b.bin', 'https://i0.hdslb.com/bfs/openplatform/7584464d69678294dfced22c3741de308e0260e8.bin', 'https://i0.hdslb.com/bfs/openplatform/e440bdb949e4a9c69bd8868beef59b4610cbda43.bin', 'https://i0.hdslb.com/bfs/openplatform/97e7c0a79f761b52795603be7827cd486fcba042.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '005-SchoolBoys!见习魔法师的小冒险\minarai1.02_已用日语环境解压.zip',
+    types: [{
+      description: '005-SchoolBoys!见习魔法师的小冒险\minarai1.02_已用日语环境解压.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

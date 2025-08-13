@@ -16,7 +16,8 @@
       "scb.ayumi BGM解包.zip.html",
       "schoolboys!步  安卓版.zip.html",
       "Schoolboys!步 电脑版.zip.html",
-      "schoolboys_comic-master_scb步流程专属配套漫画.rar.html"
+      "schoolboys_comic-master_scb步流程专属配套漫画.rar.html",
+      "手机用户如何安装SCB!步.mp4.html"
     ]
   },
   {
@@ -43,6 +44,53 @@
       "schoolboys_comic-master_部分世界观配套漫画.rar.html",
       "SUPER SCHOOLBOYS RPG 汉化版 20200802.zip.html",
       "SuperSchoolBoysRPG_1_3_日语.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/003-开局就是王炸的冒险",
+    "html_files": [
+      "开局就是王炸的冒险_DLC.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/004-SchoolBoys!夢の御咲祭",
+    "html_files": [
+      "misakisai1.01_已用日语环境解压.zip.html",
+      "misakisai1.01原版0改动文件.zip.html",
+      "schoolboys_comic-master_部分世界观配套漫画.rar.html"
+    ]
+  },
+  {
+    "folder": "游戏/004-SchoolBoys!夢の御咲祭/转区工具",
+    "html_files": [
+      "ntleas.rar.html",
+      "如何使用转区工具1.png.html",
+      "如何使用转区工具2.png.html"
+    ]
+  },
+  {
+    "folder": "游戏/005-SchoolBoys!见习魔法师的小冒险",
+    "html_files": [
+      "minarai1.02_已用日语环境解压.zip.html",
+      "minarai1.02原版0改动.zip.html",
+      "schoolboys_comic-master.zip.html",
+      "见习魔法师的小型冒险图文攻略.pdf.html"
+    ]
+  },
+  {
+    "folder": "游戏/005-SchoolBoys!见习魔法师的小冒险/转区工具",
+    "html_files": [
+      "ntleas.zip.html",
+      "如何使用转区工具1.png.html",
+      "如何使用转区工具2.png.html"
+    ]
+  },
+  {
+    "folder": "游戏/006-SchoolBoys!世依木守的任务",
+    "html_files": [
+      "ntleas.zip.html",
+      "schoolboys_comic-master_部分世界观配套漫画.zip.html",
+      "世依木守的任务.zip.html"
     ]
   }
 ]
