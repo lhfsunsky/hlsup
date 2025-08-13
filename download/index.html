@@ -24,7 +24,7 @@
           item.html_files.forEach(htmlFile => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.textContent = `${folderName} / ${htmlFile}`;
+            a.textContent = `${folderName} / ${htmlFile.replace('.html', '')}`;
             a.href = encodeURIComponent(folderName) + '/' + encodeURIComponent(htmlFile);
             a.target = '_blank'; // 新标签页打开
             li.appendChild(a);
