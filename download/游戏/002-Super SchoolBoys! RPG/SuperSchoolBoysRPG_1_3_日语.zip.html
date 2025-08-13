@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 002-Super SchoolBoys! RPG\SuperSchoolBoysRPG_1_3_日语.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：002-Super SchoolBoys! RPG\SuperSchoolBoysRPG_1_3_日语.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/9f3ddc9fa1f334e62c4cdcf61badf33f3bf7b484.bin', 'https://i0.hdslb.com/bfs/openplatform/c40207fd372b7735b467f6fbf75f3253b5a27331.bin', 'https://i0.hdslb.com/bfs/openplatform/0a8a61e7aa25d3d6c98b77e663629431f18ddda5.bin', 'https://i0.hdslb.com/bfs/openplatform/49428523302ced9235e1f88f9558ae5f23305693.bin', 'https://i0.hdslb.com/bfs/openplatform/719395519a10fb47265147d0fc53c59bd2749a29.bin', 'https://i0.hdslb.com/bfs/openplatform/1321135b55c0ecb7efa89cafcab0efe6e9a2278c.bin', 'https://i0.hdslb.com/bfs/openplatform/78b75158327f4230dbf7d873054e7258a990c7a7.bin', 'https://i0.hdslb.com/bfs/openplatform/3eca86d8b2a7b800c27ae1ffd19a88aa1684d816.bin', 'https://i0.hdslb.com/bfs/openplatform/3910348baf413dd968609de5537a4655cd84c53e.bin', 'https://i0.hdslb.com/bfs/openplatform/a6c899e64f3c5eced90446c9aff72044b48b274f.bin', 'https://i0.hdslb.com/bfs/openplatform/4344577b97c640fa4a1ff127f4baa0386637dc3a.bin', 'https://i0.hdslb.com/bfs/openplatform/5b09e448a82c5c0aa7b9cf44892998f9d7aee9a0.bin', 'https://i0.hdslb.com/bfs/openplatform/fbe395a1026ec98202388fc990123b754497590c.bin', 'https://i0.hdslb.com/bfs/openplatform/7cf3e92b970521ff60a006dc5438c455225c5886.bin', 'https://i0.hdslb.com/bfs/openplatform/9a681f414b7b49cbe6b49e861383cea6f1d1ffc7.bin', 'https://i0.hdslb.com/bfs/openplatform/093807ea590627b40b56d3731088b166ff9ea114.bin', 'https://i0.hdslb.com/bfs/openplatform/884e222421c9ea81db30d3b8c302809a5e164862.bin', 'https://i0.hdslb.com/bfs/openplatform/b0a1f91bad2c2b5538f6618b2ab5567d29bd0e46.bin', 'https://i0.hdslb.com/bfs/openplatform/ee5976388419760c6e8cafc76ad09f5a00919c8a.bin', 'https://i0.hdslb.com/bfs/openplatform/31882be7976b8e353493e36156b4f5b6194a6879.bin', 'https://i0.hdslb.com/bfs/openplatform/d499f5f36dc1037aac862381222b63200845da7e.bin', 'https://i0.hdslb.com/bfs/openplatform/f084f9f4510164b00de2e07e119a19e8dc522c94.bin', 'https://i0.hdslb.com/bfs/openplatform/8f976f8ff06211e7722573bde4db643ed18dcf3b.bin', 'https://i0.hdslb.com/bfs/openplatform/eeafec27ab3a5f7a9787f56c4f36cd5cff442ab1.bin', 'https://i0.hdslb.com/bfs/openplatform/682bd441cfaf453592049c7f2cfa1ac6fe219fec.bin', 'https://i0.hdslb.com/bfs/openplatform/ecfb7095df5e133b3752b059c824d1b36351a626.bin', 'https://i0.hdslb.com/bfs/openplatform/888699b10429717041e3050a27d921d3e2772f20.bin', 'https://i0.hdslb.com/bfs/openplatform/d758195a0707c0cfc70959d3b0274ad936cdf0a4.bin', 'https://i0.hdslb.com/bfs/openplatform/ed3288ce514197443e7bbfb6609f270c2eb5b962.bin', 'https://i0.hdslb.com/bfs/openplatform/705da740a951203bff8fb8805be338ad39d034fe.bin', 'https://i0.hdslb.com/bfs/openplatform/16a729994ad464e8152f5602b003c2999a45ad04.bin', 'https://i0.hdslb.com/bfs/openplatform/d0459f06b957fb087663e839a820b05a3275956b.bin', 'https://i0.hdslb.com/bfs/openplatform/dc5b109b3996962ea975b211f0cf8109332d1bda.bin', 'https://i0.hdslb.com/bfs/openplatform/6d00467bb478c0bbf90803af05c9fc66d2de89df.bin', 'https://i0.hdslb.com/bfs/openplatform/60c4a1fff6ab32468527e0243a3fa98ee1c5a164.bin', 'https://i0.hdslb.com/bfs/openplatform/72f14f62dd894f65b488265891163d9f72f7cedb.bin', 'https://i0.hdslb.com/bfs/openplatform/847f842d131b1f4df128e2f162143c3aa93edd10.bin', 'https://i0.hdslb.com/bfs/openplatform/98bb2040db25d696c328653123b81e5287cd4e2d.bin', 'https://i0.hdslb.com/bfs/openplatform/c0254f71e4ace59b7ede3173a89b1e360b001411.bin', 'https://i0.hdslb.com/bfs/openplatform/711d6564226ea9f9c99f47988905752fcdc7ffa1.bin', 'https://i0.hdslb.com/bfs/openplatform/749b9911164e4791aa9a2b64bc8103b556561c52.bin', 'https://i0.hdslb.com/bfs/openplatform/5ffa698bbcc9e3a4fb35a490bf7db7bf26a1b2b3.bin', 'https://i0.hdslb.com/bfs/openplatform/5b7c647d59b52f34d76a6a902e9350318519c32a.bin', 'https://i0.hdslb.com/bfs/openplatform/22c6948db7e4a1eab7fba70782dbc206c9290c43.bin', 'https://i0.hdslb.com/bfs/openplatform/5edad81f98988e2a55b46bbdc6251b20b4e80b5f.bin', 'https://i0.hdslb.com/bfs/openplatform/74c1f79ce5e27d0085b4518589e73853a0cf5941.bin', 'https://i0.hdslb.com/bfs/openplatform/00d509de1ed01c5ffed32535dd24bb75ad30cb80.bin', 'https://i0.hdslb.com/bfs/openplatform/828783c8bb550dca4c768516e44427d5792ebce6.bin', 'https://i0.hdslb.com/bfs/openplatform/46d8bf1f161a299b230ede35dd1840683dbf9a9f.bin', 'https://i0.hdslb.com/bfs/openplatform/a8eb5bff7bb0d0fb8ff6ff50f65de2b4a6f47c68.bin', 'https://i0.hdslb.com/bfs/openplatform/0ea4a3f434a5d8f67a44d0a3fa004aa829a85dce.bin', 'https://i0.hdslb.com/bfs/openplatform/4f4d4fe6cb9cc9ab886e39ba7ad5aecdd926bfb5.bin', 'https://i0.hdslb.com/bfs/openplatform/35ea65913f2e2124e55ceb65343d46f89d2b298e.bin', 'https://i0.hdslb.com/bfs/openplatform/01001f43228513f11a49d6a589efad4c28f1301d.bin', 'https://i0.hdslb.com/bfs/openplatform/303354b45061490594aec0897f95eb3f08500b15.bin', 'https://i0.hdslb.com/bfs/openplatform/ae7a4f85994b3ea15f5d5214a07c3762b5505b62.bin', 'https://i0.hdslb.com/bfs/openplatform/8993219ed22938033bc7eccbfd8e24ffe10cf4d6.bin', 'https://i0.hdslb.com/bfs/openplatform/78ef672310964d4d0bcd7f029a7f2fba4a165858.bin', 'https://i0.hdslb.com/bfs/openplatform/8fd1d1050a263e30a60c7e8f9bf96c3da224afe9.bin', 'https://i0.hdslb.com/bfs/openplatform/9a92cad1be8bfdc1d5721d194d599bd19863c98b.bin', 'https://i0.hdslb.com/bfs/openplatform/6e287a542864be4f4ee1f0ed4a331911f38bdc87.bin', 'https://i0.hdslb.com/bfs/openplatform/55d223ea1223b4b0d2baa9bc0bb6649afc8d9ba6.bin', 'https://i0.hdslb.com/bfs/openplatform/726d9dc37cb6534e303c5a45cde325b103e5ae1c.bin', 'https://i0.hdslb.com/bfs/openplatform/dec5366dd0f3b070f61b154122bc080ea40e4f73.bin', 'https://i0.hdslb.com/bfs/openplatform/fd3f820f4f47beabb4ca24f7b32ce90d23cbb73c.bin', 'https://i0.hdslb.com/bfs/openplatform/20e69b45e6360269cafad7b17db2179c23bcc21f.bin', 'https://i0.hdslb.com/bfs/openplatform/5de5246dc05cf94c2e05ebe169541d18fe99c6a3.bin', 'https://i0.hdslb.com/bfs/openplatform/a1719cb3333bae69247e339099daa77cbda633d7.bin', 'https://i0.hdslb.com/bfs/openplatform/c471ce36281578282e2728e5c7a8e8c16c814355.bin', 'https://i0.hdslb.com/bfs/openplatform/1be80a63044fbf0e0566586020f8d663bb279351.bin', 'https://i0.hdslb.com/bfs/openplatform/625312d787bfd76015c79e14ba82f747ebf8ca47.bin', 'https://i0.hdslb.com/bfs/openplatform/f106772382c4007ade96281fdb90d1ce1bcff1a4.bin', 'https://i0.hdslb.com/bfs/openplatform/d2aea44291d19e2552cedb42caef9ea450c8b879.bin', 'https://i0.hdslb.com/bfs/openplatform/617d3507607f53c5f5501315ca36af5ffb90214c.bin', 'https://i0.hdslb.com/bfs/openplatform/133d34d023bef64a96ec000e9d805f986c211ce7.bin', 'https://i0.hdslb.com/bfs/openplatform/db31769a64efd0255514107a5e582df29a9d25c4.bin', 'https://i0.hdslb.com/bfs/openplatform/126aaea69a8a124d4e5a6327d36a865c5259f474.bin', 'https://i0.hdslb.com/bfs/openplatform/6546d6c44c28df1b2292de64570462a2ab7a1262.bin', 'https://i0.hdslb.com/bfs/openplatform/34d814482fe2c09b5376f76e0c3d013ae67060c6.bin', 'https://i0.hdslb.com/bfs/openplatform/1456f6692541380e383c67b3d47c515127bb0708.bin', 'https://i0.hdslb.com/bfs/openplatform/a7227abbbc2f927e55761a2724c2c6b2e13b709b.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '002-Super SchoolBoys! RPG\SuperSchoolBoysRPG_1_3_日语.zip',
+    types: [{
+      description: '002-Super SchoolBoys! RPG\SuperSchoolBoysRPG_1_3_日语.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>
