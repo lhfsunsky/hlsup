@@ -12,7 +12,7 @@ def generate_folders_json(base_dir='.'):
         html_files = [f for f in files if f.lower().endswith('.html')]
         if html_files:
             # 相对于 base_dir 的路径
-            rel_path = os.path.relpath(root, base_dir)
+            rel_path = os.path.relpath(root, base_dir).replace(os.sep, '/')
             folders.append({
                 "folder": rel_path,
                 "html_files": html_files

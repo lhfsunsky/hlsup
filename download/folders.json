@@ -11,17 +11,16 @@
     ]
   },
   {
-    "folder": "游戏\\001-SchoolBoys!步_双版本",
+    "folder": "游戏/001-SchoolBoys!步_双版本",
     "html_files": [
       "scb.ayumi BGM解包.zip.html",
       "schoolboys!步  安卓版.zip.html",
       "Schoolboys!步 电脑版.zip.html",
-      "schoolboys_comic-master_scb步流程专属配套漫画.rar.html",
-      "手机用户如何安装SCB!步.mp4.html"
+      "schoolboys_comic-master_scb步流程专属配套漫画.rar.html"
     ]
   },
   {
-    "folder": "游戏\\001-SchoolBoys!步_双版本\\SCB!步_游戏攻略",
+    "folder": "游戏/001-SchoolBoys!步_双版本/SCB!步_游戏攻略",
     "html_files": [
       "AYUMI学园活动数值表.xlsx.html",
       "AYUMI第一章攻略.docx.html",
@@ -30,9 +29,20 @@
     ]
   },
   {
-    "folder": "游戏\\001-SchoolBoys!步_双版本\\手机用户如何安装SCB!步",
+    "folder": "游戏/001-SchoolBoys!步_双版本/手机用户如何安装SCB!步",
     "html_files": [
       "index.html"
+    ]
+  },
+  {
+    "folder": "游戏/002-Super SchoolBoys! RPG",
+    "html_files": [
+      "Hard过关存档.zip.html",
+      "lolita想用手机玩，用这个修复字体.ttf.html",
+      "SCBRPG全线攻略.docx.html",
+      "schoolboys_comic-master_部分世界观配套漫画.rar.html",
+      "SUPER SCHOOLBOYS RPG 汉化版 20200802.zip.html",
+      "SuperSchoolBoysRPG_1_3_日语.zip.html"
     ]
   }
 ]
