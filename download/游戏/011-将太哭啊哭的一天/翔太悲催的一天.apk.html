@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 011-将太哭啊哭的一天\翔太悲催的一天.apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：011-将太哭啊哭的一天\翔太悲催的一天.apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/de7cb8167b84696a403d7096843b31e0bbf6c62a.bin', 'https://i0.hdslb.com/bfs/openplatform/2b77822b310d0ed342646f3b741f9a7ee95da689.bin', 'https://i0.hdslb.com/bfs/openplatform/a4f58ad398e9f3c31e5cd86df3b1675e1ce81c92.bin', 'https://i0.hdslb.com/bfs/openplatform/737793854cb279e64e3b4ac49adb276aa6c8b25a.bin', 'https://i0.hdslb.com/bfs/openplatform/813fe8fca86966740a3d47fd8ddf196271a6a874.bin', 'https://i0.hdslb.com/bfs/openplatform/136c73ddb409ee0473de05f859b2c389d58baf43.bin', 'https://i0.hdslb.com/bfs/openplatform/bd0262cc473a3cd64d14fd21d186cc5b7125b4d2.bin', 'https://i0.hdslb.com/bfs/openplatform/682b03d67c4d99ca358bcb9ecdebb3a51f3c9ff8.bin', 'https://i0.hdslb.com/bfs/openplatform/665f6c620c76688c8545ab6a6a1b2cfada829cda.bin', 'https://i0.hdslb.com/bfs/openplatform/a142f96f6c9be7c3a1d0a97d9c9d2460c2709a82.bin', 'https://i0.hdslb.com/bfs/openplatform/1a7ad49465c70b5f4d6c300a26c475f80f241f14.bin', 'https://i0.hdslb.com/bfs/openplatform/a86c5cb6f94d74e6febb30b2ad4c96b9e796b746.bin', 'https://i0.hdslb.com/bfs/openplatform/f7f45ba91e0766841bfb91ba0b55eb5257cdb5d0.bin', 'https://i0.hdslb.com/bfs/openplatform/0efe81101c66d3b623011f8465c40103b765107d.bin', 'https://i0.hdslb.com/bfs/openplatform/67c25a553c6ef7bb56369ca4e13567ce667771f5.bin', 'https://i0.hdslb.com/bfs/openplatform/1d41f8c85f0b6a1bd35cd22f421c495ed0c6294a.bin', 'https://i0.hdslb.com/bfs/openplatform/4eb0abc6cb70d77345ae32ba476892d90d2333b6.bin', 'https://i0.hdslb.com/bfs/openplatform/fe67b0c2b24bf6e29b2355af6d4fc3eabf0537ad.bin', 'https://i0.hdslb.com/bfs/openplatform/7ea844e39dfe932584001b5bb30c79aa44cdfd9b.bin', 'https://i0.hdslb.com/bfs/openplatform/fd5347872a2e7708a9c2e6a1126c2b015edc0839.bin', 'https://i0.hdslb.com/bfs/openplatform/7f186fdaeb349ebbbd219e4bf438786848fbdb61.bin', 'https://i0.hdslb.com/bfs/openplatform/2f7b98e0315297ca24d87afd1bf62b7cb4c6db8c.bin', 'https://i0.hdslb.com/bfs/openplatform/57f1022bed87d38b191dcbcfd9368bd5f756f857.bin', 'https://i0.hdslb.com/bfs/openplatform/03519d064e9f6fd2c41ca15d42f21a8acb2cbaef.bin', 'https://i0.hdslb.com/bfs/openplatform/fb47c63c877a881a4977dfba483bedbcb26702cc.bin', 'https://i0.hdslb.com/bfs/openplatform/8e34e1b1736ebb74ded5dabc1bd7fce1b77dd983.bin', 'https://i0.hdslb.com/bfs/openplatform/5883642ba217d6c5c432d326f27f0d25ab55a201.bin', 'https://i0.hdslb.com/bfs/openplatform/2bcc2e93b079b5d6e5fb1b1e701702f66f6ce4bc.bin', 'https://i0.hdslb.com/bfs/openplatform/498fcd98b3de7acb9871201e89edee81aa6f4530.bin', 'https://i0.hdslb.com/bfs/openplatform/06865c51bc2b3d58b59becb477916e3970bb0a80.bin', 'https://i0.hdslb.com/bfs/openplatform/7929478bddc2e77ae89931dca17ee2e0caed0926.bin', 'https://i0.hdslb.com/bfs/openplatform/b87294d83e5fade596c08128b014ce420ec4dddb.bin', 'https://i0.hdslb.com/bfs/openplatform/7f3f656e1315a60f7f3895947d8c889812f2c2e9.bin', 'https://i0.hdslb.com/bfs/openplatform/dde500b2f548f416616b643ea632e1186b5b54ac.bin', 'https://i0.hdslb.com/bfs/openplatform/803c24ddc70ee23315c064816fa96c4585e55067.bin', 'https://i0.hdslb.com/bfs/openplatform/9141e5a4e9d985e7307be40105e76f0f4e3bd369.bin', 'https://i0.hdslb.com/bfs/openplatform/4272bb0d67e5b5107bcd59ca25a798833804045a.bin', 'https://i0.hdslb.com/bfs/openplatform/afffeb0b214ab74ca3a1f3d927e0aef3b7217522.bin', 'https://i0.hdslb.com/bfs/openplatform/893a54ad75d2d6cac26e3447a69f0f92668fce1c.bin', 'https://i0.hdslb.com/bfs/openplatform/a800f41f0d0ce4ccb56b1a783712ac4519d8d3c7.bin', 'https://i0.hdslb.com/bfs/openplatform/eee280faae96c6bb7e1215c3b09d8a7f84978497.bin', 'https://i0.hdslb.com/bfs/openplatform/c590053df4ce79f23fb13c0f660db91d52a4db41.bin', 'https://i0.hdslb.com/bfs/openplatform/b68afbd48919c00e3d87962ac16bd0a8a8e6e45f.bin', 'https://i0.hdslb.com/bfs/openplatform/fe11f24e876a73f80cdf7fc54ff4442a9668d8bb.bin', 'https://i0.hdslb.com/bfs/openplatform/eade802ee5f1def5f5c0498f1982e4afa2f7a3e9.bin', 'https://i0.hdslb.com/bfs/openplatform/fc9aa5a4297d493496288055c80c59d61bbbf805.bin', 'https://i0.hdslb.com/bfs/openplatform/e8795e060d316331c6693c6b31eaf24351a23192.bin', 'https://i0.hdslb.com/bfs/openplatform/f76309b285c4c1c10224174ad283645509c8542b.bin', 'https://i0.hdslb.com/bfs/openplatform/956ce17ad0ff5354254d2c1723679bdd298e66d4.bin', 'https://i0.hdslb.com/bfs/openplatform/d09f16a2bbc96a13ebbc35d98e95fdc1c6eb5164.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '011-将太哭啊哭的一天\翔太悲催的一天.apk',
+    types: [{
+      description: '011-将太哭啊哭的一天\翔太悲催的一天.apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

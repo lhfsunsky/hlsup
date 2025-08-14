@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 012-Innocent city\原版游戏\InnocentCity_MacOS.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：012-Innocent city\原版游戏\InnocentCity_MacOS.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/2f6362082e7022778dc9868d56af2721f7898df9.bin', 'https://i0.hdslb.com/bfs/openplatform/3e6589342f2e7734393bbc500fb6f70729d05d8c.bin', 'https://i0.hdslb.com/bfs/openplatform/e5510db5e87821372cef5e27f06b6c21bac867d3.bin', 'https://i0.hdslb.com/bfs/openplatform/7669029e9dcca5a12eef7eea46ae1165916e7d96.bin', 'https://i0.hdslb.com/bfs/openplatform/be8a1e7cb6952e88e43d2e174364d6bbc935499e.bin', 'https://i0.hdslb.com/bfs/openplatform/e8d1117c2a3a67a1ad30af36bd4c5aee9fc275bc.bin', 'https://i0.hdslb.com/bfs/openplatform/3d51f372a923336dcf5af0bbeafede9863f580d0.bin', 'https://i0.hdslb.com/bfs/openplatform/3ed220b1aae5c6450b8308a2c35c13978d44a00a.bin', 'https://i0.hdslb.com/bfs/openplatform/f738e555692c747061248de555cb9989865cd949.bin', 'https://i0.hdslb.com/bfs/openplatform/05cdad25166068c5056db6f08c108f0cbf96c1ad.bin', 'https://i0.hdslb.com/bfs/openplatform/6d74c8b1702f95b4f06f656df894d65aa6b0373c.bin', 'https://i0.hdslb.com/bfs/openplatform/21b720db25e1a93a52e18a09b4656c96600f287d.bin', 'https://i0.hdslb.com/bfs/openplatform/5f00a13e3ea6e369a1dbecd1782b6d4b6b08cf78.bin', 'https://i0.hdslb.com/bfs/openplatform/6209c07bb95644f193b570c9b5ccde01e57933c8.bin', 'https://i0.hdslb.com/bfs/openplatform/38674f42b31c0a3930d07bf5d9ccff247d702d74.bin', 'https://i0.hdslb.com/bfs/openplatform/9325e9c2f0af796755244381bfaecaaec398ddfb.bin', 'https://i0.hdslb.com/bfs/openplatform/4f5d979957770585c400d0e55b0bbdd486e3620f.bin', 'https://i0.hdslb.com/bfs/openplatform/23bef0b1a6f7528e8f69c9cd7aa02db517128de2.bin', 'https://i0.hdslb.com/bfs/openplatform/8f4b8d85bf272d3b0c9a19cee497f794f26cb207.bin', 'https://i0.hdslb.com/bfs/openplatform/4370201de6d4464538f3609c27dff52973483f37.bin', 'https://i0.hdslb.com/bfs/openplatform/22b5fe42dfc19443673ebb9f4c578cf31520dd31.bin', 'https://i0.hdslb.com/bfs/openplatform/77135585f98716dcab82aa2754cefaf053bc558a.bin', 'https://i0.hdslb.com/bfs/openplatform/ab5dfc0214e7fd3c6cc20eb6dad6036c3f5edc8c.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '012-Innocent city\原版游戏\InnocentCity_MacOS.zip',
+    types: [{
+      description: '012-Innocent city\原版游戏\InnocentCity_MacOS.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

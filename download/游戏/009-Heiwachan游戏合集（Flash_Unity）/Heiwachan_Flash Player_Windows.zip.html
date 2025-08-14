@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 009-Heiwachan游戏合集（Flash_Unity）\Heiwachan_Flash Player_Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：009-Heiwachan游戏合集（Flash_Unity）\Heiwachan_Flash Player_Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/b09f3c0722b336382558259ca7d4505f3d6aa0b9.bin', 'https://i0.hdslb.com/bfs/openplatform/00f4bb5b418d89dd221f5b2b076107dce0f1b98f.bin', 'https://i0.hdslb.com/bfs/openplatform/245f19f1637eb722843375eeaa0ad7621648ab7f.bin', 'https://i0.hdslb.com/bfs/openplatform/98b9c11b789f3203c840ce22e4c4783c3a6a1999.bin', 'https://i0.hdslb.com/bfs/openplatform/6eccb7fb39a946e41899cac06cf84616963e007a.bin', 'https://i0.hdslb.com/bfs/openplatform/59bb7d5012bd5f1aa3ba4af153b37cdf59741b11.bin', 'https://i0.hdslb.com/bfs/openplatform/d97ebf77fa3349ed0da2fc5111ebb5bb959b657c.bin', 'https://i0.hdslb.com/bfs/openplatform/96f42a92a67db27db39f7373ef55d9aa07896deb.bin', 'https://i0.hdslb.com/bfs/openplatform/5e7b6b8b2f531c270dff3c9528473e24707edcb4.bin', 'https://i0.hdslb.com/bfs/openplatform/3b88adb55a667f5d6a744126cf6f84675456053b.bin', 'https://i0.hdslb.com/bfs/openplatform/58e69790a23b785854f8c7a7b6c5ad44f84e3ba0.bin', 'https://i0.hdslb.com/bfs/openplatform/c617b92e1d34b8f2e03fc1965dbc76f1153916ac.bin', 'https://i0.hdslb.com/bfs/openplatform/095385959e74fb045e3c4c7c1387594430c6b3c5.bin', 'https://i0.hdslb.com/bfs/openplatform/bc6ee52650e10146a30a804ca7e8e1e7431b3641.bin', 'https://i0.hdslb.com/bfs/openplatform/20ab5390ff246361b03919b764d60f4889f795d3.bin', 'https://i0.hdslb.com/bfs/openplatform/5dcdfe1e6d7544ead32617546b153a722548bd0d.bin', 'https://i0.hdslb.com/bfs/openplatform/30067e2c5c2b43861aa01c342148b5018fc0224b.bin', 'https://i0.hdslb.com/bfs/openplatform/9a7bf6aff1af52bab6ccedaac631e8f4e2190a63.bin', 'https://i0.hdslb.com/bfs/openplatform/d924e15eae2d6229f156542c5f1e4425cc4c1525.bin', 'https://i0.hdslb.com/bfs/openplatform/f7e3e55b709a50498c5c86ce03f9fb1c20a6c9a0.bin', 'https://i0.hdslb.com/bfs/openplatform/d6044e224561cfd34bbb3b366dcc74c423336f80.bin', 'https://i0.hdslb.com/bfs/openplatform/5c626cdf77619b2662258e487c80e4c42636a276.bin', 'https://i0.hdslb.com/bfs/openplatform/e5c18e4fe01090424508f0b5bd7b99106dc7ac59.bin', 'https://i0.hdslb.com/bfs/openplatform/16d4c7b54c40102945e2e0534df0e958a75c30e4.bin', 'https://i0.hdslb.com/bfs/openplatform/9085f4cd9936a73a6ad7e1482b58f905cc52d6de.bin', 'https://i0.hdslb.com/bfs/openplatform/934a05e83ab886f9472cb0211af558dfc500af35.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '009-Heiwachan游戏合集（Flash_Unity）\Heiwachan_Flash Player_Windows.zip',
+    types: [{
+      description: '009-Heiwachan游戏合集（Flash_Unity）\Heiwachan_Flash Player_Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>
