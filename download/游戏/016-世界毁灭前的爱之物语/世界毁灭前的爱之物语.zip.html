@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 016-世界毁灭前的爱之物语\世界毁灭前的爱之物语.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：016-世界毁灭前的爱之物语\世界毁灭前的爱之物语.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/a00aa627c283eebb6385ef54ffc497242ddab849.bin', 'https://i0.hdslb.com/bfs/openplatform/c94f4bb45410f986067c17cfd38e1702dbb83f7e.bin', 'https://i0.hdslb.com/bfs/openplatform/9a53cac3bccd5c888df5c30c48616cad3765e95a.bin', 'https://i0.hdslb.com/bfs/openplatform/76f497a6343019270909c0296b15f1f81e139a4f.bin', 'https://i0.hdslb.com/bfs/openplatform/b73028fa765b652603a74435d49d0d97726af90e.bin', 'https://i0.hdslb.com/bfs/openplatform/cad743556abfcaa0ac784699cc643ff9592f09d6.bin', 'https://i0.hdslb.com/bfs/openplatform/1943d6bd51c81c4a209745fda3e48923b707fffa.bin', 'https://i0.hdslb.com/bfs/openplatform/702aaee42207fd51dc3426ec98087bcf661e20fd.bin', 'https://i0.hdslb.com/bfs/openplatform/351ed2c08b67ba058cc2b10e024b09d97f71fb17.bin', 'https://i0.hdslb.com/bfs/openplatform/b5e6cd7b3973a473dcc303d0939e7d1dbf38f534.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '016-世界毁灭前的爱之物语\世界毁灭前的爱之物语.zip',
+    types: [{
+      description: '016-世界毁灭前的爱之物语\世界毁灭前的爱之物语.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

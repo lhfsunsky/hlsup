@@ -16,8 +16,7 @@
       "scb.ayumi BGM解包.zip.html",
       "schoolboys!步  安卓版.zip.html",
       "Schoolboys!步 电脑版.zip.html",
-      "schoolboys_comic-master_scb步流程专属配套漫画.rar.html",
-      "手机用户如何安装SCB!步.mp4.html"
+      "schoolboys_comic-master_scb步流程专属配套漫画.rar.html"
     ]
   },
   {
@@ -91,6 +90,87 @@
       "ntleas.zip.html",
       "schoolboys_comic-master_部分世界观配套漫画.zip.html",
       "世依木守的任务.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/007-NS就算在游戏里我的青春恋爱物语果然有问题",
+    "html_files": [
+      "就算在游戏里我的青春恋爱物语也有问题.nsp.html",
+      "果然在游戏里我的青春恋爱物语也有问题 移植版_1.2.apk.html",
+      "果然在游戏里我的青春恋爱物语也有问题 续 移植版_1.2.apk.html"
+    ]
+  },
+  {
+    "folder": "游戏/008-Great Our Days",
+    "html_files": [
+      "GOD机翻-报错要点ignore_Windows.zip.html",
+      "GreatOurDays-0.6.4.apk.html",
+      "GreatOurDays_0.6.4_Windows.zip.html",
+      "GreatOurDays_0.6.6_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/009-Heiwachan游戏合集（Flash_Unity）",
+    "html_files": [
+      "Flash Player 终极精简版 务必断网使用否则强制没商量的提醒更新.exe.html",
+      "Heiwachan Games Unity Games.zip.html",
+      "Heiwachan_Flash Player_Windows.zip.html",
+      "有难点的flash攻略.txt.html"
+    ]
+  },
+  {
+    "folder": "游戏/010-我的夏休",
+    "html_files": [
+      "我的夏休回忆_Windows.zip.html",
+      "我的暑假秘密生活 V2.0.apk.html"
+    ]
+  },
+  {
+    "folder": "游戏/011-将太哭啊哭的一天",
+    "html_files": [
+      "翔太悲催的一天.apk.html"
+    ]
+  },
+  {
+    "folder": "游戏/012-Innocent city",
+    "html_files": [
+      "Innocent City同人_Windows.zip.html",
+      "翻译文件script.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/012-Innocent city/原版游戏",
+    "html_files": [
+      "InnocentCity_Android.apk.html",
+      "InnocentCity_MacOS.zip.html",
+      "InnocentCity_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/012-Innocent city/汉化游戏",
+    "html_files": [
+      "InnocentCity机翻_Windows.zip.html",
+      "InnocentCity汉化版.apk.html"
+    ]
+  },
+  {
+    "folder": "游戏/014-小王子圣晶石",
+    "html_files": [
+      "LittlePrince_SaintQuartzStrike.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/016-世界毁灭前的爱之物语",
+    "html_files": [
+      "世界毁灭前的爱之物语.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/018-今日是魔法少年",
+    "html_files": [
+      "今日是魔法少年冷狐三核版(开局送作弊器).apk.html",
+      "解压前必看.txt.html",
+      "魔法少年日语_Windows.zip.html"
     ]
   }
 ]
