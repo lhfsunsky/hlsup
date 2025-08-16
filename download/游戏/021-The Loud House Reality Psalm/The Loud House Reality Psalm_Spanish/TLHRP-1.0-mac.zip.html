@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 021-The Loud House Reality Psalm\The Loud House Reality Psalm_Spanish\TLHRP-1.0-mac.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：021-The Loud House Reality Psalm\The Loud House Reality Psalm_Spanish\TLHRP-1.0-mac.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/92f335644478214b58477e4f2801bb56e7313e81.bin', 'https://i0.hdslb.com/bfs/openplatform/4cfa9c9edc87bca8fb42cc7da98551f496f2c623.bin', 'https://i0.hdslb.com/bfs/openplatform/d4c71f62b0d60de1edac7d15ad77313f119a3f7e.bin', 'https://i0.hdslb.com/bfs/openplatform/c49b7d3fd91cbee58e9ed298314871cc824e3a9f.bin', 'https://i0.hdslb.com/bfs/openplatform/e51667f6504eda4c4f764a12ffa801587a4288f7.bin', 'https://i0.hdslb.com/bfs/openplatform/a570498b0601c6f165cda13e33a5579b6a64d5a1.bin', 'https://i0.hdslb.com/bfs/openplatform/0a855276a2d7abec9557bdc8c40e76c0ab9a5296.bin', 'https://i0.hdslb.com/bfs/openplatform/40218f71244d50b201e5fc2e4fd50ca2c36bffdd.bin', 'https://i0.hdslb.com/bfs/openplatform/c4d976a5a61bf79f3a4a16f5a4d5297644ba80d1.bin', 'https://i0.hdslb.com/bfs/openplatform/3cd839cbf691e0e5d953b8e5c353e6fdda26ff2d.bin', 'https://i0.hdslb.com/bfs/openplatform/e9d20274a84b190c8e4eff5415ea597d25b22a63.bin', 'https://i0.hdslb.com/bfs/openplatform/555cfc11fbdff0ff43271f7892f4aaafb3bb927a.bin', 'https://i0.hdslb.com/bfs/openplatform/e0d31e20c55f095508f39cd07b2773a932752edf.bin', 'https://i0.hdslb.com/bfs/openplatform/fe3fcf68b10fb8be4f77311bc38322d680ad90c8.bin', 'https://i0.hdslb.com/bfs/openplatform/cb41dc0cbfe53de2086ee16de2fb098236c13854.bin', 'https://i0.hdslb.com/bfs/openplatform/674072a5dde2be45bde38790049913b2b7db5946.bin', 'https://i0.hdslb.com/bfs/openplatform/95f6b8bdd665254eb2deac5c07d478ae0c5016c9.bin', 'https://i0.hdslb.com/bfs/openplatform/98c317c58b48baf4d16cf9eafa82259fb0ca5456.bin', 'https://i0.hdslb.com/bfs/openplatform/27c49f97b2c93822648dda146eceb3da37977444.bin', 'https://i0.hdslb.com/bfs/openplatform/c199f61e864f04bbb2c4b4009c7b7ae91225c58f.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '021-The Loud House Reality Psalm\The Loud House Reality Psalm_Spanish\TLHRP-1.0-mac.zip',
+    types: [{
+      description: '021-The Loud House Reality Psalm\The Loud House Reality Psalm_Spanish\TLHRP-1.0-mac.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

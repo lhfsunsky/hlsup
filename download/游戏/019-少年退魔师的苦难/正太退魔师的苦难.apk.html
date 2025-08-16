@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 019-少年退魔师的苦难\正太退魔师的苦难.apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：019-少年退魔师的苦难\正太退魔师的苦难.apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/cad9154ea774f6d38b8af3656f24860b8ef65b4c.bin', 'https://i0.hdslb.com/bfs/openplatform/b3afbb8bfddd43f256afa3e300198c5b5e295ee8.bin', 'https://i0.hdslb.com/bfs/openplatform/3eb87b8c59cb4a55f737fc5e2b16ed5f33795faa.bin', 'https://i0.hdslb.com/bfs/openplatform/b566e1795f48108c66b7493d3c880f493c4b18ff.bin', 'https://i0.hdslb.com/bfs/openplatform/8ffef92b51fbb6969d3da56bf0f901b17eccf3a7.bin', 'https://i0.hdslb.com/bfs/openplatform/c81bf20a2356e605d3edf21df5f6769d864c3dc0.bin', 'https://i0.hdslb.com/bfs/openplatform/d9a37b4b41e19af1a6761ba176cb78d666bdc8f7.bin', 'https://i0.hdslb.com/bfs/openplatform/4de5cec8fdcc84e4d7ea673416ec9aa7d646a0be.bin', 'https://i0.hdslb.com/bfs/openplatform/db9a9bc64a18ca5b3d3cff977930d52074d6f267.bin', 'https://i0.hdslb.com/bfs/openplatform/a83cb055b0b47ffcfbca9fa33c7585b9d04cb6db.bin', 'https://i0.hdslb.com/bfs/openplatform/7a24d99d52032f99cfa75a9a581d862c0b031d2c.bin', 'https://i0.hdslb.com/bfs/openplatform/ff54650c75398fb5ebd7e0bdf6681ea5f8931f20.bin', 'https://i0.hdslb.com/bfs/openplatform/95b218f3e9c6810c02603a8833e51fca6abcb49c.bin', 'https://i0.hdslb.com/bfs/openplatform/b8ef4643157019019dacdc305d05899f2a3b5ee2.bin', 'https://i0.hdslb.com/bfs/openplatform/c6517a4159e807b27170078974a4dcdd59ffba19.bin', 'https://i0.hdslb.com/bfs/openplatform/0ce4ceedd49034da89c0dc07a00e5a3ea15de899.bin', 'https://i0.hdslb.com/bfs/openplatform/f654df88a33f9224b4d84c3ca1e251959abdf405.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '019-少年退魔师的苦难\正太退魔师的苦难.apk',
+    types: [{
+      description: '019-少年退魔师的苦难\正太退魔师的苦难.apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 031-S×M_L2DV2\SML2D_vol2_v101.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：031-S×M_L2DV2\SML2D_vol2_v101.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/1519afeaf2b70e39837e717921a7f32ebae8bd69.bin', 'https://i0.hdslb.com/bfs/openplatform/c5245b746500b27a2f894afade9a5f7fe54b3c1b.bin', 'https://i0.hdslb.com/bfs/openplatform/5fe53005a74d91b78e9a961d0d0ee4bf3918867a.bin', 'https://i0.hdslb.com/bfs/openplatform/ae059a328333e46ac8a30dd4b84f5b7dc4c1649c.bin', 'https://i0.hdslb.com/bfs/openplatform/27f17506125d35956be80bdd27b57c00807cebe5.bin', 'https://i0.hdslb.com/bfs/openplatform/ca093e9e43cb818178c4021e78d9abbfb2dd107b.bin', 'https://i0.hdslb.com/bfs/openplatform/e989f6427cd1f57625a41898af869108e5380b08.bin', 'https://i0.hdslb.com/bfs/openplatform/667c440378ba0044ea6860de4695615f6b3b12cf.bin', 'https://i0.hdslb.com/bfs/openplatform/dd19ed8eb25f259ebfe840f0abe258d491d8d13b.bin', 'https://i0.hdslb.com/bfs/openplatform/87ec2c0053046332e1807316652da7a30c0dbcba.bin', 'https://i0.hdslb.com/bfs/openplatform/311d0fe0b023d9271e1d4250a681f3fcaee675e3.bin', 'https://i0.hdslb.com/bfs/openplatform/4ebc20ca952a55db786b02eb5339741538fb070b.bin', 'https://i0.hdslb.com/bfs/openplatform/9caee8375241dda610968fa50f7bffcb5ca51c0d.bin', 'https://i0.hdslb.com/bfs/openplatform/82335cd2c7dd28e0a18e18ceae5c313bd1d0eff4.bin', 'https://i0.hdslb.com/bfs/openplatform/4c63e1c7833c4cc59b75b1ba579bb467dc28f1f1.bin', 'https://i0.hdslb.com/bfs/openplatform/d25f94555b21e4f6eb4f37c5690c527dc12f005e.bin', 'https://i0.hdslb.com/bfs/openplatform/0860156fa59e2484d574af6061c768c87b99672e.bin', 'https://i0.hdslb.com/bfs/openplatform/b9ebcfceb667b99c7158b4798b048414b5c81b89.bin', 'https://i0.hdslb.com/bfs/openplatform/726e88e33d225f9ffd4bf1dfa303b50fd914fbb7.bin', 'https://i0.hdslb.com/bfs/openplatform/04ddb2eb215d350df23c0d5108b8c51e8b26c535.bin', 'https://i0.hdslb.com/bfs/openplatform/3c34b38a0f753f35a49f920b8f7da9aaf792ae99.bin', 'https://i0.hdslb.com/bfs/openplatform/a0d589c306594ab63e5ef4f030f041ba5f4537aa.bin', 'https://i0.hdslb.com/bfs/openplatform/1c3338cef43d889527e73530bae996076d48e255.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '031-S×M_L2DV2\SML2D_vol2_v101.zip',
+    types: [{
+      description: '031-S×M_L2DV2\SML2D_vol2_v101.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

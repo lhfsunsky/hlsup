@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 029-补完计划\补完计划_Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：029-补完计划\补完计划_Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/58576315ac2458c9cba6da1264dada6bee909b7f.bin', 'https://i0.hdslb.com/bfs/openplatform/0005162519f150d7a5294b4acd0eb0fe85c3fa73.bin', 'https://i0.hdslb.com/bfs/openplatform/d6e86fbf0cd93c0d4363e68c85140f75813be305.bin', 'https://i0.hdslb.com/bfs/openplatform/f85d24d58dacb20a3dba5e6d63a0021fd6e35cec.bin', 'https://i0.hdslb.com/bfs/openplatform/be5277eeeea51d15ae2705dac28b1cc9f760d5d2.bin', 'https://i0.hdslb.com/bfs/openplatform/b96abfb97f8ba092d7c6ad190e05bd397e887bd6.bin', 'https://i0.hdslb.com/bfs/openplatform/1fb2d9bbf162612d05a1f010f3325f924ada49ad.bin', 'https://i0.hdslb.com/bfs/openplatform/1d3a0406eb027d0bd555a7bdb193fb0a5526af59.bin', 'https://i0.hdslb.com/bfs/openplatform/87b3c3fe1ede0dfef0db99fbb722a344fb63e98e.bin', 'https://i0.hdslb.com/bfs/openplatform/de4cb4ef5553cbf77184b7d56d4c27d993db8b06.bin', 'https://i0.hdslb.com/bfs/openplatform/4c61b7acd7e1bf13ccba418eac3713e6281ec3b9.bin', 'https://i0.hdslb.com/bfs/openplatform/1879e738deae832cb6c0e9c80db24ab4f0a2ef01.bin', 'https://i0.hdslb.com/bfs/openplatform/713221df968726ef02dd9291d3ae16545938bb2e.bin', 'https://i0.hdslb.com/bfs/openplatform/4cdd7d249b19e0f6d8bb91beaee78bd905b6e8e0.bin', 'https://i0.hdslb.com/bfs/openplatform/53589154e548e3f884a17ff440057ecd78306f57.bin', 'https://i0.hdslb.com/bfs/openplatform/ebdd13f898478b1e31a7e454cf4531fc590cece5.bin', 'https://i0.hdslb.com/bfs/openplatform/b5311e5003a7ea8050d1db84e51a34d25e8a636a.bin', 'https://i0.hdslb.com/bfs/openplatform/4d6ff4655acf06159a63a464ec4fd6a0cb5ecf9b.bin', 'https://i0.hdslb.com/bfs/openplatform/d7b45f68ce0131b1e1a5df841247f2fc1f560d07.bin', 'https://i0.hdslb.com/bfs/openplatform/364e43dce8c28123a6a21c852fda009e7c9a2c05.bin', 'https://i0.hdslb.com/bfs/openplatform/1049d47e5bed28cc9154e10dd9de476e9c588921.bin', 'https://i0.hdslb.com/bfs/openplatform/0ec06e5b786dd3c776107881c3eb8b2678721f84.bin', 'https://i0.hdslb.com/bfs/openplatform/4f684176566db15c3aef81635502c3c2775e5e33.bin', 'https://i0.hdslb.com/bfs/openplatform/86ee70bbc482779f09a77a603ae48550543c097b.bin', 'https://i0.hdslb.com/bfs/openplatform/425c6faa63c2b2b1ca25f451d1a6a55211431ced.bin', 'https://i0.hdslb.com/bfs/openplatform/b5228d89b0199c13a32502522d7f11a8085e0832.bin', 'https://i0.hdslb.com/bfs/openplatform/71ad00ab337f8506b10ecdd0e5e0c03bfe0b0b1b.bin', 'https://i0.hdslb.com/bfs/openplatform/5f32aeed0d84158136aa90f5a89ae7b533eb1e25.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '029-补完计划\补完计划_Windows.zip',
+    types: [{
+      description: '029-补完计划\补完计划_Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

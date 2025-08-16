@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 020-Max the Eif\MtE_5.0.apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：020-Max the Eif\MtE_5.0.apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/2b2162e9a09c7ae7452b91563069ef0eeb4be7d6.bin', 'https://i0.hdslb.com/bfs/openplatform/3ab4720d7fecd5cb9e63d81bc5c981fab4898f2a.bin', 'https://i0.hdslb.com/bfs/openplatform/261887fcfb87572c0eae96f64f703f8ea2e45126.bin', 'https://i0.hdslb.com/bfs/openplatform/311743e03c61df271dbcc91c49517cd7866aa098.bin', 'https://i0.hdslb.com/bfs/openplatform/428b90069143156a38e583c139a8e390ebef331d.bin', 'https://i0.hdslb.com/bfs/openplatform/ae77de551cabec4df7d9da6ba5ef03615da4564b.bin', 'https://i0.hdslb.com/bfs/openplatform/4bfb2aec9dd30d07d71e8ecf9d2ad637d768a1ef.bin', 'https://i0.hdslb.com/bfs/openplatform/7346a706017b764d8d45a1ea036e2d4dc4f26b1c.bin', 'https://i0.hdslb.com/bfs/openplatform/9ade7153a932003e4e064f6451c1340640d031c0.bin', 'https://i0.hdslb.com/bfs/openplatform/75f912a5efcc7fc4c1a77c9f893ba655f2cff958.bin', 'https://i0.hdslb.com/bfs/openplatform/743aa251255c0221143ef33dea0a4f09e277e4c6.bin', 'https://i0.hdslb.com/bfs/openplatform/970199777e01e19beeacf173d3db5402bcbaa36f.bin', 'https://i0.hdslb.com/bfs/openplatform/80053cba342f68348645806f97a2ecc4c80fa329.bin', 'https://i0.hdslb.com/bfs/openplatform/5440bd1567855f097e67ab11ecd4cb01c3f9dd65.bin', 'https://i0.hdslb.com/bfs/openplatform/7683acdff7bc3815ab9b6aa0d96af1d62d2153d2.bin', 'https://i0.hdslb.com/bfs/openplatform/438833f64de0c2eb59fa2c32319cecb6e1630043.bin', 'https://i0.hdslb.com/bfs/openplatform/7098e238257a8b5e69be6d707b7ef9e923151c1b.bin', 'https://i0.hdslb.com/bfs/openplatform/be408ac293ebd77029fc639677ee531d2779cb4f.bin', 'https://i0.hdslb.com/bfs/openplatform/ac5ae87878feb793eacdb62dacf142649c82019b.bin', 'https://i0.hdslb.com/bfs/openplatform/095bf95f088da44c852f6036c362850befdfcec9.bin', 'https://i0.hdslb.com/bfs/openplatform/b265ba56bed38a304e51bf3eb4c87a783289c790.bin', 'https://i0.hdslb.com/bfs/openplatform/c08122803d378b564caa8e8279d814fdd8dbfffb.bin', 'https://i0.hdslb.com/bfs/openplatform/f0e0f400e02a3a7505818127c21025dfdb3ca026.bin', 'https://i0.hdslb.com/bfs/openplatform/5e68141374cf51c843c598d24821ad775c0ea27f.bin', 'https://i0.hdslb.com/bfs/openplatform/db1da6c295dd8d73e8a21b908e67210fff237f36.bin', 'https://i0.hdslb.com/bfs/openplatform/8935a2416aec0d9b837f2460593f31d0ffe2475e.bin', 'https://i0.hdslb.com/bfs/openplatform/1d6b1c567c116d4e6156577b76bde5551acea959.bin', 'https://i0.hdslb.com/bfs/openplatform/9966685ceeb544147094c5a6783fca32fbd273ee.bin', 'https://i0.hdslb.com/bfs/openplatform/727e6a0182cebf5ab6c2205ca3cefc3cb8674fd4.bin', 'https://i0.hdslb.com/bfs/openplatform/644c6667150ce44b1857fa06e10b5fc4aa07398b.bin', 'https://i0.hdslb.com/bfs/openplatform/817606fd015b70af30de413b3216eef0a4128246.bin', 'https://i0.hdslb.com/bfs/openplatform/abec8216d456eddfefcadbf75d2171c66aa672dd.bin', 'https://i0.hdslb.com/bfs/openplatform/f737017fdb8ef621df91bc1a10b5c3c608afea93.bin', 'https://i0.hdslb.com/bfs/openplatform/33ee0c0afb208a709bf1b15d3d62a410051fee0a.bin', 'https://i0.hdslb.com/bfs/openplatform/6f5332726074fb5d667ba2d3cdf71ec8d6882de8.bin', 'https://i0.hdslb.com/bfs/openplatform/a17bbd252cf18cf60a243c59789ae815c8c41a66.bin', 'https://i0.hdslb.com/bfs/openplatform/bfb149655a66da534887227fe7028fa12d817a46.bin', 'https://i0.hdslb.com/bfs/openplatform/54f91ddeb01ef7d76eac573689904edd05b9fb93.bin', 'https://i0.hdslb.com/bfs/openplatform/a3a59957d3cb80c5bd1ba2ca0a9f1e4bdb44a2fb.bin', 'https://i0.hdslb.com/bfs/openplatform/5aac23c7ab4e07d0504a948563bef948b89ab602.bin', 'https://i0.hdslb.com/bfs/openplatform/58ee3ee4068e441b93211e69bab0f1524f8ee2b5.bin', 'https://i0.hdslb.com/bfs/openplatform/bc1648d081766ea5e4607d1073f86bd35a975758.bin', 'https://i0.hdslb.com/bfs/openplatform/72a84a343049b3b5192a89454c906f2c0049b510.bin', 'https://i0.hdslb.com/bfs/openplatform/6b7da5aa455a2f882b91fc8b522e373f1612ff88.bin', 'https://i0.hdslb.com/bfs/openplatform/d7ec3d272d02294ab73800d87d7a6d78af7ce045.bin', 'https://i0.hdslb.com/bfs/openplatform/879740aa0347417cc861faeb8d1c3574ec7d6ee9.bin', 'https://i0.hdslb.com/bfs/openplatform/a96cbe19065f243aa7b0dad98a24001899d3fa3c.bin', 'https://i0.hdslb.com/bfs/openplatform/f417fdac830b6c72f301a2b1a25d897b1155f689.bin', 'https://i0.hdslb.com/bfs/openplatform/a338f65aeb19a720588b7c956291a97daf0e1e80.bin', 'https://i0.hdslb.com/bfs/openplatform/a8fe606543cb53cab90e3304c00f4e87baa67a54.bin', 'https://i0.hdslb.com/bfs/openplatform/a094ae39bea4f03bbf8d8baf6b8b695d12e9ad6e.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '020-Max the Eif\MtE_5.0.apk',
+    types: [{
+      description: '020-Max the Eif\MtE_5.0.apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -154,9 +154,26 @@
     ]
   },
   {
+    "folder": "游戏/013-Laughter Land",
+    "html_files": [
+      "Laughter Land_Windows.zip.html",
+      "winisostandard.zip.html",
+      "学习提取安装虚拟光驱文件，灵活动脑.txt.html",
+      "少年理想国攻略.txt.html",
+      "少年理想国虚拟光驱版.zip.html"
+    ]
+  },
+  {
     "folder": "游戏/014-小王子圣晶石",
     "html_files": [
       "LittlePrince_SaintQuartzStrike.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/015-Kannagi_CN",
+    "html_files": [
+      "Kannagi_神无之鸟.zip.html",
+      "神无之鸟攻略.txt.html"
     ]
   },
   {
@@ -166,11 +183,129 @@
     ]
   },
   {
+    "folder": "游戏/017-勇者RPG",
+    "html_files": [
+      "勇者RPG_Windows.zip.html",
+      "勇者RPG机翻_Windows.zip.html",
+      "继承勇者之力的RPG 攻略.zip.html"
+    ]
+  },
+  {
     "folder": "游戏/018-今日是魔法少年",
     "html_files": [
       "今日是魔法少年冷狐三核版(开局送作弊器).apk.html",
       "解压前必看.txt.html",
       "魔法少年日语_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/019-少年退魔师的苦难",
+    "html_files": [
+      "正太退魔师的苦难.apk.html",
+      "解压前必看.txt.html"
+    ]
+  },
+  {
+    "folder": "游戏/020-Max the Eif",
+    "html_files": [
+      "MAC v5.01 MAC.zip.html",
+      "MtE v5.01 Windows.zip.html",
+      "MtE_5.0.apk.html"
+    ]
+  },
+  {
+    "folder": "游戏/021-The Loud House Reality Psalm/The Loud House Reality Psalm_English",
+    "html_files": [
+      "reality.psalms-100-universal-release.apk.html",
+      "TLHRPE-1.1-mac.zip.html",
+      "TLHRPE-1.1-pc.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/021-The Loud House Reality Psalm/The Loud House Reality Psalm_Spanish",
+    "html_files": [
+      "TLHRP-1.0-mac.zip.html",
+      "TLHRP-1.0-pc.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/022-练习吧！",
+    "html_files": [
+      "練習しようぜ！.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/023-学校の日",
+    "html_files": [
+      "小学校の日_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/024-被叫起床",
+    "html_files": [
+      "“叫哥哥起床的弟弟”_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/025-共有学习",
+    "html_files": [
+      "共有学习.zip.html",
+      "共有学习作弊码.txt.html"
+    ]
+  },
+  {
+    "folder": "游戏/026-元气弹球",
+    "html_files": [
+      "元气弹球作弊码.txt.html",
+      "弹球什么的最讨厌了第一部.zip.html",
+      "弹球什么的最讨厌了第三部.zip.html",
+      "弹球什么的最讨厌了第二部.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/027-The Demon Lands",
+    "html_files": [
+      "The Demon Lands 0.1.0.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/029-补完计划",
+    "html_files": [
+      "正太补完计划冷狐版(开局送作弊器).apk.html",
+      "补完计划_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/030-Flatcheez",
+    "html_files": [
+      "[Anda Daichii] Flatcheez 01 English [Uncensored].zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/031-S×M_L2DV2",
+    "html_files": [
+      "SML2D_vol2_v101.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/032-POF",
+    "html_files": [
+      "Promise of Friend jap.zip.html",
+      "Promise of Friend_机翻_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/033-Flatcheez2",
+    "html_files": [
+      "[Anda Daichii] Flatcheez 02 English [Uncensored].zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/034-其他Flash游戏",
+    "html_files": [
+      "flashplayer 32.exe.html",
+      "★使用前须知☆.txt.html",
+      "视频类Flash_Windows.zip.html"
     ]
   }
 ]

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 027-The Demon Lands\The Demon Lands 0.1.0.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：027-The Demon Lands\The Demon Lands 0.1.0.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/0de8840f644753355df56f0fedb33dd3cc6f0016.bin', 'https://i0.hdslb.com/bfs/openplatform/cd438e0ea2e8ad738ef2f1e5614c32341fb9283d.bin', 'https://i0.hdslb.com/bfs/openplatform/104a2e17258f6be65416c68633a96f2c7dca83b9.bin', 'https://i0.hdslb.com/bfs/openplatform/33ab90ed833c32fb22aa8792ac328b6b85c0660d.bin', 'https://i0.hdslb.com/bfs/openplatform/9d06741d552d6cad4581d9b028200ce23a09e678.bin', 'https://i0.hdslb.com/bfs/openplatform/69716e895b7be4990aa388aaf052ac3280897ab0.bin', 'https://i0.hdslb.com/bfs/openplatform/6c51369cc68fe4040b868d13156f9fb5590da33b.bin', 'https://i0.hdslb.com/bfs/openplatform/c6799af15225a6f6e1410e2f12e6dc7d9d3a49a6.bin', 'https://i0.hdslb.com/bfs/openplatform/80f1062d63afea8660c3e0d43dff8ceace8274e6.bin', 'https://i0.hdslb.com/bfs/openplatform/7963e6b081d949ce37fd47d3e08b0fcd788df023.bin', 'https://i0.hdslb.com/bfs/openplatform/5ec848baf5f30a7956ed69a39f18a06add6201db.bin', 'https://i0.hdslb.com/bfs/openplatform/8dbfdf8df0dbf4617658c4843a8f35b50bc95ac3.bin', 'https://i0.hdslb.com/bfs/openplatform/4550ce1b187c2a2ac8db18a43c13ea6f96109eb6.bin', 'https://i0.hdslb.com/bfs/openplatform/8386eea4b26a77d5bedea69ec7c853b93b495db4.bin', 'https://i0.hdslb.com/bfs/openplatform/ab8122c703fb2408fd674bd7a921aa98815ad73e.bin', 'https://i0.hdslb.com/bfs/openplatform/ed9628dc5e8a758f97cc70b1f16216dfa97eac1a.bin', 'https://i0.hdslb.com/bfs/openplatform/2cabb23f05a5dbd499cf1995274c7026034a5e37.bin', 'https://i0.hdslb.com/bfs/openplatform/0ac225d6a828bd6bcd0a2308c98f0c9d30cdd509.bin', 'https://i0.hdslb.com/bfs/openplatform/eb79c720276a57b34f1c79d7dd2794fe522da15e.bin', 'https://i0.hdslb.com/bfs/openplatform/8721f503130f20bb7f238f172608f99f15a8e688.bin', 'https://i0.hdslb.com/bfs/openplatform/3c1343dd760cef16d836358090ead80f7a696400.bin', 'https://i0.hdslb.com/bfs/openplatform/6f5c11047ad2389e7c92393c490c86b4b453948c.bin', 'https://i0.hdslb.com/bfs/openplatform/636493c7d5fddfc4f5efeb8055b367e734203694.bin', 'https://i0.hdslb.com/bfs/openplatform/b166ddb077550c0c1b9c12cc5455ee7cc23f7e81.bin', 'https://i0.hdslb.com/bfs/openplatform/fd6d08c2d08beb5b3b330a36cb0cae264248b844.bin', 'https://i0.hdslb.com/bfs/openplatform/343312af6aa3f3442b41a1c11177e8c3ecc6dd08.bin', 'https://i0.hdslb.com/bfs/openplatform/690b61f788df144546dd0abed0d5b0f1dfa4b991.bin', 'https://i0.hdslb.com/bfs/openplatform/9b92492258adb1485f013d729758be8b37abdca2.bin', 'https://i0.hdslb.com/bfs/openplatform/764e82b3054ce58dd8809f93a4480a8caa749ef5.bin', 'https://i0.hdslb.com/bfs/openplatform/c888d5168cfc5101794cdcf5db562c4f3165ccbc.bin', 'https://i0.hdslb.com/bfs/openplatform/46e02f6f1b93812fdb09774e3483d48f282f1374.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '027-The Demon Lands\The Demon Lands 0.1.0.zip',
+    types: [{
+      description: '027-The Demon Lands\The Demon Lands 0.1.0.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 029-补完计划\正太补完计划冷狐版(开局送作弊器).apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：029-补完计划\正太补完计划冷狐版(开局送作弊器).apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/388c6d80ef1c488e6e7eb68e1ce2259031b76de5.bin', 'https://i0.hdslb.com/bfs/openplatform/67c03c021b27f49a503401d93c4a064397387aac.bin', 'https://i0.hdslb.com/bfs/openplatform/ab7e5e24deb89450c2143b294be5527deabd72ec.bin', 'https://i0.hdslb.com/bfs/openplatform/f14eddd135f7d5acebbcd3d8c71ef45ae390d2d0.bin', 'https://i0.hdslb.com/bfs/openplatform/245bbfdd16d20003d6e62e3b42f711f4fc3246c7.bin', 'https://i0.hdslb.com/bfs/openplatform/a8ec282ce3ac5b6724170173a27b9a039cf7c172.bin', 'https://i0.hdslb.com/bfs/openplatform/041bf1fd76d9496a126c700b5b972e392c15c8c5.bin', 'https://i0.hdslb.com/bfs/openplatform/66ac930271d3ba4f2bab78784138768e9f291f6b.bin', 'https://i0.hdslb.com/bfs/openplatform/a6da0f0446298fb9ed02f5be8859379371781bdd.bin', 'https://i0.hdslb.com/bfs/openplatform/7c062e816d4943123175b8c3c8f7a8b8ebaf7beb.bin', 'https://i0.hdslb.com/bfs/openplatform/70b6ab8f45fb35f560ce104926ab19cced403c72.bin', 'https://i0.hdslb.com/bfs/openplatform/9df10ed2e3a420c659d9bdd5ee9cf4e760111603.bin', 'https://i0.hdslb.com/bfs/openplatform/cd56eefa2e791b8d8c74934499c47a7ed0574630.bin', 'https://i0.hdslb.com/bfs/openplatform/d3e4f08229a7e159a2236d057bd379b6b3ba57f9.bin', 'https://i0.hdslb.com/bfs/openplatform/74dacd0b9ec78491b2bbf16545fa7023b639f2f2.bin', 'https://i0.hdslb.com/bfs/openplatform/356c56028fcab76edab86378915f692b3d03aad9.bin', 'https://i0.hdslb.com/bfs/openplatform/43824cf0f89a8cf2b3e85437036ef97c3aca3743.bin', 'https://i0.hdslb.com/bfs/openplatform/56f1ef5e5b615502f3596c125e1b4b86d1203d83.bin', 'https://i0.hdslb.com/bfs/openplatform/081516932565d8f3167805af631b8cec4f9c5fdc.bin', 'https://i0.hdslb.com/bfs/openplatform/8e24a21b27563120014784e4a3202226c324e0b1.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '029-补完计划\正太补完计划冷狐版(开局送作弊器).apk',
+    types: [{
+      description: '029-补完计划\正太补完计划冷狐版(开局送作弊器).apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

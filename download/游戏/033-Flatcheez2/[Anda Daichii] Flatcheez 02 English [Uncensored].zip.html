@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 033-Flatcheez2\[Anda Daichii] Flatcheez 02 English [Uncensored].zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：033-Flatcheez2\[Anda Daichii] Flatcheez 02 English [Uncensored].zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/ddf2346d5615f5beafa2135f77afe8c3b241b0e8.bin', 'https://i0.hdslb.com/bfs/openplatform/3981f04938374f8c3f5980ac4936509ad3f8d537.bin', 'https://i0.hdslb.com/bfs/openplatform/7a81155079556583b0d322ced65471b911680d75.bin', 'https://i0.hdslb.com/bfs/openplatform/a055ff04f598e3de417e0d248d7acb221e2b5c29.bin', 'https://i0.hdslb.com/bfs/openplatform/aa2056289c9aa79322a6d330cddc139ce53789dd.bin', 'https://i0.hdslb.com/bfs/openplatform/080ef88f0e0cbab2297b0f3941f9886269c89b5a.bin', 'https://i0.hdslb.com/bfs/openplatform/4921c6fb5097687bb294c1e597d65a7ac8477fee.bin', 'https://i0.hdslb.com/bfs/openplatform/4b894471f44945e39c7dab6ff827a3a26b1a87b0.bin', 'https://i0.hdslb.com/bfs/openplatform/0f86b4935d1368751d2d62e5ac47c73c3c395524.bin', 'https://i0.hdslb.com/bfs/openplatform/5a9a7d4aba45331f20177ee75f5e6d0d51d6dddd.bin', 'https://i0.hdslb.com/bfs/openplatform/c917b28737af76663008e01eef9b564b0c78ac18.bin', 'https://i0.hdslb.com/bfs/openplatform/9fbd8aad092e9347091f64fa6822ac7b2c26f4bd.bin', 'https://i0.hdslb.com/bfs/openplatform/05a4db29eb36be85433bcb4f6911d2be533fde44.bin', 'https://i0.hdslb.com/bfs/openplatform/1ffd59865be079ad84b22f3e84729e1fa503e234.bin', 'https://i0.hdslb.com/bfs/openplatform/fddb4f0b6ef4a2310e86931e0feddd5272c061c3.bin', 'https://i0.hdslb.com/bfs/openplatform/ad29d2873fb35e5414784fc7d01d5c3cfb95b568.bin', 'https://i0.hdslb.com/bfs/openplatform/94d212db74c132751e5327f5b63504f1539304c3.bin', 'https://i0.hdslb.com/bfs/openplatform/0b24e7f478cee383a862e977bb849b041e213653.bin', 'https://i0.hdslb.com/bfs/openplatform/e5f804a04915d83023ac7881550c2caa78a07078.bin', 'https://i0.hdslb.com/bfs/openplatform/1228fbc45115e4be36cec721a6eb8a2dbb80fa53.bin', 'https://i0.hdslb.com/bfs/openplatform/5b11a41d5bd588bb9d640bb514c90fcf3ebe7d2e.bin', 'https://i0.hdslb.com/bfs/openplatform/165c4500fcaf053cf8e5c9257653c240762719a8.bin', 'https://i0.hdslb.com/bfs/openplatform/e3412f3d12bb4b80816c764f3cbfb74c8fcf3250.bin', 'https://i0.hdslb.com/bfs/openplatform/0e8d00b87e0f6e63ad503a79c8d17fadd2b1258b.bin', 'https://i0.hdslb.com/bfs/openplatform/7d950227a4e6a6df75c94f5c992608190947cc5c.bin', 'https://i0.hdslb.com/bfs/openplatform/f62e4146eca4d60b87c826f84d90b7495f41cd28.bin', 'https://i0.hdslb.com/bfs/openplatform/81886558485c85667b1323e817b2b8c23a798f34.bin', 'https://i0.hdslb.com/bfs/openplatform/fb5cda2b56762924ce68ffff6aa889da937c102e.bin', 'https://i0.hdslb.com/bfs/openplatform/1dc39e8a446202660b250d3c61d0be73afcaf791.bin', 'https://i0.hdslb.com/bfs/openplatform/0c52c76659fa1aed4c79351049e5333987051e92.bin', 'https://i0.hdslb.com/bfs/openplatform/ef8b1f6eb77c0b80be29c1bef3bed84f90bd22c0.bin', 'https://i0.hdslb.com/bfs/openplatform/9c481cec9a42527e886ae753f95f5fb90ab90cda.bin', 'https://i0.hdslb.com/bfs/openplatform/002b24dc6a90d8e7002c7e926a5e27c0e90d73b7.bin', 'https://i0.hdslb.com/bfs/openplatform/2969304fc12dc85399a1c0491fc696a01cc229cd.bin', 'https://i0.hdslb.com/bfs/openplatform/ed7e9b25f226a9f2be2a698873ae858923de4a13.bin', 'https://i0.hdslb.com/bfs/openplatform/09ab652ce9b4ef0f3bdddea0d3cd1633b046d089.bin', 'https://i0.hdslb.com/bfs/openplatform/9f1e20dba52a9fa8d2a9782a769a6b328fef11f4.bin', 'https://i0.hdslb.com/bfs/openplatform/1404b8e4175fcc2c938495d8aff9f777158f4cea.bin', 'https://i0.hdslb.com/bfs/openplatform/12e486865932e7afdf32f545fd88a4b31cb1d8f5.bin', 'https://i0.hdslb.com/bfs/openplatform/fa8874401741aac634d97c8688b1a3f3ac56aa3b.bin', 'https://i0.hdslb.com/bfs/openplatform/43dc7d15b3fa76b5461c7f7746cd62ddc0a4b414.bin', 'https://i0.hdslb.com/bfs/openplatform/008e72bb172f6ec1dc69edf07e1c73620f9d208c.bin', 'https://i0.hdslb.com/bfs/openplatform/a19677a220e1a3c86aa40eb2f22da66cc095f164.bin', 'https://i0.hdslb.com/bfs/openplatform/f1a86075ec73e510248a56a884a239a4f59449b7.bin', 'https://i0.hdslb.com/bfs/openplatform/b7c7dea6393a2f11c45cd90b47e0a3fa00fe7914.bin', 'https://i0.hdslb.com/bfs/openplatform/e065d104fea4b8d1324b1b078e1b2bffdca515d0.bin', 'https://i0.hdslb.com/bfs/openplatform/2ce7ea860c33c52be41bda874ecb00b82ff27bd1.bin', 'https://i0.hdslb.com/bfs/openplatform/be75db9931a3556b2f4fffb1af60462f71946104.bin', 'https://i0.hdslb.com/bfs/openplatform/fba4a80d1756f72cabc4457394767cf1c7316d52.bin', 'https://i0.hdslb.com/bfs/openplatform/79da87942c8fdff48d209fdb0e3b59da1bf1bc7f.bin', 'https://i0.hdslb.com/bfs/openplatform/747e3ab206f8e8c0d50a5aed2bfc3018c13e2cc0.bin', 'https://i0.hdslb.com/bfs/openplatform/476c41a882b45911f42ef4bac817fce45c2184f4.bin', 'https://i0.hdslb.com/bfs/openplatform/61c2e3acb4fadb3e421874ccf4a8481e187fd171.bin', 'https://i0.hdslb.com/bfs/openplatform/2007ef4f3c187d0a13098657dc30a190d4d7647d.bin', 'https://i0.hdslb.com/bfs/openplatform/8fc96d44f21e07ebc78ccebbaadbad1cbff8e1f2.bin', 'https://i0.hdslb.com/bfs/openplatform/ffa94c4d975b575a5e246b94d82da32d6bb83280.bin', 'https://i0.hdslb.com/bfs/openplatform/95198f901536dd145176a2148a2e79a9d1fdb5ce.bin', 'https://i0.hdslb.com/bfs/openplatform/898536086be675bc9d442e13466f46c8328955ad.bin', 'https://i0.hdslb.com/bfs/openplatform/d660dea1c397f7cbaf78937b9addd48c2be0a06e.bin', 'https://i0.hdslb.com/bfs/openplatform/93c4b092319dc5a459488e6ce3f55685fb36bde8.bin', 'https://i0.hdslb.com/bfs/openplatform/464290bc2860eb6afdce451b6e8c2f56f25ddfba.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '033-Flatcheez2\[Anda Daichii] Flatcheez 02 English [Uncensored].zip',
+    types: [{
+      description: '033-Flatcheez2\[Anda Daichii] Flatcheez 02 English [Uncensored].zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

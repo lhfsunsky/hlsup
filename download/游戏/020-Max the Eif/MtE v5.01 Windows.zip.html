@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 020-Max the Eif\MtE v5.01 Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：020-Max the Eif\MtE v5.01 Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/eb998bf71e0c928a00754db2162885732662a3b5.bin', 'https://i0.hdslb.com/bfs/openplatform/b507910cf9f143baf1eddc90a5fc3f20bc150e26.bin', 'https://i0.hdslb.com/bfs/openplatform/babff2a07bbd78705c67fe85f0079a30c3d86c3f.bin', 'https://i0.hdslb.com/bfs/openplatform/f2135f2437f6e3771bd1f3c266acb79cd7119649.bin', 'https://i0.hdslb.com/bfs/openplatform/e50c82f2dac3fc6e8c86dcb3f701161b15aa32e0.bin', 'https://i0.hdslb.com/bfs/openplatform/913f36f1f490367c7c955a5980e48af404ae352b.bin', 'https://i0.hdslb.com/bfs/openplatform/a6dcbd26cb8f69ec0a1fada9b2ce5f64c1199db8.bin', 'https://i0.hdslb.com/bfs/openplatform/45e5d904e2e2de243c4d6fe852c1bb8e44edd6a5.bin', 'https://i0.hdslb.com/bfs/openplatform/c82ea3d28f38b208cf27274d2e64feec25525177.bin', 'https://i0.hdslb.com/bfs/openplatform/807f47165f02ac40e05d78c10b1290dac80895aa.bin', 'https://i0.hdslb.com/bfs/openplatform/b34f5dd87a4bf9eecbda4c24c37942f045cf0d37.bin', 'https://i0.hdslb.com/bfs/openplatform/fcfc311b5bec8a1196b01e0b788ecb8933ca6d83.bin', 'https://i0.hdslb.com/bfs/openplatform/10c3e262d326f2f3a65223abac421bc2bca1aa8c.bin', 'https://i0.hdslb.com/bfs/openplatform/f4f79d3837f378f7901150a3b83781cf015a67dc.bin', 'https://i0.hdslb.com/bfs/openplatform/3bb53b2d3b9709151953e9585ee87e30f8261620.bin', 'https://i0.hdslb.com/bfs/openplatform/ddc2eb037a7426c494dd69a0fc3bd4f6c53062dd.bin', 'https://i0.hdslb.com/bfs/openplatform/7564d1601be4d8dedc4bc8b69428583da7793ede.bin', 'https://i0.hdslb.com/bfs/openplatform/43616f9c0d249c18a7acb3436c3f01fc14f86fab.bin', 'https://i0.hdslb.com/bfs/openplatform/0484cde4f73ebcc38e2441ae393f6f6ad59cb7e9.bin', 'https://i0.hdslb.com/bfs/openplatform/630ac81d3c3b4dcdee1af961910ff40a588a1ae0.bin', 'https://i0.hdslb.com/bfs/openplatform/7ca61bdbf9545af39aff309e0c90fb13432c4582.bin', 'https://i0.hdslb.com/bfs/openplatform/8368c006182b06cc88f0b656ca508c5b5b5982b3.bin', 'https://i0.hdslb.com/bfs/openplatform/2365501b90d5adabb52b809b8156547fda6a92b5.bin', 'https://i0.hdslb.com/bfs/openplatform/ac3d17c655d569bb568fd5f2982c30a96094bb92.bin', 'https://i0.hdslb.com/bfs/openplatform/bfad78bb8c949a99a9daf22dee8f23fb804c88b6.bin', 'https://i0.hdslb.com/bfs/openplatform/1fbe7ad4a49480022500fdaff42516bf5305fb27.bin', 'https://i0.hdslb.com/bfs/openplatform/e8f5ab7025559c6c555784fe3c523579e11536df.bin', 'https://i0.hdslb.com/bfs/openplatform/7aeba56b0965f9004379a2085dea206c78f7e173.bin', 'https://i0.hdslb.com/bfs/openplatform/a6a726c0950c1877da67ae402d7aa7be0a6b6118.bin', 'https://i0.hdslb.com/bfs/openplatform/92715fc8dfd0854c57237e37704c3544ee1cb341.bin', 'https://i0.hdslb.com/bfs/openplatform/7df3a27f1871247b820cdb107f6065091df43436.bin', 'https://i0.hdslb.com/bfs/openplatform/db58e431b3d4117b813941ed5be24b9d6ac5ab1d.bin', 'https://i0.hdslb.com/bfs/openplatform/e61978badb7a88b017f359638c860f5150057d92.bin', 'https://i0.hdslb.com/bfs/openplatform/8777b3ddcf878314026cb03f2fc92ab5b766d510.bin', 'https://i0.hdslb.com/bfs/openplatform/2df7ed8749ea70056d4381007fe1fb4b8bf01f80.bin', 'https://i0.hdslb.com/bfs/openplatform/457fab96127f6989a357e8ef10078279a59271e3.bin', 'https://i0.hdslb.com/bfs/openplatform/94f5fad6eb1290714621cda37c054aa14322fff1.bin', 'https://i0.hdslb.com/bfs/openplatform/f54c10df1ea4e49a6c08b08d282bffa242a42be6.bin', 'https://i0.hdslb.com/bfs/openplatform/1ad2f975f5655feccbc7ab07dc87978a443efb21.bin', 'https://i0.hdslb.com/bfs/openplatform/a3de35fc084cccf39993e6b4831dc9f8ecad8608.bin', 'https://i0.hdslb.com/bfs/openplatform/718d1465e25ef6ce65f1d3011f000b52759a2e32.bin', 'https://i0.hdslb.com/bfs/openplatform/7f4a525bb0d4869d889a5c0aa3a272a49f8a99e3.bin', 'https://i0.hdslb.com/bfs/openplatform/9a89fbefb3acaf7706e4c4194a6dd9e32d7d4367.bin', 'https://i0.hdslb.com/bfs/openplatform/c0889b4767e42a8b8fc50b19a02a81f58c5bb96c.bin', 'https://i0.hdslb.com/bfs/openplatform/22086775690c0f585b9701a3a53fc73a6bdf82ec.bin', 'https://i0.hdslb.com/bfs/openplatform/79fff7a6e6b568cb53e8e81ea4711da89afba6d2.bin', 'https://i0.hdslb.com/bfs/openplatform/3e1b7a52040fe06e3232f755f8402459ed0f4b0f.bin', 'https://i0.hdslb.com/bfs/openplatform/f902b0992951f9ecc33fda99ea5655601281f9a5.bin', 'https://i0.hdslb.com/bfs/openplatform/4fd8a05214c3d55d51a56962386f2c89edf527f6.bin', 'https://i0.hdslb.com/bfs/openplatform/69e4aa55490346dab869c17ecc571ce0cc34fa7f.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '020-Max the Eif\MtE v5.01 Windows.zip',
+    types: [{
+      description: '020-Max the Eif\MtE v5.01 Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>
