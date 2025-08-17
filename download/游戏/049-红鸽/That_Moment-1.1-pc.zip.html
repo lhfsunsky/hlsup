@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 049-红鸽\That_Moment-1.1-pc.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：049-红鸽\That_Moment-1.1-pc.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/91691be5ea12d41d250e07ffebf1a7a49e4e9e0a.bin', 'https://i0.hdslb.com/bfs/openplatform/19720ef734ed46efa72a44dab117dc4efb757680.bin', 'https://i0.hdslb.com/bfs/openplatform/2ff0310765ac291e826ec4ceb86eda72dcc58195.bin', 'https://i0.hdslb.com/bfs/openplatform/0b08be14ea917cd50c7e5d5a7b0a6af5910e8a1a.bin', 'https://i0.hdslb.com/bfs/openplatform/39b7cf0757d12a67bb5d80d78a439eb789e29f64.bin', 'https://i0.hdslb.com/bfs/openplatform/e0c3bd95112a3f0cb739bb62af595bdb51503535.bin', 'https://i0.hdslb.com/bfs/openplatform/5fca98371bcd665254a73fbec06cd8d66e846258.bin', 'https://i0.hdslb.com/bfs/openplatform/20f9dedddc7c24254c8f159152a8283ce91fb6c3.bin', 'https://i0.hdslb.com/bfs/openplatform/a01995c6efd025adeb92ba1eba0503bf9334e11e.bin', 'https://i0.hdslb.com/bfs/openplatform/1dd2d12849ab2b38883d14935a3812de393bed01.bin', 'https://i0.hdslb.com/bfs/openplatform/b1d8165116fdb6f98027453dfba258fded48e46f.bin', 'https://i0.hdslb.com/bfs/openplatform/a158f027e8f78af3cb6092190bd00237235f1bd3.bin', 'https://i0.hdslb.com/bfs/openplatform/941332a9f4bd3598b9ea89bd6cef9c68302bb3cf.bin', 'https://i0.hdslb.com/bfs/openplatform/4deb6c6c78515885a8ec052dca472c2a9b35fda9.bin', 'https://i0.hdslb.com/bfs/openplatform/ff423c50f2f405e50b73ee08e6f0f21c3af0c12c.bin', 'https://i0.hdslb.com/bfs/openplatform/0a30194ebe2f2fe2a838643365a0a7ee8736ac8a.bin', 'https://i0.hdslb.com/bfs/openplatform/e5c49b5a762063a2ae7ee63f7f9f753f3caa0778.bin', 'https://i0.hdslb.com/bfs/openplatform/ed310b7802d1db80cd06ce4c0b86b96088a03249.bin', 'https://i0.hdslb.com/bfs/openplatform/63f9185bb77e9cfca2dc73eaadb641824e3d6404.bin', 'https://i0.hdslb.com/bfs/openplatform/4350006111bd372137edcd58866cb95ce0f3880e.bin', 'https://i0.hdslb.com/bfs/openplatform/0f69bd8af3df1ce6f4afc078dfd0d193fc2bbd26.bin', 'https://i0.hdslb.com/bfs/openplatform/dcd842600959e2678dd78f92aac1522129c00a67.bin', 'https://i0.hdslb.com/bfs/openplatform/e59797a22527b4a422cc3f52427ba7599e0f087e.bin', 'https://i0.hdslb.com/bfs/openplatform/5fd6c0e878e51007fde9458aa12262cd45af3d38.bin', 'https://i0.hdslb.com/bfs/openplatform/30dc036d9fb0d45e132d04ea9c48ed3e52525b08.bin', 'https://i0.hdslb.com/bfs/openplatform/de592e04f7e923e1c01a54458eaf002c71eb7d68.bin', 'https://i0.hdslb.com/bfs/openplatform/dac35b29b6cdb00d2b6e7d085587ae7cf691dd02.bin', 'https://i0.hdslb.com/bfs/openplatform/46900c53f656cc2a0ebbf148a62dbd5df5be9caf.bin', 'https://i0.hdslb.com/bfs/openplatform/edf2a9b6bfe0d5f368a0c23a592cfac966cee9ee.bin', 'https://i0.hdslb.com/bfs/openplatform/fdea9feb2b007b3949fb899aa6e59b92cdd2cdab.bin', 'https://i0.hdslb.com/bfs/openplatform/f33abeb56b9b81d62e919921d14cf6469e4d4951.bin', 'https://i0.hdslb.com/bfs/openplatform/5144efdf0d9043548bbb635982fc62a34b66b153.bin', 'https://i0.hdslb.com/bfs/openplatform/76aaeb91907d6e21b947d57cd76f8f70fe2fda27.bin', 'https://i0.hdslb.com/bfs/openplatform/aff2322a0aba399273c1bc41e0762ebb3c0c32f2.bin', 'https://i0.hdslb.com/bfs/openplatform/35ebeb003fd846495f38655974c27e0948693f14.bin', 'https://i0.hdslb.com/bfs/openplatform/3b454ddda5a2c8e31dcc52dc244261c3a9fad179.bin', 'https://i0.hdslb.com/bfs/openplatform/afe8a0bafa704b2c99199f2ea55af5493fb5fc6b.bin', 'https://i0.hdslb.com/bfs/openplatform/a9d3d6af9be07f8dc89279627d66f75bbfcabb44.bin', 'https://i0.hdslb.com/bfs/openplatform/dcd284dd45d53778a63cb72f45cf0bf84edc1eca.bin', 'https://i0.hdslb.com/bfs/openplatform/613fc41fcd806beb119c423b80f7f98028610411.bin', 'https://i0.hdslb.com/bfs/openplatform/70afadd35d908bd4ff43096f9bf0d9ea850418b7.bin', 'https://i0.hdslb.com/bfs/openplatform/0d52568dbadb94dbee602ea5ec8ddb9de9b29609.bin', 'https://i0.hdslb.com/bfs/openplatform/84893fa82c8a0621abb1be8a692294583d0361db.bin', 'https://i0.hdslb.com/bfs/openplatform/7885ce583bb22600db942167b106644fb2d6776d.bin', 'https://i0.hdslb.com/bfs/openplatform/8cfa74532b79bc152059901037c5676dae548ed5.bin', 'https://i0.hdslb.com/bfs/openplatform/037a3e67f751569d943e96d7d51ea6f62cbad795.bin', 'https://i0.hdslb.com/bfs/openplatform/8845b389ce581a39ab8f508e6e503e89a2796953.bin', 'https://i0.hdslb.com/bfs/openplatform/194009b27d396dca47eb63862a51f1992fb1e96d.bin', 'https://i0.hdslb.com/bfs/openplatform/7e66f44ce794676af866d27e78bef6823b5b8816.bin', 'https://i0.hdslb.com/bfs/openplatform/df2ad77a52e634f7ecae0743ed1200c4262d544d.bin', 'https://i0.hdslb.com/bfs/openplatform/4c6601cbb3a15f8ac7ac314ea7d9d8b77d84a114.bin', 'https://i0.hdslb.com/bfs/openplatform/9ae05a10cd43c61fd5aaa1344fa770ad582157af.bin', 'https://i0.hdslb.com/bfs/openplatform/38e363d376195bc1b7e17bac7088a61c3ba599e2.bin', 'https://i0.hdslb.com/bfs/openplatform/ff65a2149ebb473fd0f37a9d3c8f8b3c8c71d2e5.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '049-红鸽\That_Moment-1.1-pc.zip',
+    types: [{
+      description: '049-红鸽\That_Moment-1.1-pc.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

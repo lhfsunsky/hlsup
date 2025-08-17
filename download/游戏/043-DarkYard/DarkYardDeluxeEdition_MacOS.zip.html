@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 043-DarkYard\DarkYardDeluxeEdition_MacOS.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：043-DarkYard\DarkYardDeluxeEdition_MacOS.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/a6c1ae3c065fe0091ecc7423d6f9d2db937c3c1b.bin', 'https://i0.hdslb.com/bfs/openplatform/14744d4db3277a737c951dbad727fc5da219334e.bin', 'https://i0.hdslb.com/bfs/openplatform/46be2002b449942c4f7542c969eb911ee45efdfc.bin', 'https://i0.hdslb.com/bfs/openplatform/40ff6cb65ac6819b5eef95f883a45fb2c6dac268.bin', 'https://i0.hdslb.com/bfs/openplatform/d2bc8c2263ff627c9aebceb866f633af6550448e.bin', 'https://i0.hdslb.com/bfs/openplatform/0949a6651bb877b52406c62e4f00b71d1542f8ab.bin', 'https://i0.hdslb.com/bfs/openplatform/3923eba972c50fcb8915125dde689eb99b8ca74b.bin', 'https://i0.hdslb.com/bfs/openplatform/4cdcd7a20e45d96cd08e40ccf57a1001568e2721.bin', 'https://i0.hdslb.com/bfs/openplatform/c73e703641ef243a59d54bf72d87a8e50c65fcea.bin', 'https://i0.hdslb.com/bfs/openplatform/a77d8e6f11b1d3dee7da2420dff8d1c326d7eea4.bin', 'https://i0.hdslb.com/bfs/openplatform/78e31a15f7f9f53f805f0ce26ddd284cd5cc6639.bin', 'https://i0.hdslb.com/bfs/openplatform/6fd26a4fa7d81e93aec09bd3f1c886a4d0e5a626.bin', 'https://i0.hdslb.com/bfs/openplatform/6034e5b8eb6421beb228cda840b12b1ac0124e0a.bin', 'https://i0.hdslb.com/bfs/openplatform/1199c851457ed1963ec853303c1377789e3f9678.bin', 'https://i0.hdslb.com/bfs/openplatform/e4812cc6794f8210546e26a6cc0b35f618306a81.bin', 'https://i0.hdslb.com/bfs/openplatform/51483a74d75f1b84427cf6f54060b73c735febd1.bin', 'https://i0.hdslb.com/bfs/openplatform/dcf27337dcca57eb56775a7818ea0bdf70cd2573.bin', 'https://i0.hdslb.com/bfs/openplatform/fbe37febf6f135863f5af50fbc11ed68d9294cad.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '043-DarkYard\DarkYardDeluxeEdition_MacOS.zip',
+    types: [{
+      description: '043-DarkYard\DarkYardDeluxeEdition_MacOS.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 039-怕生孩子的故事\[RJ109284] 绿毛正太.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：039-怕生孩子的故事\[RJ109284] 绿毛正太.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/0b7fde1ab9b80a1ef6bb0baf8963a941d0456696.bin', 'https://i0.hdslb.com/bfs/openplatform/f1916d9b3ab1b083081e7b847af90a7320b14e03.bin', 'https://i0.hdslb.com/bfs/openplatform/e5593481fdebd6ee8ace22e65ce0350e2f63b4c1.bin', 'https://i0.hdslb.com/bfs/openplatform/aec99c00d7789b0d7cb5cb964167847153bd521f.bin', 'https://i0.hdslb.com/bfs/openplatform/78e8eebe2cd7e93bc5ec8571f074a11a6bf6fa73.bin', 'https://i0.hdslb.com/bfs/openplatform/c3ae9a24ba6cff6771c5bce3ba971c6659ed85cc.bin', 'https://i0.hdslb.com/bfs/openplatform/685ed5f158846ab5d668e493fcbe7813b8d478ce.bin', 'https://i0.hdslb.com/bfs/openplatform/1fca0ce417160478b65de5b705464bb51791099a.bin', 'https://i0.hdslb.com/bfs/openplatform/c6aad6a94eb0fcc1a6a602c7b16e0fa8e86d7fe4.bin', 'https://i0.hdslb.com/bfs/openplatform/f082defcff02f06942633b0a7efcc017ca6e286b.bin', 'https://i0.hdslb.com/bfs/openplatform/c6858ee5a878891af641293b27b93ac3267a2bea.bin', 'https://i0.hdslb.com/bfs/openplatform/1a733b4323613a0c43fae7cbcde9869f58073784.bin', 'https://i0.hdslb.com/bfs/openplatform/f1a2e0f36593a57bfb2c4dee2191d00796053c48.bin', 'https://i0.hdslb.com/bfs/openplatform/bd2eebad6439da6e85ce94b0b7181b122e4769cb.bin', 'https://i0.hdslb.com/bfs/openplatform/1bf45330178b0cf1b075b7b154f64f41d0a201f6.bin', 'https://i0.hdslb.com/bfs/openplatform/7d8dd730528ee8340a405d84350436d565d1c68b.bin', 'https://i0.hdslb.com/bfs/openplatform/607fe56734f8bf7a167ef54d162571a86aa68496.bin', 'https://i0.hdslb.com/bfs/openplatform/985875a4bfa8105926c7d43004ee782f20777960.bin', 'https://i0.hdslb.com/bfs/openplatform/72e5304ea6eb5321b19d67b6466109ec35e61aab.bin', 'https://i0.hdslb.com/bfs/openplatform/04a86bfd588c19a6e786e9c5a65b3efd5a1aab33.bin', 'https://i0.hdslb.com/bfs/openplatform/bf6def9e0afb0ed911f93ab1650ff4236dddce6b.bin', 'https://i0.hdslb.com/bfs/openplatform/5904fb60137839745d282179856841d237e6c543.bin', 'https://i0.hdslb.com/bfs/openplatform/2fcea22c89d11818dbde915cd15ee3a6c8bfb93b.bin', 'https://i0.hdslb.com/bfs/openplatform/6b62fad5e7da35ef70a197a0dca66796260b0835.bin', 'https://i0.hdslb.com/bfs/openplatform/bc65d88bc77b765c89bea302e949a481100e0805.bin', 'https://i0.hdslb.com/bfs/openplatform/e50d4271cedd281d4888de42cc5a403a2da6e890.bin', 'https://i0.hdslb.com/bfs/openplatform/a7c063a5f1d0e769c33a1c91a2e93a358b7ee60b.bin', 'https://i0.hdslb.com/bfs/openplatform/deaa318029364f2c972490c89f8a7ca4725c66fb.bin', 'https://i0.hdslb.com/bfs/openplatform/eb23985b85d69c1bb7eb515f3832cf004b5ca656.bin', 'https://i0.hdslb.com/bfs/openplatform/a651f065dc99caa8ad79d9a25fb9d6ee1ada95ae.bin', 'https://i0.hdslb.com/bfs/openplatform/ff156bdccd22f036340084476a2118313fd24c32.bin', 'https://i0.hdslb.com/bfs/openplatform/81e0fc15a818d6997088a88fcd842eae23a984c8.bin', 'https://i0.hdslb.com/bfs/openplatform/8b58a1d537b2f589b63de3f104780240c3ca07b4.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '039-怕生孩子的故事\[RJ109284] 绿毛正太.zip',
+    types: [{
+      description: '039-怕生孩子的故事\[RJ109284] 绿毛正太.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

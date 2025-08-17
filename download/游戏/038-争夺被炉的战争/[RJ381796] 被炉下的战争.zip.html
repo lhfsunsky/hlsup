@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 038-争夺被炉的战争\[RJ381796] 被炉下的战争.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：038-争夺被炉的战争\[RJ381796] 被炉下的战争.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/57a481ab3dac92547e9d96760009eee9d86a85b7.bin', 'https://i0.hdslb.com/bfs/openplatform/28dc7f04f2f9de105d1d3432671ae77255257e68.bin', 'https://i0.hdslb.com/bfs/openplatform/eecb996fadecd4ed4a1329e515c7a26a088428ee.bin', 'https://i0.hdslb.com/bfs/openplatform/9a401e1d16951380df50ef5121076478cb3a3538.bin', 'https://i0.hdslb.com/bfs/openplatform/f0c9d2911248848ef243a45957daaeb6570c424e.bin', 'https://i0.hdslb.com/bfs/openplatform/8a42a808843eda8e4bfecea2c9e12d36eba403da.bin', 'https://i0.hdslb.com/bfs/openplatform/31d22ba345ae179d23071375f805170a33b7b3b7.bin', 'https://i0.hdslb.com/bfs/openplatform/d0c5288792d8044dc024a9a1b71edb2da2b0ff04.bin', 'https://i0.hdslb.com/bfs/openplatform/40d73047fb9b8e0962a4de503b6b8d3a157b52d4.bin', 'https://i0.hdslb.com/bfs/openplatform/066a1728a8db93915eb03e12b40096cb7ba68795.bin', 'https://i0.hdslb.com/bfs/openplatform/3163d5aeab6c7211fdf2d9b92c9eb2de5f6c0e09.bin', 'https://i0.hdslb.com/bfs/openplatform/bdd5426b0a7a9723d546c292c94dd3fc9e116751.bin', 'https://i0.hdslb.com/bfs/openplatform/503688cb2929ec6759e76f9fae6ef7749db09b77.bin', 'https://i0.hdslb.com/bfs/openplatform/03a14898a0c8ea3fa1a0654a5689c865a7f28c04.bin', 'https://i0.hdslb.com/bfs/openplatform/2c4cf6c35b51b31ab95e19df65ba4538c66ce612.bin', 'https://i0.hdslb.com/bfs/openplatform/4b5a5f7d9845cfc688276ccf377c394b1df573e8.bin', 'https://i0.hdslb.com/bfs/openplatform/07f8eb8d7fddd98c3c32014b8de4590609e83106.bin', 'https://i0.hdslb.com/bfs/openplatform/124a329f0b05968e41e7be3297428ec43e997b36.bin', 'https://i0.hdslb.com/bfs/openplatform/e64e09d81c1d769690f47ace81dc0705b1dcab65.bin', 'https://i0.hdslb.com/bfs/openplatform/953698d35139498067f2940f85917fa40516ae99.bin', 'https://i0.hdslb.com/bfs/openplatform/33ce2793624198fd87fb44ea0ba7788b8a459b4c.bin', 'https://i0.hdslb.com/bfs/openplatform/bd71141b25eb9d275660d59a336135738040b464.bin', 'https://i0.hdslb.com/bfs/openplatform/a9edc6537be9bf49c5a728cfcbfc280cca89bc6e.bin', 'https://i0.hdslb.com/bfs/openplatform/6a92842c974215d20a6c1a959480e45a4d316090.bin', 'https://i0.hdslb.com/bfs/openplatform/7e3a43d2cce3c4efc11238ca45dedb5bc540afb5.bin', 'https://i0.hdslb.com/bfs/openplatform/4f9af5d1f99600dbbc23f3d01d09d5bdf940f69e.bin', 'https://i0.hdslb.com/bfs/openplatform/07fe6ec13010ed2e42ada87b1bff2a9060cb2b68.bin', 'https://i0.hdslb.com/bfs/openplatform/cbde3a7deb59aff8e17e304fb9e4a7820c071f08.bin', 'https://i0.hdslb.com/bfs/openplatform/33d2beb41d6ed4dd6bb7fd8276f8ac78a313139b.bin', 'https://i0.hdslb.com/bfs/openplatform/85080a366597bbf50c8432e61c77479099ad81fc.bin', 'https://i0.hdslb.com/bfs/openplatform/c0ec831c6fcf110a94f1b31bd3deb607e32b08df.bin', 'https://i0.hdslb.com/bfs/openplatform/d38383a0325a468028311791d782d9a9c28916b8.bin', 'https://i0.hdslb.com/bfs/openplatform/f022c517fc0a1acfc5ff3cbe4394ec10bcc0018e.bin', 'https://i0.hdslb.com/bfs/openplatform/ba8138cbef138ad57cfe98f1eba1477906b45c7b.bin', 'https://i0.hdslb.com/bfs/openplatform/84c516f49342f108328047096917035c94fddf22.bin', 'https://i0.hdslb.com/bfs/openplatform/f4d6dc25d5b35acc56c17b7d052b2cc1770372fb.bin', 'https://i0.hdslb.com/bfs/openplatform/ab08492d664a148559fd081063e4e1f7372e326f.bin', 'https://i0.hdslb.com/bfs/openplatform/7f87ae8fbc162a5742720b125311470ccef54c14.bin', 'https://i0.hdslb.com/bfs/openplatform/9bb8ecdc1c45b03e2afeef71c9b0b25905d71d64.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '038-争夺被炉的战争\[RJ381796] 被炉下的战争.zip',
+    types: [{
+      description: '038-争夺被炉的战争\[RJ381796] 被炉下的战争.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

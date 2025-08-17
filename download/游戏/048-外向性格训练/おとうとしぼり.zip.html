@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 048-外向性格训练\おとうとしぼり.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：048-外向性格训练\おとうとしぼり.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/3293886e67d21adb81111e0e034cda1e6778d8a2.bin', 'https://i0.hdslb.com/bfs/openplatform/aea6eb5433e55ed8d709412d58f03e0215f48714.bin', 'https://i0.hdslb.com/bfs/openplatform/962fa2dd73cb7a8906a6f8e31436c70eee8ec86c.bin', 'https://i0.hdslb.com/bfs/openplatform/eb085e411beacb9db454c4f840b5daf106ad0eb1.bin', 'https://i0.hdslb.com/bfs/openplatform/202a6cb5e70c341c97274ca86690d72b1f9120f4.bin', 'https://i0.hdslb.com/bfs/openplatform/3dc69c7ac2f92f5cc706aff6de8c28e63dc2217e.bin', 'https://i0.hdslb.com/bfs/openplatform/4e6d7949e528ebaf2d16678e652cd3c17dbd05a7.bin', 'https://i0.hdslb.com/bfs/openplatform/e9e63c5a24aa727bf7359449d38312fb82e1deae.bin', 'https://i0.hdslb.com/bfs/openplatform/b6860f050d919f6bb86146f77bdd4ecb6bc414f8.bin', 'https://i0.hdslb.com/bfs/openplatform/2c4ffc613f57bb69a6250f5366d2d66f27ede5b5.bin', 'https://i0.hdslb.com/bfs/openplatform/c4a556e8ae2a21811efd180f2c6270eec4543c8e.bin', 'https://i0.hdslb.com/bfs/openplatform/c2fa78433c327bf23539fa6cb406be53a500b80a.bin', 'https://i0.hdslb.com/bfs/openplatform/e024e754f0733f7c423824909c9de3ddddc037c3.bin', 'https://i0.hdslb.com/bfs/openplatform/9a3c59c52732e5d65d6e47a66db6257055014613.bin', 'https://i0.hdslb.com/bfs/openplatform/79832f7984d948286833103885cadbf0789f2686.bin', 'https://i0.hdslb.com/bfs/openplatform/d15879d842c3d6e667d57e7f4b44198c1246b64f.bin', 'https://i0.hdslb.com/bfs/openplatform/79e8cbc6b02a82984499665ec3df6a2a602c2de7.bin', 'https://i0.hdslb.com/bfs/openplatform/d8ebfe5c9e63a492019f98b31a31c9a2dbdf8b1f.bin', 'https://i0.hdslb.com/bfs/openplatform/50d733123ebd2b847642631d9b3b10fa264b67a8.bin', 'https://i0.hdslb.com/bfs/openplatform/5a1e8e64fac7a9d9a6aef86bf1385d7900f0a936.bin', 'https://i0.hdslb.com/bfs/openplatform/cc7389f0b3cc19e9e1e19e83f7f04f6dd87205b9.bin', 'https://i0.hdslb.com/bfs/openplatform/f55bc3b92a0880dc73cdd92f7fd0a4af55be8827.bin', 'https://i0.hdslb.com/bfs/openplatform/7975d77ccc30ea147fc2f134e1f3cc98c896cb16.bin', 'https://i0.hdslb.com/bfs/openplatform/92fef10fe1546598587820ebb67d4aa88ec91f39.bin', 'https://i0.hdslb.com/bfs/openplatform/f697ce098b2a59c519af5b79f4e80e1a5cdcaee6.bin', 'https://i0.hdslb.com/bfs/openplatform/01fbd71426cd1f4eb787ae5c4cf7dd831e9b8ea6.bin', 'https://i0.hdslb.com/bfs/openplatform/0b8d502f7395ee70935eb8e0749db4176308152c.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '048-外向性格训练\おとうとしぼり.zip',
+    types: [{
+      description: '048-外向性格训练\おとうとしぼり.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

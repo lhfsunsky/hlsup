@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 046-元素增强版\Elementicles Enhanced.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：046-元素增强版\Elementicles Enhanced.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/c2b5ee915ecfba3bc91537151d51798f5a72357d.bin', 'https://i0.hdslb.com/bfs/openplatform/20ce843897cfe4a497b30e154c52f2af34fd7357.bin', 'https://i0.hdslb.com/bfs/openplatform/c41180bc6f153e15278abcb4b33ee8dc0954dd24.bin', 'https://i0.hdslb.com/bfs/openplatform/69212eb0083ef1e9a7d6b1f3a9b8e3e00f6741a3.bin', 'https://i0.hdslb.com/bfs/openplatform/2f1be7c3705fc00228e0fe900222dbde2e881e2f.bin', 'https://i0.hdslb.com/bfs/openplatform/09ab1869850e409cf6a865ee4b4f1f5f91871d36.bin', 'https://i0.hdslb.com/bfs/openplatform/eeaf0d734ea0879f41d5eb71436d0e9ef047ea4b.bin', 'https://i0.hdslb.com/bfs/openplatform/cae4d405378f0208c30ec2ba0010b138b122ef94.bin', 'https://i0.hdslb.com/bfs/openplatform/2b508a7649a17a3dea2de6c20ff3a1bed11d6daf.bin', 'https://i0.hdslb.com/bfs/openplatform/5215ebc96e62753d9eabe7b7175ac96aecba66a9.bin', 'https://i0.hdslb.com/bfs/openplatform/19b2c69392a56ff483dc355762838528d7e1c3b0.bin', 'https://i0.hdslb.com/bfs/openplatform/95e48d73305077d723bbbeb3f0cc7e793fde6cc3.bin', 'https://i0.hdslb.com/bfs/openplatform/2d5e4936577897e69654ce8bd96ff1124b9717d8.bin', 'https://i0.hdslb.com/bfs/openplatform/cedd2e35fdf3de1988f32b32b1b5cb441e4863f2.bin', 'https://i0.hdslb.com/bfs/openplatform/b531a8a091425f2c6c8e3a51e871c0582b499cd4.bin', 'https://i0.hdslb.com/bfs/openplatform/e2e35633a496c7af5bd98c40cc426df2c2f51424.bin', 'https://i0.hdslb.com/bfs/openplatform/decdf7b3514d3402f28eee2d5a890982de84a51e.bin', 'https://i0.hdslb.com/bfs/openplatform/2256d023fdd42d6f10435ea58f5fa61a4042632a.bin', 'https://i0.hdslb.com/bfs/openplatform/652413e599fadf896b5bafe58330dcd8ccb5af9e.bin', 'https://i0.hdslb.com/bfs/openplatform/63de984b5f53807cddec61f173da5d29a989cc59.bin', 'https://i0.hdslb.com/bfs/openplatform/c4fbbc8bda2d123b71c457e589a45dc087f224f5.bin', 'https://i0.hdslb.com/bfs/openplatform/10fd927c2ae9f4825e932657c9625c689706d132.bin', 'https://i0.hdslb.com/bfs/openplatform/6b38ff0ae3efae6b12a8537e9781988f0b712f46.bin', 'https://i0.hdslb.com/bfs/openplatform/8a918d5720f74f7681c85c2e10f1433575554695.bin', 'https://i0.hdslb.com/bfs/openplatform/646773dbd2f13679763c0cf8222439693ba0a7c7.bin', 'https://i0.hdslb.com/bfs/openplatform/5c8739d6c1f2597d134b1f51304fdbd183142352.bin', 'https://i0.hdslb.com/bfs/openplatform/c5e8bfbd41ff6ace5fdb47440f47445db33b39d9.bin', 'https://i0.hdslb.com/bfs/openplatform/2bfc21918eb92eca3175f4f01113f33fa053d30b.bin', 'https://i0.hdslb.com/bfs/openplatform/ec9f0979c37dcd538eadd7ab905bf7926ab455cd.bin', 'https://i0.hdslb.com/bfs/openplatform/d0b620acc2e9bbe2627306533081094391f9e7d4.bin', 'https://i0.hdslb.com/bfs/openplatform/42409734c0a32d761e0e7ee8ac78a5948bf34bfb.bin', 'https://i0.hdslb.com/bfs/openplatform/fb6ae3f3dfa19595baa5f6722df0fea623ac38bf.bin', 'https://i0.hdslb.com/bfs/openplatform/edaba64ed1bac6b0ba7148f9abdf41bffb7cc53d.bin', 'https://i0.hdslb.com/bfs/openplatform/2bcdf8d013226c4e4ee0ea9568129441e806f562.bin', 'https://i0.hdslb.com/bfs/openplatform/cd7c1b8a78cb15febefdb6312fb21fb5081ee7d6.bin', 'https://i0.hdslb.com/bfs/openplatform/23026f258a5f100319a10dca5b4ae77fc120338a.bin', 'https://i0.hdslb.com/bfs/openplatform/1affb1b1b70c6ae8c3063f7b1339c0b4fbc197e2.bin', 'https://i0.hdslb.com/bfs/openplatform/8b1f16044e54ece0cf03d9f54c88a5b8e9004f73.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '046-元素增强版\Elementicles Enhanced.zip',
+    types: [{
+      description: '046-元素增强版\Elementicles Enhanced.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

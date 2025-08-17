@@ -307,5 +307,98 @@
       "★使用前须知☆.txt.html",
       "视频类Flash_Windows.zip.html"
     ]
+  },
+  {
+    "folder": "游戏/035-Darakue",
+    "html_files": [
+      "DarakueEX0.3p.zip.html",
+      "save.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/036-地牢冒险",
+    "html_files": [
+      "黑暗王国_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/037-乡下女装少年",
+    "html_files": [
+      "乡下少年_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/038-争夺被炉的战争",
+    "html_files": [
+      "[RJ381796] 被炉下的战争.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/039-怕生孩子的故事",
+    "html_files": [
+      "[RJ109284] 绿毛正太.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/040-正太兼职教师",
+    "html_files": [
+      "ntleas.zip.html",
+      "如何使用转区工具1.png.html",
+      "如何使用转区工具2.png.html",
+      "正太指导A_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/041-召唤之夜4",
+    "html_files": [
+      "NPJH50410[召唤之夜4](JP).iso.html",
+      "NPJH50410[召唤之夜4](JP).zip.html",
+      "PSP模拟器如何导入金手指或者存档.txt.html",
+      "SN4_SAVEPSP.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/042-男孩的生活/2305更新",
+    "html_files": [
+      "LaaB V0.02.02c.zip.html",
+      "LaaB_v0.02.02c.apk.html"
+    ]
+  },
+  {
+    "folder": "游戏/043-DarkYard",
+    "html_files": [
+      "DarkYardDeluxeEdition_MacOS.zip.html",
+      "Dark_Yard_DeluxeEdition - Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/044-怪生物图鉴",
+    "html_files": [
+      "怪生物图鉴Vol.1_Windows.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/046-元素增强版",
+    "html_files": [
+      "Elementicles Enhanced.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/047-夏日祭",
+    "html_files": [
+      "Summer_Matsuri_Demo__夏祭り技術デモ_.1.0.0.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/048-外向性格训练",
+    "html_files": [
+      "おとうとしぼり.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/049-红鸽",
+    "html_files": [
+      "That_Moment-1.1-pc.zip.html"
+    ]
   }
 ]
