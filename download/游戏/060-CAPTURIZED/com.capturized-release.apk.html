@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 060-CAPTURIZED\com.capturized-release.apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：060-CAPTURIZED\com.capturized-release.apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/43cd5e92c466e9131fcc16b2ddb94bd436359271.bin', 'https://i0.hdslb.com/bfs/openplatform/82bb73961936abc5e8ddd32e66ce79c2a517774e.bin', 'https://i0.hdslb.com/bfs/openplatform/494aadb78150cb6b28cec267ae0be62bf1c37455.bin', 'https://i0.hdslb.com/bfs/openplatform/f9ec835f9b7cb8b581b103766abe49af24097c94.bin', 'https://i0.hdslb.com/bfs/openplatform/2f722311aefa98785c45f8c941b8b6111d9e8eed.bin', 'https://i0.hdslb.com/bfs/openplatform/f18c76019e548825cd27272687c7245c02baed66.bin', 'https://i0.hdslb.com/bfs/openplatform/e70c87400dd0a0750b9faac9cb089213ffeb7c09.bin', 'https://i0.hdslb.com/bfs/openplatform/520e64aca7ecae422228df0b8a877c962186bb07.bin', 'https://i0.hdslb.com/bfs/openplatform/48e01cfb18ae679c5d23b8ce69d4eccfc93a1c60.bin', 'https://i0.hdslb.com/bfs/openplatform/9a22214958d8f88141f838791a070e407d97d6fc.bin', 'https://i0.hdslb.com/bfs/openplatform/2743297eb8ecdd2a8c320e9f40f9174deb4097b3.bin', 'https://i0.hdslb.com/bfs/openplatform/2303dd0e609f3a9bc77f2e5fa6c6abbeb4197911.bin', 'https://i0.hdslb.com/bfs/openplatform/866c6f8389d3660312bd42c4e58cf99b3d0e8fa6.bin', 'https://i0.hdslb.com/bfs/openplatform/c9824e132c1774fb4c9039f42f31ea5840afe5a3.bin', 'https://i0.hdslb.com/bfs/openplatform/75f2066f396db5e337c8fdd88219afef4cb378a8.bin', 'https://i0.hdslb.com/bfs/openplatform/19da861eacd0f8df2e5b1fdc8d0036c6844f9b64.bin', 'https://i0.hdslb.com/bfs/openplatform/b30d9b50265a8c028d27376640f1a28346720578.bin', 'https://i0.hdslb.com/bfs/openplatform/5255f163fb3e0a8d5c3f142b7cab52956c7ef071.bin', 'https://i0.hdslb.com/bfs/openplatform/0ac59f0c2dd92dcf305fa509058f6354dff2fee1.bin', 'https://i0.hdslb.com/bfs/openplatform/2b2b36a4e5b88cc2d0b7b7f311d2b489a9fd2ce7.bin', 'https://i0.hdslb.com/bfs/openplatform/f80f829d146cc12486cdd27a15a28392e402099c.bin', 'https://i0.hdslb.com/bfs/openplatform/b5775e137268b7e5f9c08b44314aa0660b6579ae.bin', 'https://i0.hdslb.com/bfs/openplatform/d4fcfd342011a3189b0db336e2bd7cec3a3dd94c.bin', 'https://i0.hdslb.com/bfs/openplatform/c3278ef7d1fee3c4630c42de5721bcf355763fd8.bin', 'https://i0.hdslb.com/bfs/openplatform/96aab710fd1203bc6cf7ec405701ef2a3059d1f6.bin', 'https://i0.hdslb.com/bfs/openplatform/20092d7433ee8b07a0b5be2df40d7afd93c0c8af.bin', 'https://i0.hdslb.com/bfs/openplatform/718de9b1d4903b99419e7d55f1621be0fdbfa30b.bin', 'https://i0.hdslb.com/bfs/openplatform/3c783e8d83d37f65bc3eba72bcaad1dc9cb58336.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '060-CAPTURIZED\com.capturized-release.apk',
+    types: [{
+      description: '060-CAPTURIZED\com.capturized-release.apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

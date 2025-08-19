@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 063-星星勇士魔法学院\ルドゥス魔法学院.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：063-星星勇士魔法学院\ルドゥス魔法学院.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/7a55c19fca89f4621d9701ff2d3d9097dd79c73f.bin', 'https://i0.hdslb.com/bfs/openplatform/5911b50a604fbb07f39f72c56d456eca637a978e.bin', 'https://i0.hdslb.com/bfs/openplatform/45899d2c23e6938e4610ce293dd4745dfc78d2dd.bin', 'https://i0.hdslb.com/bfs/openplatform/ae2c42e92824e7aa970b1496bdfc3f286aa3683a.bin', 'https://i0.hdslb.com/bfs/openplatform/66e3086c00e2e3dc3bd2e3f0b928ae9b23a1bd99.bin', 'https://i0.hdslb.com/bfs/openplatform/6c0193a255864175370ebd74e489bb1c91da51aa.bin', 'https://i0.hdslb.com/bfs/openplatform/71226052b98ed22bbd4ac3d38967502b63dde987.bin', 'https://i0.hdslb.com/bfs/openplatform/7fe9acdab25a70836e4e1f2f1c6c7aaa90250dba.bin', 'https://i0.hdslb.com/bfs/openplatform/80c2f4472380af4a9d808527a9335ea446ae6295.bin', 'https://i0.hdslb.com/bfs/openplatform/edee4d2c962ea72dd960cb7d065538777d1e507a.bin', 'https://i0.hdslb.com/bfs/openplatform/583e3f1007b086ce31dcbabd7c5a899a7e449ad7.bin', 'https://i0.hdslb.com/bfs/openplatform/886064f28ec43abf7e8d779b00d0ef1a0098eaf9.bin', 'https://i0.hdslb.com/bfs/openplatform/fc9c7fd13c2fb073aa98ba09b4ec721d60dadbd0.bin', 'https://i0.hdslb.com/bfs/openplatform/cd682b2492de5f7bf84936b20114fdfe2114eb6a.bin', 'https://i0.hdslb.com/bfs/openplatform/d1c217141b7c7040bb54c6e23150e638633d50e5.bin', 'https://i0.hdslb.com/bfs/openplatform/603f78527b98319983ffacc4eb23c3fdf7955be5.bin', 'https://i0.hdslb.com/bfs/openplatform/beebf2012b61c22748886e46d9341768d0f2b667.bin', 'https://i0.hdslb.com/bfs/openplatform/94a7592f81065813fde54430f934ffe751c1c553.bin', 'https://i0.hdslb.com/bfs/openplatform/2f553b45a34d5f2a6405ccad55a6ab099f99b038.bin', 'https://i0.hdslb.com/bfs/openplatform/5f5e690ce9a8f6b2111e35f7bddcc088b5070047.bin', 'https://i0.hdslb.com/bfs/openplatform/9b1b892bb02e44d89c57d8cb326b605875ac8eb9.bin', 'https://i0.hdslb.com/bfs/openplatform/91c46da856985c8aa04d6941802d8ed7e2cf43f0.bin', 'https://i0.hdslb.com/bfs/openplatform/77a3dd8a40b690a73ccc6276c1e64aa13a590255.bin', 'https://i0.hdslb.com/bfs/openplatform/8b4ee26de4d48fd38f411e13976c60e6149f9617.bin', 'https://i0.hdslb.com/bfs/openplatform/c6bbe70b1c8416a8f19f68c75375a276420a63bd.bin', 'https://i0.hdslb.com/bfs/openplatform/0e49514180fa9f44588e932433329686e93d72c1.bin', 'https://i0.hdslb.com/bfs/openplatform/f761641f15aa9a4168fb4619d954dc95ed36e9e4.bin', 'https://i0.hdslb.com/bfs/openplatform/89152b544d2590c6ee24aef6b29d1fbb96a46327.bin', 'https://i0.hdslb.com/bfs/openplatform/ea5f68d97e9ceee9bb1917be59e5b7f2ce2c9b1c.bin', 'https://i0.hdslb.com/bfs/openplatform/95af5ac7bbf571c0922de1613b0be55ea28b8adc.bin', 'https://i0.hdslb.com/bfs/openplatform/6b0e83d9c3243d4559bae2f0c2711c178dc57da7.bin', 'https://i0.hdslb.com/bfs/openplatform/1a9fb826f671b36b33be9cd28f3267988cc0f49a.bin', 'https://i0.hdslb.com/bfs/openplatform/5ab5d6dc1f00707abcd68144a4df7196033bfd0b.bin', 'https://i0.hdslb.com/bfs/openplatform/a636820431db32510312acbe96cbbb7e347b23e7.bin', 'https://i0.hdslb.com/bfs/openplatform/45810c76e58bf12a55f0ebd5e1a3c111ced1564a.bin', 'https://i0.hdslb.com/bfs/openplatform/87a1da0cec995b42664ad30b932239aec23843e4.bin', 'https://i0.hdslb.com/bfs/openplatform/59c443b821c6aedf8dc9ebb0bdf4c06e41a68843.bin', 'https://i0.hdslb.com/bfs/openplatform/05af17ec6a06bc4c115e5347c8ba2a3d9ff4fc73.bin', 'https://i0.hdslb.com/bfs/openplatform/3d99d184282fbf34cf5974f27aef8074463cf08c.bin', 'https://i0.hdslb.com/bfs/openplatform/d2421330cdaa51ecc89edbc69fbc8360e8504b5b.bin', 'https://i0.hdslb.com/bfs/openplatform/9861e7098fd9c0085ebe61f99f31e7445cd3c286.bin', 'https://i0.hdslb.com/bfs/openplatform/ef27d1dc122e4d1fe5fad1b3814d70394cfa6a7f.bin', 'https://i0.hdslb.com/bfs/openplatform/144697721dbebe13e23094e6e072fd84c99c7369.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '063-星星勇士魔法学院\ルドゥス魔法学院.zip',
+    types: [{
+      description: '063-星星勇士魔法学院\ルドゥス魔法学院.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -2,12 +2,12 @@
   {
     "folder": "游戏",
     "html_files": [
-      "SHOTAxMONSTERS1.41.10.zip.html",
-      "SHOTAxMONSTERS2.zip.html",
-      "ShotaxMonstersL2DV01.zip.html",
-      "星星勇士1.zip.html",
-      "星星勇士2.zip.html",
-      "星星勇士3.zip.html"
+      "028-ShotaxMonstersL2DV01.zip.html",
+      "050-SHOTAxMONSTERS1.41.10.zip.html",
+      "055-星星勇士1.zip.html",
+      "056-星星勇士2.zip.html",
+      "061-星星勇士3.zip.html",
+      "150-SHOTAxMONSTERS2.zip.html"
     ]
   },
   {
@@ -378,6 +378,30 @@
     ]
   },
   {
+    "folder": "游戏/045-神奇夏天/0.1H 版本",
+    "html_files": [
+      "MagicalSummer_0.1h_Windows.7z.html",
+      "MagicalSummer_Windows.zip.html",
+      "MagicalSummer汉化版.apk.html"
+    ]
+  },
+  {
+    "folder": "游戏/045-神奇夏天/0.1H 版本/MagicalSummerMAC",
+    "html_files": [
+      "Contents.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/045-神奇夏天/0.1K 版本20231206",
+    "html_files": [
+      "MagicalSummer-0.1K-pc.zip.html",
+      "MagicalSummer机翻__0.1K_Windows.zip.html",
+      "MagicalSummer机翻报错点lgnore_0.1K_Windows.zip.html",
+      "机翻汉化游戏运行问题解决.txt.html",
+      "翻译补丁，有生肉版本的替换源文件即可，也可以试试替换现有的机翻版本.zip.html"
+    ]
+  },
+  {
     "folder": "游戏/046-元素增强版",
     "html_files": [
       "Elementicles Enhanced.zip.html"
@@ -399,6 +423,128 @@
     "folder": "游戏/049-红鸽",
     "html_files": [
       "That_Moment-1.1-pc.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/051-新小学校日",
+    "html_files": [
+      "SnHSummerDemov1.1.0.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/052-DND任务",
+    "html_files": [
+      "DNd Poisoned.zip.html",
+      "DND任务攻略.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/053-Re.Err",
+    "html_files": [
+      "ntleas.zip.html",
+      "RE.ERR.zip.html",
+      "RE解包.zip.html",
+      "如何使用转区工具1.png.html",
+      "如何使用转区工具2.png.html"
+    ]
+  },
+  {
+    "folder": "游戏/054-保健室的故事",
+    "html_files": [
+      "hokensitu.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/057-setumati",
+    "html_files": [
+      "setumati.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/058-Lemures Blue's",
+    "html_files": [
+      "Lemures Blue's 2 A.M.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/059-Crimson Sun",
+    "html_files": [
+      "CrimsonSun-1.0-mac.zip.html",
+      "CrimsonSun-1.0-pc.zip.html",
+      "CrimsonSun机翻_1.0_Windows.zip.html",
+      "新建Word.docx.html"
+    ]
+  },
+  {
+    "folder": "游戏/059-Crimson Sun/转区工具",
+    "html_files": [
+      "ntleas.zip.html",
+      "如何使用转区工具1.png.html",
+      "如何使用转区工具2.png.html"
+    ]
+  },
+  {
+    "folder": "游戏/060-CAPTURIZED",
+    "html_files": [
+      "CAPTURIZED-0.21-pc.zip.html",
+      "capturized.zh-release.apk.html",
+      "CAPTURIZED机翻_Windows.zip.html",
+      "com.capturized-release.apk.html"
+    ]
+  },
+  {
+    "folder": "游戏/060-CAPTURIZED/CAPTURIZED-MAC",
+    "html_files": [
+      "Contents.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/062-魔法小镇",
+    "html_files": [
+      "ハロウィンファクトリー_ver1.00.zip.html",
+      "解包.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/062-魔法小镇/转区工具",
+    "html_files": [
+      "ntleas.zip.html",
+      "如何使用转区工具1.png.html",
+      "如何使用转区工具2.png.html"
+    ]
+  },
+  {
+    "folder": "游戏/063-星星勇士魔法学院",
+    "html_files": [
+      "ルドゥス魔法学院.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/064-镜音连野球拳",
+    "html_files": [
+      "Funny Cat - Isshoni Jankenpon (Vocaloid).zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/064-镜音连野球拳/转区工具",
+    "html_files": [
+      "ntleas.zip.html",
+      "如何使用转区工具1.png.html",
+      "如何使用转区工具2.png.html"
+    ]
+  },
+  {
+    "folder": "游戏/065-勇者特别的生活",
+    "html_files": [
+      "Yasaka (Yoshitakashi Athletic) - Courageous Children.zip.html"
+    ]
+  },
+  {
+    "folder": "游戏/065-勇者特别的生活/转区工具",
+    "html_files": [
+      "ntleas.zip.html",
+      "如何使用转区工具1.png.html",
+      "如何使用转区工具2.png.html"
     ]
   }
 ]

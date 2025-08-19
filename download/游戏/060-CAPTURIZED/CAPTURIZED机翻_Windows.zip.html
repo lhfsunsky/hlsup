@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 060-CAPTURIZED\CAPTURIZED机翻_Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：060-CAPTURIZED\CAPTURIZED机翻_Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/691141280e3085c028a99a24d75185d2d6ca125f.bin', 'https://i0.hdslb.com/bfs/openplatform/974ee6a9d22ea7f900b234b43dfd492d5a70f615.bin', 'https://i0.hdslb.com/bfs/openplatform/beecb7a240088c39cca347d0a3df261bee2ce928.bin', 'https://i0.hdslb.com/bfs/openplatform/3e33642150a9ba5f5cfd11b2660bbb6b74cbf558.bin', 'https://i0.hdslb.com/bfs/openplatform/9ccf0246f2e7f1d5b6fa5b623d3023e735cf202b.bin', 'https://i0.hdslb.com/bfs/openplatform/6cb16ee5af7c3160a8c9262cd09996394477c649.bin', 'https://i0.hdslb.com/bfs/openplatform/72b9184e858395bf9330a4341bd29773c6b94bf7.bin', 'https://i0.hdslb.com/bfs/openplatform/cc5fe341590528b964d7d0703338fba043e8d147.bin', 'https://i0.hdslb.com/bfs/openplatform/03845843dbce0a7a5f5d48c10a312ac8a810a511.bin', 'https://i0.hdslb.com/bfs/openplatform/29ad5508629576fb9c4c37b8eb81f5d4c0e17d07.bin', 'https://i0.hdslb.com/bfs/openplatform/beb812bfe1922915c2653cd3332051739ea017f3.bin', 'https://i0.hdslb.com/bfs/openplatform/cf38d735d05f7bd874d1527a11e316628fbba152.bin', 'https://i0.hdslb.com/bfs/openplatform/365beb0ca24b4c5605ed0cb595f038a11c8519ac.bin', 'https://i0.hdslb.com/bfs/openplatform/548f58bb6a78abc57a5fc6e6c1198ed0ee9c73e8.bin', 'https://i0.hdslb.com/bfs/openplatform/fd4db981e892c380d5ed16a28f5af7ceed7ce275.bin', 'https://i0.hdslb.com/bfs/openplatform/04a26f08e956bda7f28e05f4bfb102726bf75afc.bin', 'https://i0.hdslb.com/bfs/openplatform/4715058e2e761f4ac74fd252b74c90c25f3798b2.bin', 'https://i0.hdslb.com/bfs/openplatform/ac41f7b31c0a2b817a9731059679c6eff83a05bd.bin', 'https://i0.hdslb.com/bfs/openplatform/1de9a0f0ef8482f2a135a375cc6a140c0272ceb8.bin', 'https://i0.hdslb.com/bfs/openplatform/17ca89811d4879588cf5602a95d9391a3810d947.bin', 'https://i0.hdslb.com/bfs/openplatform/74f55a32f2f1dfedb6230941028be5807bd06516.bin', 'https://i0.hdslb.com/bfs/openplatform/a8aae204b9c0510d073a81ded46dafe183c5865b.bin', 'https://i0.hdslb.com/bfs/openplatform/1da455e96271e9c06bd41f9bfb3a64dfce0fe487.bin', 'https://i0.hdslb.com/bfs/openplatform/a48339caa4f6c8214deef663d76dd30698a4e661.bin', 'https://i0.hdslb.com/bfs/openplatform/4720071589a3c6e104f2c3ac0534b22c11c248b2.bin', 'https://i0.hdslb.com/bfs/openplatform/e81768faf3addc068c5855d0458a8573c5a92c47.bin', 'https://i0.hdslb.com/bfs/openplatform/eaf83fd302abddc01f3ac6881b5078fabae27ef2.bin', 'https://i0.hdslb.com/bfs/openplatform/22b16e0ca66e5e12f232b4505a3f63a7950bf343.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '060-CAPTURIZED\CAPTURIZED机翻_Windows.zip',
+    types: [{
+      description: '060-CAPTURIZED\CAPTURIZED机翻_Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>
