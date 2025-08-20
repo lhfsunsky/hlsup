@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 080-怕生男孩的故事\ぼくたちの性くらべ.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：080-怕生男孩的故事\ぼくたちの性くらべ.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/a94c83525f6a6fdaf00ad9f79b428daee37182b0.bin', 'https://i0.hdslb.com/bfs/openplatform/87981da95e213c89b8a59829b21507c85cd0029d.bin', 'https://i0.hdslb.com/bfs/openplatform/3327665a2d13257b323010c13d4904bd8e500e6a.bin', 'https://i0.hdslb.com/bfs/openplatform/06359aa2d83fea99950a122a0009d07a0f794db1.bin', 'https://i0.hdslb.com/bfs/openplatform/73b08db11fb87c69d6f1b5b3be8cc0ae9082cf1e.bin', 'https://i0.hdslb.com/bfs/openplatform/1b3254ce50816e1386e9f7cacd3f233339e47287.bin', 'https://i0.hdslb.com/bfs/openplatform/121668d4cab5543bc33ef3cc6bb6c30ec9b81dd8.bin', 'https://i0.hdslb.com/bfs/openplatform/21e9662daa26c45255eec24b4976e0ed29d30b28.bin', 'https://i0.hdslb.com/bfs/openplatform/b76fb12ba5804ace3c467ca4b9cf7d2545018014.bin', 'https://i0.hdslb.com/bfs/openplatform/cf7b1eb1cbcf6bf78fdfc20865c76dec9594a21a.bin', 'https://i0.hdslb.com/bfs/openplatform/eb5710595b83616d999fced273190bd4963addc7.bin', 'https://i0.hdslb.com/bfs/openplatform/f56d9fe94067ad459652b41e91a4f21a4f10736c.bin', 'https://i0.hdslb.com/bfs/openplatform/a754c9f6473bebb95698d768dd7ed00be3aff757.bin', 'https://i0.hdslb.com/bfs/openplatform/0b6adb09760fe5378fe09e2d7c86b214e65fb84a.bin', 'https://i0.hdslb.com/bfs/openplatform/9f1a08b37a6fb1d29524094f661993bbb8af0ca5.bin', 'https://i0.hdslb.com/bfs/openplatform/48a16deb6c6793496a838593ac69a9935867341e.bin', 'https://i0.hdslb.com/bfs/openplatform/ec6455a33d8c8f7e438bf7bd20dbc7040e037e0e.bin', 'https://i0.hdslb.com/bfs/openplatform/04a8015b631ec61957387c511440611706fece63.bin', 'https://i0.hdslb.com/bfs/openplatform/6db208152cc7c941eaa14b43dc74cebed098a96a.bin', 'https://i0.hdslb.com/bfs/openplatform/2453d06731de4b624de75472cbc4c816c5a186c7.bin', 'https://i0.hdslb.com/bfs/openplatform/d02157f8689a3b7b76a6aa2169bef2e3ffe052bb.bin', 'https://i0.hdslb.com/bfs/openplatform/4d4615362388c0f8b5744176f22ecd9ea19e597b.bin', 'https://i0.hdslb.com/bfs/openplatform/db7d7ef4cd89b5390560d6394161f3e45828674e.bin', 'https://i0.hdslb.com/bfs/openplatform/ef45d928a42efb22d40873309af30c9f4b7cb9d6.bin', 'https://i0.hdslb.com/bfs/openplatform/bafd433cb6004d9dcab6535d880409e09a5c247f.bin', 'https://i0.hdslb.com/bfs/openplatform/0790341e37f9a27b631ff2b9b52eb23bdb832681.bin', 'https://i0.hdslb.com/bfs/openplatform/1709df154d1e5b5676925184ce0d848aa769cb05.bin', 'https://i0.hdslb.com/bfs/openplatform/4e9044f43aeece897811c92e784a79dd45fd4596.bin', 'https://i0.hdslb.com/bfs/openplatform/224c4b97574cb78dc306dc64d9034f8c99463e7e.bin', 'https://i0.hdslb.com/bfs/openplatform/21e183559b983ba6d57a1d910aa5451d54b1e3f9.bin', 'https://i0.hdslb.com/bfs/openplatform/b22a6728bd7c4b3185efa19b8c411e1dd8341960.bin', 'https://i0.hdslb.com/bfs/openplatform/22ece6ca00fca378815fec13921062ae239e0923.bin', 'https://i0.hdslb.com/bfs/openplatform/d46444422053a7e82bcfe7833017c4365d73e7c3.bin', 'https://i0.hdslb.com/bfs/openplatform/ec7c3663dc14babde119779a04bef420997a734c.bin', 'https://i0.hdslb.com/bfs/openplatform/0bd998069b9df4796abf5495192a2ba52b1067c7.bin', 'https://i0.hdslb.com/bfs/openplatform/19bbecc90665aad21b847abb22743c89dfa9ad93.bin', 'https://i0.hdslb.com/bfs/openplatform/f536395bbe863a196bc4df3b89bc359f8379286e.bin', 'https://i0.hdslb.com/bfs/openplatform/b75c4384ac1e70f13b9b24b2c1fd17a2e1f63c7a.bin', 'https://i0.hdslb.com/bfs/openplatform/88c5a0c82d1f1e3f3092b709b31cca5f833cf2f2.bin', 'https://i0.hdslb.com/bfs/openplatform/73513f12cba06a7f7135aa22aafe5d58937121cb.bin', 'https://i0.hdslb.com/bfs/openplatform/2e9392da959b81f8ff58a74efadc539dc95ec273.bin', 'https://i0.hdslb.com/bfs/openplatform/fa65ac41a25af34e6cab7dfcedc80f095480366f.bin', 'https://i0.hdslb.com/bfs/openplatform/d39d22ac80a125d5de86a315ec697e3367b8c5db.bin', 'https://i0.hdslb.com/bfs/openplatform/e508347b2df26c50800cc1d50298be1dfdd9d79d.bin', 'https://i0.hdslb.com/bfs/openplatform/dd5fcf3c230aa40d87e61027cef3159651276b40.bin', 'https://i0.hdslb.com/bfs/openplatform/1d6317f23f69765fc8347ba3f56f2a2e686405ad.bin', 'https://i0.hdslb.com/bfs/openplatform/6e1b45ab9028909c8a23771dbe0603a97f462f4e.bin', 'https://i0.hdslb.com/bfs/openplatform/9cf27b46bf77a0115caa7bea7866f4e7ce5d7031.bin', 'https://i0.hdslb.com/bfs/openplatform/b78c573167820ebe93f1233268aaace324da6bdf.bin', 'https://i0.hdslb.com/bfs/openplatform/66e2a24193ffe057d5e7ab30de3dc1f72ba6b1bd.bin', 'https://i0.hdslb.com/bfs/openplatform/054ab8d30e8b93e6d8c5c4e75f40ef1e1ddd008f.bin', 'https://i0.hdslb.com/bfs/openplatform/7fa5b010db966c374c2044c29f252199e8351edd.bin', 'https://i0.hdslb.com/bfs/openplatform/8bdf37d0cd0cce00a1c458601e3e5b124991740b.bin', 'https://i0.hdslb.com/bfs/openplatform/5405982ed193ad144c37b5ab5b8d2eb3aea0c26e.bin', 'https://i0.hdslb.com/bfs/openplatform/93bbf19a9b67853abf992b7628d1e5ef9189c4d8.bin', 'https://i0.hdslb.com/bfs/openplatform/3e679615859d646819619ee9310d4a3199bfd731.bin', 'https://i0.hdslb.com/bfs/openplatform/1343c2deacca7dd52aa68767e39b3f3625374326.bin', 'https://i0.hdslb.com/bfs/openplatform/c4f5ea63b61625d919c152d28dba3f10259b9ee3.bin', 'https://i0.hdslb.com/bfs/openplatform/1cf6540a68d2dd8caa0a9db17171126e8fe3c08f.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '080-怕生男孩的故事\ぼくたちの性くらべ.zip',
+    types: [{
+      description: '080-怕生男孩的故事\ぼくたちの性くらべ.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 070-丹尼的新家\丹尼的新家庭机翻_Android.apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：070-丹尼的新家\丹尼的新家庭机翻_Android.apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/6f6d3eec4597712bb7d21c97b6375eadc3482253.bin', 'https://i0.hdslb.com/bfs/openplatform/ebf79c10a06aa03925552545d96f32fceb6d0a84.bin', 'https://i0.hdslb.com/bfs/openplatform/ba13e2e1064ae8db10afc0cb80315aa5daa2799a.bin', 'https://i0.hdslb.com/bfs/openplatform/1e90df3779680939df766f2a100a34ca037aa71f.bin', 'https://i0.hdslb.com/bfs/openplatform/4164aad14ddf9996791af36332b3fe773d35b5c2.bin', 'https://i0.hdslb.com/bfs/openplatform/0938a5265ae1a2705b2176a22257114d69b18a8b.bin', 'https://i0.hdslb.com/bfs/openplatform/745e901e7eff9d70032479d5b58546ed412d95a7.bin', 'https://i0.hdslb.com/bfs/openplatform/6218d93f0d10c8ad4889abc61368344b8c473d5c.bin', 'https://i0.hdslb.com/bfs/openplatform/ddb830ce69cd01c313be1787de53926685a79167.bin', 'https://i0.hdslb.com/bfs/openplatform/b07c1c888e8661e67b5b06f19525df642a9182a7.bin', 'https://i0.hdslb.com/bfs/openplatform/4575faa1e497a18a77462caa2a7d7d93e7e5ec6f.bin', 'https://i0.hdslb.com/bfs/openplatform/8c7830ea6ded0baddca2f19f3e9fc70fac9b4260.bin', 'https://i0.hdslb.com/bfs/openplatform/4820d4d5a04f16cd5541fd5dbf1059dd14c16d18.bin', 'https://i0.hdslb.com/bfs/openplatform/8ad3d09625bc6edfdc6254eff6f4556c4f508ea7.bin', 'https://i0.hdslb.com/bfs/openplatform/95796bc0201d7037e7681623e4bf9b9e776696f4.bin', 'https://i0.hdslb.com/bfs/openplatform/09aa3ad41c4c559dd2ee20e430e03343b2be6e7b.bin', 'https://i0.hdslb.com/bfs/openplatform/4e331beeed7b9ac37d946a8cdc09e3a288164a52.bin', 'https://i0.hdslb.com/bfs/openplatform/8b89a048d307d14e90cdf010047e581116b93e91.bin', 'https://i0.hdslb.com/bfs/openplatform/d48abd7fd8f938c6cbfa04875f20bd31dbe15ac7.bin', 'https://i0.hdslb.com/bfs/openplatform/16d27c63a0a572956504e440265fdcb7d7d9da37.bin', 'https://i0.hdslb.com/bfs/openplatform/013b0d9b9b96842a7c354d824ad70b329c047e96.bin', 'https://i0.hdslb.com/bfs/openplatform/fc83ca16b6ca254ffd6f5e8ae6dbfc39d3d08d04.bin', 'https://i0.hdslb.com/bfs/openplatform/bbc05d226dc60502a5e6380bf55ed2eb7ee64a1d.bin', 'https://i0.hdslb.com/bfs/openplatform/500bd3477c949e952f3cf45b6eacb8c98c3fad54.bin', 'https://i0.hdslb.com/bfs/openplatform/6f6f6456b2d8a3c8dac4caeb2ca2b86db5ab8d60.bin', 'https://i0.hdslb.com/bfs/openplatform/5312d03ed8cdf10fb6286bf6729830169857fb3a.bin', 'https://i0.hdslb.com/bfs/openplatform/0b916b1d4f5d756db7f09e0bb57aaf088600c973.bin', 'https://i0.hdslb.com/bfs/openplatform/5f28785c93f3e66f873a530108f372d3485047d8.bin', 'https://i0.hdslb.com/bfs/openplatform/599598b3f26340015ddd720d274a98b78690f67d.bin', 'https://i0.hdslb.com/bfs/openplatform/a378d2ab31c58962acb5ae5afe0f902b4c5873cd.bin', 'https://i0.hdslb.com/bfs/openplatform/22c375c584e8301ca4c1f3db1982659d32bdb94f.bin', 'https://i0.hdslb.com/bfs/openplatform/2f27e3f16a0432cf91a7c61c676b17cfdcf27ab2.bin', 'https://i0.hdslb.com/bfs/openplatform/8672129eb9bf50c4ef8658fb791b134fb8156b6c.bin', 'https://i0.hdslb.com/bfs/openplatform/76c6a89ba52304f1825e8b36b9c65a1837cb72e9.bin', 'https://i0.hdslb.com/bfs/openplatform/d9e92f13d609320f013d58c0c6b011302f4b1094.bin', 'https://i0.hdslb.com/bfs/openplatform/1baa95f7976d9d81b9434a3257028a89ad77e4ea.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '070-丹尼的新家\丹尼的新家庭机翻_Android.apk',
+    types: [{
+      description: '070-丹尼的新家\丹尼的新家庭机翻_Android.apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 067-少年魔导士\少年魔导士语音版_Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：067-少年魔导士\少年魔导士语音版_Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/6abd8281fd6697304a8d7eb77b50399c63ad12f9.bin', 'https://i0.hdslb.com/bfs/openplatform/616c9b2a588ff56990a676f665a02fe6e9b04231.bin', 'https://i0.hdslb.com/bfs/openplatform/0c9721eb71fc816957375cc0fe800e10905d26d3.bin', 'https://i0.hdslb.com/bfs/openplatform/434f07401d605a4c6ebf20069d60346e38cc7310.bin', 'https://i0.hdslb.com/bfs/openplatform/29bf31b9d52a5a1a0d1b6b3141955af8a44ae097.bin', 'https://i0.hdslb.com/bfs/openplatform/3744f56e0548367e76ab1ee2d4717dd0510b2d3d.bin', 'https://i0.hdslb.com/bfs/openplatform/26ad3226f724618886c4e5af3b6b89fb331a6326.bin', 'https://i0.hdslb.com/bfs/openplatform/86019d8a60d4acbfd63df1101abf9ead3631c87e.bin', 'https://i0.hdslb.com/bfs/openplatform/b4d1f83d3fcfa3a0741906c53101b17dcb873588.bin', 'https://i0.hdslb.com/bfs/openplatform/f9237804e32fd563a8ff8750a2eaeaac1fc5a313.bin', 'https://i0.hdslb.com/bfs/openplatform/73d3e20f0e8fa64bcf778462034f945f00836076.bin', 'https://i0.hdslb.com/bfs/openplatform/8883d640006a4ed697cb9dd3582b11aec41528df.bin', 'https://i0.hdslb.com/bfs/openplatform/c3c78f9a40ca3854e8f118b559fbd9552496e060.bin', 'https://i0.hdslb.com/bfs/openplatform/47983855520d397380e275a0064b86b48d530672.bin', 'https://i0.hdslb.com/bfs/openplatform/201736df18435ce48bf9d372be50db8397cfa269.bin', 'https://i0.hdslb.com/bfs/openplatform/7032be271b0f6591ef189c800fb4300d7cca3226.bin', 'https://i0.hdslb.com/bfs/openplatform/cf9ac3800f1cd6ea5c8da4655baf531002ea2dc3.bin', 'https://i0.hdslb.com/bfs/openplatform/5d7875878c350e5641445c498e1a833852bb88f5.bin', 'https://i0.hdslb.com/bfs/openplatform/045a8453021a3edc59b08b3e185299cc31ee42c8.bin', 'https://i0.hdslb.com/bfs/openplatform/d9c86461dd444ddfe2eabc661ff33d79bbb0a959.bin', 'https://i0.hdslb.com/bfs/openplatform/b9ceca12711d1cc1b8ba20570b20c78e816b6a23.bin', 'https://i0.hdslb.com/bfs/openplatform/a0bcb7a01b62ba9a07812f802dd12b327a68e52e.bin', 'https://i0.hdslb.com/bfs/openplatform/a2f010e61daaa5f5cd3503dbc3484ae400392a3a.bin', 'https://i0.hdslb.com/bfs/openplatform/54a355f2bd0aee4a109410a4b41f87e3d12e11f2.bin', 'https://i0.hdslb.com/bfs/openplatform/e79b3da2921d8929a63a583f45180dc95f1475b1.bin', 'https://i0.hdslb.com/bfs/openplatform/0ba009e1cd2fd07ba6f108348119e249423f96e5.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '067-少年魔导士\少年魔导士语音版_Windows.zip',
+    types: [{
+      description: '067-少年魔导士\少年魔导士语音版_Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

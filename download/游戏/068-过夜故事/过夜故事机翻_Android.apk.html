@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 068-过夜故事\过夜故事机翻_Android.apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：068-过夜故事\过夜故事机翻_Android.apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/90956ca21a6b1b38634031f82ac435ea7612fc27.bin', 'https://i0.hdslb.com/bfs/openplatform/d7d69c7e924c7e74b64d00810cf97ccce0498f47.bin', 'https://i0.hdslb.com/bfs/openplatform/71009a5fb3e47b588d7a5a33c63819b329380bd0.bin', 'https://i0.hdslb.com/bfs/openplatform/a5cd172fd9bea1d86e7576f5cff4976cea7a3b42.bin', 'https://i0.hdslb.com/bfs/openplatform/29f9a2a65c5eb980b80b74dc77fc2a2b06c1d022.bin', 'https://i0.hdslb.com/bfs/openplatform/0407023cf2b8a2eb2338a44e62513bb3db9c2571.bin', 'https://i0.hdslb.com/bfs/openplatform/0c26e9bf86386dade51eca3b6e48799a8a6ee06c.bin', 'https://i0.hdslb.com/bfs/openplatform/8cfc505a1ceda313ba85b69225bb5d8adf3f3b81.bin', 'https://i0.hdslb.com/bfs/openplatform/3cafb9521b249dc84dc65c6df704a1d44d08fbb2.bin', 'https://i0.hdslb.com/bfs/openplatform/29ec9b77f408295234bd2fafa91823584f764597.bin', 'https://i0.hdslb.com/bfs/openplatform/770dcc3d6e0b4bb8372b00fea5cd0d7320dd069f.bin', 'https://i0.hdslb.com/bfs/openplatform/c11f4a096a90248ca8eee01ba9455f7806f16210.bin', 'https://i0.hdslb.com/bfs/openplatform/6a1b758b829334564cae91dbe05a86b9339981a6.bin', 'https://i0.hdslb.com/bfs/openplatform/12356c126c4775eea08737d080f936ec8a98fb6f.bin', 'https://i0.hdslb.com/bfs/openplatform/23f8d23e01299937f973716585fe0db458acba8f.bin', 'https://i0.hdslb.com/bfs/openplatform/abbc57b43438b1202832433ed0e937dce435c6bf.bin', 'https://i0.hdslb.com/bfs/openplatform/96923edb9b886ecd3da5f3cbec69825d01c66477.bin', 'https://i0.hdslb.com/bfs/openplatform/83f0dbfb46642fa0b1d3e111952403b8729acf56.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '068-过夜故事\过夜故事机翻_Android.apk',
+    types: [{
+      description: '068-过夜故事\过夜故事机翻_Android.apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

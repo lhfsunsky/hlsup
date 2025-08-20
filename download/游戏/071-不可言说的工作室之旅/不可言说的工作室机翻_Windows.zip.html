@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 071-不可言说的工作室之旅\不可言说的工作室机翻_Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：071-不可言说的工作室之旅\不可言说的工作室机翻_Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/1427f278fbfc5abb33bab503cdbfd171d6c9c08a.bin', 'https://i0.hdslb.com/bfs/openplatform/e462c0fb71c66040774013c92826db43b3c148f1.bin', 'https://i0.hdslb.com/bfs/openplatform/0cb3dd15acc75f5926a5de3a78cf48a6492a4837.bin', 'https://i0.hdslb.com/bfs/openplatform/2dcf88fc0a2e0c3ff4e603ed4df345af061a0d81.bin', 'https://i0.hdslb.com/bfs/openplatform/2f050dc153e1171dea4801d32abb5393049f931c.bin', 'https://i0.hdslb.com/bfs/openplatform/0540df4c0f98d591010ddfd206b6d3fe0a28f356.bin', 'https://i0.hdslb.com/bfs/openplatform/27d834aeacde7e4d75690c1116f5e0611e72a387.bin', 'https://i0.hdslb.com/bfs/openplatform/6c3ff1e6bba00b6fbd4d6c4bb1ea20ab39513889.bin', 'https://i0.hdslb.com/bfs/openplatform/d543c77624a514eed49cf40c46a6687566790391.bin', 'https://i0.hdslb.com/bfs/openplatform/6023b6a58a3d65fa8e2d6692351e3013a3f45650.bin', 'https://i0.hdslb.com/bfs/openplatform/a404d3b50b966d8026c72966232978837f701750.bin', 'https://i0.hdslb.com/bfs/openplatform/895b72679d0acc2364ced5a2ed6ea6cd28808c6d.bin', 'https://i0.hdslb.com/bfs/openplatform/bebfd14ee1735d91b757b82ecfc90af77c8317b1.bin', 'https://i0.hdslb.com/bfs/openplatform/a94b61d2ebe76aeed0041325c92dde2ee41758cd.bin', 'https://i0.hdslb.com/bfs/openplatform/6d885141f5db84c6dafccf93c45211afcd7d5bbe.bin', 'https://i0.hdslb.com/bfs/openplatform/1733fc3766fb78e56f5d69c11f633adb2999f4fc.bin', 'https://i0.hdslb.com/bfs/openplatform/c5fc64bd609f11132b8f972c11943baf8da22fd0.bin', 'https://i0.hdslb.com/bfs/openplatform/8c276c6392fa954b6f8b9b7867dc3f1b4d9422aa.bin', 'https://i0.hdslb.com/bfs/openplatform/cc2920aef3ddf3cd599071aeef242930766b730a.bin', 'https://i0.hdslb.com/bfs/openplatform/4635804fe771165aae77024b14de888b1297f04f.bin', 'https://i0.hdslb.com/bfs/openplatform/8ef26f8601fc0290332f87f2617cd2a7ce5541b6.bin', 'https://i0.hdslb.com/bfs/openplatform/3f9eea63b35146b0fe56d5b8209112bba6dd136d.bin', 'https://i0.hdslb.com/bfs/openplatform/81ab9a9402ce92211d211e0308f95ab2f398132a.bin', 'https://i0.hdslb.com/bfs/openplatform/d388e63fbe10afd40ecc5e6a481d8de7f4941217.bin', 'https://i0.hdslb.com/bfs/openplatform/6ff8829ca3caf252b6dc46326987722f8565cb78.bin', 'https://i0.hdslb.com/bfs/openplatform/58df067f8ab0dcc0a782de07a93eae688be50532.bin', 'https://i0.hdslb.com/bfs/openplatform/d311f35df846dc104373b19e7a2c0fa3f8a3391b.bin', 'https://i0.hdslb.com/bfs/openplatform/3e7dacd378eec55f716a395371f78a4a55bc056f.bin', 'https://i0.hdslb.com/bfs/openplatform/a570d9550a72ae84732d601bb7aa572e487e6cab.bin', 'https://i0.hdslb.com/bfs/openplatform/171f1d724ac3ca09bb480686afc1ef323b03a7f2.bin', 'https://i0.hdslb.com/bfs/openplatform/de711dc8e8ceaac88a88dbcba082eb10eb3f52b2.bin', 'https://i0.hdslb.com/bfs/openplatform/66cc0de771e990dee225725e2b30a782a9624b2e.bin', 'https://i0.hdslb.com/bfs/openplatform/2b96665dbba793a39754761f356275ae2b2ea682.bin', 'https://i0.hdslb.com/bfs/openplatform/f4fba88cc59081d89fcae4d81498c6eb2e9ff3c0.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '071-不可言说的工作室之旅\不可言说的工作室机翻_Windows.zip',
+    types: [{
+      description: '071-不可言说的工作室之旅\不可言说的工作室机翻_Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

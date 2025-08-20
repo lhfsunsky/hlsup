@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 067-少年魔导士\RPGVXAce_RTP.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：067-少年魔导士\RPGVXAce_RTP.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/56295d9d125799c7b3f010b5d4174356ffcf4718.bin', 'https://i0.hdslb.com/bfs/openplatform/d4bca0b8a241c787e30eca519bab28b9181cfb2a.bin', 'https://i0.hdslb.com/bfs/openplatform/19aa15c17b76e3c05ec247a53ff3a8c3919fd690.bin', 'https://i0.hdslb.com/bfs/openplatform/732e331f1fa95f3f992d0c2662d31a92dbe9a692.bin', 'https://i0.hdslb.com/bfs/openplatform/7f4bf8d4f5995a42e09347ad8794455edfa52abf.bin', 'https://i0.hdslb.com/bfs/openplatform/bbedbd753594ea40778999b613bf54e775da1d05.bin', 'https://i0.hdslb.com/bfs/openplatform/69434070abce64c6c1a55ccd1cf337a61eef53d9.bin', 'https://i0.hdslb.com/bfs/openplatform/3cc3618eff5120a4690fad930615a3ed6642d037.bin', 'https://i0.hdslb.com/bfs/openplatform/a793b96028954f4b55b0505d1ea2aad734fd7c45.bin', 'https://i0.hdslb.com/bfs/openplatform/bffddaf1ca6fd26ff2b96de89aefca038520006a.bin', 'https://i0.hdslb.com/bfs/openplatform/40e2f8c3df358048743f59ad9edb5b73da5c6a21.bin', 'https://i0.hdslb.com/bfs/openplatform/bf13da5ba16c5153a32128bfd24f5c5a885b0c70.bin', 'https://i0.hdslb.com/bfs/openplatform/37f18fd389b988f5ddf636348c836ffe2b7d7f9a.bin', 'https://i0.hdslb.com/bfs/openplatform/86e79c6fd6cfe9a920103acc2cfad0a4a03d6066.bin', 'https://i0.hdslb.com/bfs/openplatform/c1fdad2dc4b8c649a25c09e0b50070e3cae663a0.bin', 'https://i0.hdslb.com/bfs/openplatform/ed3b0d3171ff191719ba1747dda0850a64867184.bin', 'https://i0.hdslb.com/bfs/openplatform/c4e648a21b7f9092f64979c9233515f39a65a7c6.bin', 'https://i0.hdslb.com/bfs/openplatform/b541a492e7febaeaea751dbdefe3563a68009e67.bin', 'https://i0.hdslb.com/bfs/openplatform/d8293b7e30b4ec5d7f36b25a74e92cc1e7817ff0.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '067-少年魔导士\RPGVXAce_RTP.zip',
+    types: [{
+      description: '067-少年魔导士\RPGVXAce_RTP.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

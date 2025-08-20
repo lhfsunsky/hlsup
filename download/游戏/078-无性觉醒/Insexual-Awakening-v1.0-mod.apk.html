@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 078-无性觉醒\Insexual-Awakening-v1.0-mod.apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：078-无性觉醒\Insexual-Awakening-v1.0-mod.apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/1bed091bf9ace36b4a510822b2a4c2b635453db0.bin', 'https://i0.hdslb.com/bfs/openplatform/a769b8ce072f5f94891d853ec9f00b7984d06681.bin', 'https://i0.hdslb.com/bfs/openplatform/4d0b6a6e360429c888a351ba5bc5df2bb1b0a906.bin', 'https://i0.hdslb.com/bfs/openplatform/319d5568e22b1b26de3d736264bea35109196c49.bin', 'https://i0.hdslb.com/bfs/openplatform/67dbec454a8cb62ef1095ceb7c0da1e145049720.bin', 'https://i0.hdslb.com/bfs/openplatform/6f1d876dea79909c987ede0315d80fcca5e41ffc.bin', 'https://i0.hdslb.com/bfs/openplatform/47a49a838fd5068cbf612896d2c0c30a289c30a6.bin', 'https://i0.hdslb.com/bfs/openplatform/d2f583b217c68d2aa20149b5248358177ebe1cbd.bin', 'https://i0.hdslb.com/bfs/openplatform/e6da2404593eb6091923a4e6e36be0327e8576c2.bin', 'https://i0.hdslb.com/bfs/openplatform/133be4053d5a27e80846d282aa3327a469d0ef20.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '078-无性觉醒\Insexual-Awakening-v1.0-mod.apk',
+    types: [{
+      description: '078-无性觉醒\Insexual-Awakening-v1.0-mod.apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

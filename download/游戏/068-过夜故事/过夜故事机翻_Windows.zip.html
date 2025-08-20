@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 068-过夜故事\过夜故事机翻_Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：068-过夜故事\过夜故事机翻_Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/e65697f5af189497865517c63e9c8094608ddecf.bin', 'https://i0.hdslb.com/bfs/openplatform/e8554d99429ce93242a1ad888e2f4ff2c3360fc6.bin', 'https://i0.hdslb.com/bfs/openplatform/551fcfe76742e436bfcb94a2b903f9f480aa1714.bin', 'https://i0.hdslb.com/bfs/openplatform/6c904b74af2f62a9a3a0c067867b248203a0235a.bin', 'https://i0.hdslb.com/bfs/openplatform/1045ff1b716551b48e405ef47a08f2e982974347.bin', 'https://i0.hdslb.com/bfs/openplatform/e46d2e348be226526b49909c88e53bbbdb228061.bin', 'https://i0.hdslb.com/bfs/openplatform/99acc492f2a396cd5676bdf561d78bc4e18d425c.bin', 'https://i0.hdslb.com/bfs/openplatform/ad8b30ca6e4d07b9ae7e04c21269b1e1714da4b7.bin', 'https://i0.hdslb.com/bfs/openplatform/f738ad2843ba5d04c37410c0eb0996138292bea8.bin', 'https://i0.hdslb.com/bfs/openplatform/2b49896f355a11e7991e8ad9f6edeae80c91425a.bin', 'https://i0.hdslb.com/bfs/openplatform/ddebda619c12f3b39817c3e0137cd9d79f13233a.bin', 'https://i0.hdslb.com/bfs/openplatform/aa29303703cd7783982d6e0a3fd3982e623b3191.bin', 'https://i0.hdslb.com/bfs/openplatform/74035cfa26b5883376abc1ce80b019abbed68450.bin', 'https://i0.hdslb.com/bfs/openplatform/8c206a1a87599f532ce68675536f0b1546900d7a.bin', 'https://i0.hdslb.com/bfs/openplatform/8c206a1a87599f532ce68675536f0b1546900d7a.bin', 'https://i0.hdslb.com/bfs/openplatform/8c206a1a87599f532ce68675536f0b1546900d7a.bin', 'https://i0.hdslb.com/bfs/openplatform/8c206a1a87599f532ce68675536f0b1546900d7a.bin', 'https://i0.hdslb.com/bfs/openplatform/8c206a1a87599f532ce68675536f0b1546900d7a.bin', 'https://i0.hdslb.com/bfs/openplatform/8c206a1a87599f532ce68675536f0b1546900d7a.bin', 'https://i0.hdslb.com/bfs/openplatform/4f5b5366bc545cf73df101ab7206c83a433111e5.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '068-过夜故事\过夜故事机翻_Windows.zip',
+    types: [{
+      description: '068-过夜故事\过夜故事机翻_Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

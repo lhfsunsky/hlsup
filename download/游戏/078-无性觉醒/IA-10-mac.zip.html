@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 078-无性觉醒\IA-10-mac.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：078-无性觉醒\IA-10-mac.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/a746a5159947ce8ba32b190e47525140044c3d5a.bin', 'https://i0.hdslb.com/bfs/openplatform/a9f2809739292e358d9a08579bab05dba8dc37b6.bin', 'https://i0.hdslb.com/bfs/openplatform/93a73e2dc99d5455a56f7611d8740c4d69ddbefb.bin', 'https://i0.hdslb.com/bfs/openplatform/a1d4860d18d5049784a85378bfc16db363cb4104.bin', 'https://i0.hdslb.com/bfs/openplatform/0ed41edcbedb64fa70cc5f6dc6bb65fe9eb5dd63.bin', 'https://i0.hdslb.com/bfs/openplatform/623ca3221865da65ba7195f97b98cf6391196ff9.bin', 'https://i0.hdslb.com/bfs/openplatform/2e62d13a765eeb70d67a298957d44005896f254d.bin', 'https://i0.hdslb.com/bfs/openplatform/7dd8ac3935d237653d9949850c45752a70c24854.bin', 'https://i0.hdslb.com/bfs/openplatform/8ba29fc2076f49fc22f39a94fad5b645521f6233.bin', 'https://i0.hdslb.com/bfs/openplatform/d6af43d13a3d9edcfb57d9558e1e4eec2f223f70.bin', 'https://i0.hdslb.com/bfs/openplatform/572f0c7feee9b31f00eaa7f13874944413265327.bin', 'https://i0.hdslb.com/bfs/openplatform/8142d70945c55757886e1db60dcd8fc6e41fd7d9.bin', 'https://i0.hdslb.com/bfs/openplatform/3e45f2ea233e25a430e93ea074cec3de2f8efaf2.bin', 'https://i0.hdslb.com/bfs/openplatform/0d43a3fe740957b9adda77ecf07d499336624e51.bin', 'https://i0.hdslb.com/bfs/openplatform/5ab1e7c994657e51fdbf9c28f79ec8c527ade7c3.bin', 'https://i0.hdslb.com/bfs/openplatform/ab7f6498d4bf0e7457e72586736fd0efa17dca94.bin', 'https://i0.hdslb.com/bfs/openplatform/e55198a2d6301a349113a541a79b9022451d11b9.bin', 'https://i0.hdslb.com/bfs/openplatform/6b87792516ef8fad240bdf29dada7b133b4f6129.bin', 'https://i0.hdslb.com/bfs/openplatform/9ddba0fcc29f9da9d02d99e8aa5f7d9a0dc2bf52.bin', 'https://i0.hdslb.com/bfs/openplatform/114b99823c89e85e84496712d204bf6cae3a1f84.bin', 'https://i0.hdslb.com/bfs/openplatform/83c979ba1929a46b5e13cefbd3c941ca727ee7ac.bin', 'https://i0.hdslb.com/bfs/openplatform/294c54d42f1995a31e9aa360fb05c7374f4e764f.bin', 'https://i0.hdslb.com/bfs/openplatform/253ce6080cdf62ae5e14dad4c4422243b88b39b5.bin', 'https://i0.hdslb.com/bfs/openplatform/3c62b8e839d4ed998d095ebeccbe6a4d6aa2463b.bin', 'https://i0.hdslb.com/bfs/openplatform/ff019d7b15bb88fb8a742cbe414e247cf80ae4ef.bin', 'https://i0.hdslb.com/bfs/openplatform/34736d18920305eca5634852b84c8df3dd04f43d.bin', 'https://i0.hdslb.com/bfs/openplatform/8f98e4d6bee7c6b602fefcbc516bf30a08c3a165.bin', 'https://i0.hdslb.com/bfs/openplatform/d2a61fa45d360658e668f774be4e5a7b78d915ca.bin', 'https://i0.hdslb.com/bfs/openplatform/b55b09301b08084ff2a8a8fc333558a29e41bf98.bin', 'https://i0.hdslb.com/bfs/openplatform/df4adec3aeaaf65e2efb7d640bfadf0245ccb43f.bin', 'https://i0.hdslb.com/bfs/openplatform/b1d9c44dbf738cb38966049e24f38e32b642226a.bin', 'https://i0.hdslb.com/bfs/openplatform/f6711fe7bfc58c679c99e75c5fa40e3e543e371a.bin', 'https://i0.hdslb.com/bfs/openplatform/4e42c8179e8b8d99261dafd476747a39d8b83f22.bin', 'https://i0.hdslb.com/bfs/openplatform/b1905d2bda1e9d41a5a4551b8cb1c1bc43b361f7.bin', 'https://i0.hdslb.com/bfs/openplatform/cddfa67292f5c67667d6694f3ec02e932147aab1.bin', 'https://i0.hdslb.com/bfs/openplatform/ab279e351e328f78a87b0bb551958d098f781acc.bin', 'https://i0.hdslb.com/bfs/openplatform/df34455b2ba757602ae7bd32aba00e79a180b20f.bin', 'https://i0.hdslb.com/bfs/openplatform/f882bc5f32cb45c066b8253fb027f0e242b9cecf.bin', 'https://i0.hdslb.com/bfs/openplatform/73cd361222adb6e5808f65f39e2ac343f59a9ab5.bin', 'https://i0.hdslb.com/bfs/openplatform/0d483392890d261687dbe1ae4dd3f52ce29d1abb.bin', 'https://i0.hdslb.com/bfs/openplatform/2f73d060837d4dd3b6b4eb3ec553ddfd25419522.bin', 'https://i0.hdslb.com/bfs/openplatform/86941eeaa74b86b4ef38c7ee84164aeb24777bdc.bin', 'https://i0.hdslb.com/bfs/openplatform/a39d6b66129e48f4f3e250c2005bdfa13e806f74.bin', 'https://i0.hdslb.com/bfs/openplatform/9c82be26c80be79880e55b852f852ab362692e89.bin', 'https://i0.hdslb.com/bfs/openplatform/c23cad1aa50136ca837a21614c99931408c34e99.bin', 'https://i0.hdslb.com/bfs/openplatform/bda4cb25c96c507230720e74840aaf94de911da7.bin', 'https://i0.hdslb.com/bfs/openplatform/62fb29fcb6f637c6e1745f22f88b7f1e89492f65.bin', 'https://i0.hdslb.com/bfs/openplatform/36dd17ee3c7eb2fa9ad69b8c195463a7d9f58be4.bin', 'https://i0.hdslb.com/bfs/openplatform/887e2082c50a8d9687dd01e6aa74e453fad258a0.bin', 'https://i0.hdslb.com/bfs/openplatform/dd759a747d5ee74ff0db8c6e499910d516dd666b.bin', 'https://i0.hdslb.com/bfs/openplatform/d4e64f5bd35880c7665b41601b9855d31545763c.bin', 'https://i0.hdslb.com/bfs/openplatform/d0cf7af7d247e5e35ea41adcd329de098dcfbb26.bin', 'https://i0.hdslb.com/bfs/openplatform/14e825e7bf53ea212b24239f8877176ea7a7940c.bin', 'https://i0.hdslb.com/bfs/openplatform/1ff904eaba52d1417e9ab9846ff6d8ba4b7bc8ee.bin', 'https://i0.hdslb.com/bfs/openplatform/da964e80cae119190be0246412814494f137e549.bin', 'https://i0.hdslb.com/bfs/openplatform/e88c36eb97d9955c822532f62f3a1678e7629b9a.bin', 'https://i0.hdslb.com/bfs/openplatform/86e99258c9ccb9dce9e2039ad8f5f70c1456d480.bin', 'https://i0.hdslb.com/bfs/openplatform/01c787aca1a469a215617cada6bdf8bc967639d6.bin', 'https://i0.hdslb.com/bfs/openplatform/f364bf29acebf75ecf8bbeb88c3cfa9d444ce4b2.bin', 'https://i0.hdslb.com/bfs/openplatform/e1a4ed5a6b070922ae781aa4f3c1972070cf46ec.bin', 'https://i0.hdslb.com/bfs/openplatform/355779355ba230de97284a24eeb8b97a008a5807.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '078-无性觉醒\IA-10-mac.zip',
+    types: [{
+      description: '078-无性觉醒\IA-10-mac.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 074-SxM L2D SP\SML2D_volsp_ST_v101.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：074-SxM L2D SP\SML2D_volsp_ST_v101.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/257e25d97bbe73acf74b84f270ee0f8cc01ac2b5.bin', 'https://i0.hdslb.com/bfs/openplatform/aa9c27a1cf19a64b756b2050da5fd08b7660d7b7.bin', 'https://i0.hdslb.com/bfs/openplatform/b619043369d25922d3c37ddbba23060b9e4dcf0c.bin', 'https://i0.hdslb.com/bfs/openplatform/5c496618b37bf44fe1747ef87f6c94f30a3603df.bin', 'https://i0.hdslb.com/bfs/openplatform/9dfcbb2384f8f74c4411ec1f9697a9bb58295605.bin', 'https://i0.hdslb.com/bfs/openplatform/ffe98723f069d9c4d38f604719107bc5a01ec84a.bin', 'https://i0.hdslb.com/bfs/openplatform/72ed6caf6dc3202a297e4e3fec289ff652933dde.bin', 'https://i0.hdslb.com/bfs/openplatform/d79b1567be8f78742d1b9cd4741bcdaf0d5a2efd.bin', 'https://i0.hdslb.com/bfs/openplatform/6f383739525e10789c572154876131143dc97fbf.bin', 'https://i0.hdslb.com/bfs/openplatform/a944b381ff6485a4f36303a8aec8338acf6ff883.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '074-SxM L2D SP\SML2D_volsp_ST_v101.zip',
+    types: [{
+      description: '074-SxM L2D SP\SML2D_volsp_ST_v101.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

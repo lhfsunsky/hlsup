@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 068-过夜故事\过夜故事_MacOS.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：068-过夜故事\过夜故事_MacOS.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/6635f8185f657eeb3582c47eb476ae2871ba9b4b.bin', 'https://i0.hdslb.com/bfs/openplatform/5b93c36675b90248a2193b6bb9839cb84c7452d9.bin', 'https://i0.hdslb.com/bfs/openplatform/9391949b50e95ae8da6e30b4f3bf02500e86b062.bin', 'https://i0.hdslb.com/bfs/openplatform/77eb747ccb0e93532a962216291a3f842dac0cc3.bin', 'https://i0.hdslb.com/bfs/openplatform/a8ef6314921a6e0db719f60162abaf57e389321d.bin', 'https://i0.hdslb.com/bfs/openplatform/d17fa71283bf20dd22b323df12c44960075f081e.bin', 'https://i0.hdslb.com/bfs/openplatform/673c21011d5da9b0127a5d9c3c5930cbbb2d89d1.bin', 'https://i0.hdslb.com/bfs/openplatform/3818a74fdcf1659f567d12efb96e2a09fb0ed6d0.bin', 'https://i0.hdslb.com/bfs/openplatform/2d373677467b37355c55211e06e9070e38853d7a.bin', 'https://i0.hdslb.com/bfs/openplatform/7245894154d1bee1ca46918aec10de16aac2349a.bin', 'https://i0.hdslb.com/bfs/openplatform/1e2d4449aa17c838fc39c01df5109ed1d0d8eb14.bin', 'https://i0.hdslb.com/bfs/openplatform/dd513403722f95e58f867ed6e76887cea82697ef.bin', 'https://i0.hdslb.com/bfs/openplatform/ba602ca0b573b1e91871686f0592b7cd3a930ab1.bin', 'https://i0.hdslb.com/bfs/openplatform/69c25916c649dc1373a9ea8322dff4e42dd7be3e.bin', 'https://i0.hdslb.com/bfs/openplatform/0d5a5bee5e57e69336a044c9e750e7911642cc73.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '068-过夜故事\过夜故事_MacOS.zip',
+    types: [{
+      description: '068-过夜故事\过夜故事_MacOS.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

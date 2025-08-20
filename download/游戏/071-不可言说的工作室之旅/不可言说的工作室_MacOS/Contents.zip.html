@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 071-不可言说的工作室之旅\不可言说的工作室_MacOS\Contents.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：071-不可言说的工作室之旅\不可言说的工作室_MacOS\Contents.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/2d4c16bf490e3a47bec59d0cbb1324c876d11642.bin', 'https://i0.hdslb.com/bfs/openplatform/3cc7461cc51e95157851bcf45d61a8af8dc2d8f8.bin', 'https://i0.hdslb.com/bfs/openplatform/4e7caee677b86b8f19e198b651bbb74b01a042ed.bin', 'https://i0.hdslb.com/bfs/openplatform/2a482694bdb7920d998cfe92940d9f5f5537f7dc.bin', 'https://i0.hdslb.com/bfs/openplatform/e1e952318ed08b3e2a63727de0c8144c29531db1.bin', 'https://i0.hdslb.com/bfs/openplatform/f0bdfdc90f6f552719d2af38cc62db762827131b.bin', 'https://i0.hdslb.com/bfs/openplatform/ed4169f8c5f659471aef845db6b98bf1903465bd.bin', 'https://i0.hdslb.com/bfs/openplatform/7277f50de7267c3a6923915d7353714d596ed67b.bin', 'https://i0.hdslb.com/bfs/openplatform/a1ca92f3adc104f26b4d466f4de5d2dd3c6f44a2.bin', 'https://i0.hdslb.com/bfs/openplatform/fe1dcd5a58ebdc9cf0407f93e0fafbc9af62c858.bin', 'https://i0.hdslb.com/bfs/openplatform/7b382583c440d4112c0f54b74c528b50b6fd0a5c.bin', 'https://i0.hdslb.com/bfs/openplatform/d84d6aa20a113e4ec82869374a21e69c49e26c72.bin', 'https://i0.hdslb.com/bfs/openplatform/3d6a8ede3dbfc94abbeeed0ca174d3339249fc6e.bin', 'https://i0.hdslb.com/bfs/openplatform/59059f78fb71a65444a3ec02e01e6cc47ee180e2.bin', 'https://i0.hdslb.com/bfs/openplatform/ebef56debb5082b50f5bf56154493fe24940492d.bin', 'https://i0.hdslb.com/bfs/openplatform/464ccfc2bb169e2467c2acbc9ca1f8648828ca3a.bin', 'https://i0.hdslb.com/bfs/openplatform/45079e8b5696dc67a76f008b43dbda5a4df18271.bin', 'https://i0.hdslb.com/bfs/openplatform/21fb5e6d2cbee8089a4c3df1294ece77d4f39836.bin', 'https://i0.hdslb.com/bfs/openplatform/3e66c3dfda69444800e633fd0a80ddb8280b2837.bin', 'https://i0.hdslb.com/bfs/openplatform/0d57cfb7626d7450d77c088db30dd5f1c81f39cf.bin', 'https://i0.hdslb.com/bfs/openplatform/9150fd9d2b0b2940782ab8886d093f964c704fd2.bin', 'https://i0.hdslb.com/bfs/openplatform/048d785f9303317b61f61490727a3697fcdbddac.bin', 'https://i0.hdslb.com/bfs/openplatform/cb034fd81cea8ca1bb384197c5fce3b8938d9d06.bin', 'https://i0.hdslb.com/bfs/openplatform/063a3ca1c70ef6b5c4cd5eaafbb11305daa65fcc.bin', 'https://i0.hdslb.com/bfs/openplatform/ebbaf36ff3d516d24e8fb86d355a123b8587925c.bin', 'https://i0.hdslb.com/bfs/openplatform/71f7d76d9f14cc1801a129d145861581fa8f2e98.bin', 'https://i0.hdslb.com/bfs/openplatform/082e63eaf13c27f18ccda3643ce66acc41e752a4.bin', 'https://i0.hdslb.com/bfs/openplatform/f92430297e1bc9100f6712fa62eced5e2db09843.bin', 'https://i0.hdslb.com/bfs/openplatform/aa0f8901e955bbe41ac231689e5c87b9230cd5d2.bin', 'https://i0.hdslb.com/bfs/openplatform/a9be77cd8e2f65a194b12a132435db642420cecb.bin', 'https://i0.hdslb.com/bfs/openplatform/7e69f8efb7be08e0f1898f5101f5d47325f31053.bin', 'https://i0.hdslb.com/bfs/openplatform/533f42559920327f8bb24bf748cefea1c7836213.bin', 'https://i0.hdslb.com/bfs/openplatform/cc0ddb693b0334097fbe15521e5326591e8ec97b.bin', 'https://i0.hdslb.com/bfs/openplatform/46a27b72aed71a3d985dcc32b011da6354c940f4.bin', 'https://i0.hdslb.com/bfs/openplatform/cd5c95ba4847f10e718e649dc930e43b1ed287ed.bin', 'https://i0.hdslb.com/bfs/openplatform/49420eab7133b5c0cf1e7ddaf509faf8a6f91496.bin', 'https://i0.hdslb.com/bfs/openplatform/acf1da7e25b3c7f3b38cecd9d8a72c71700860ea.bin', 'https://i0.hdslb.com/bfs/openplatform/8cc83edf87bb6ae9ff5c956532440de7254f630e.bin', 'https://i0.hdslb.com/bfs/openplatform/11427a1c4c6992b22a8b1dc5acd23c33678118e7.bin', 'https://i0.hdslb.com/bfs/openplatform/e8306a72b0484f97423246583d33f38cde10e0f7.bin', 'https://i0.hdslb.com/bfs/openplatform/7756564dbeabba5c304fbf3da0a4a900b7436d13.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '071-不可言说的工作室之旅\不可言说的工作室_MacOS\Contents.zip',
+    types: [{
+      description: '071-不可言说的工作室之旅\不可言说的工作室_MacOS\Contents.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>
