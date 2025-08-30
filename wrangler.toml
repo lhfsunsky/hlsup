@@ -8,9 +8,9 @@ bucket = "./public"
 
 "kv_namespaces": [
 {
-    "binding": "KV",
-    "id": "f8e9d611b3b84875864e3b93f0939eab",
-    "preview_id": "<ID_OF_PREVIEW_KV_NAMESPACE_FOR_LOCAL_DEVELOPMENT>"
+    binding="KV",
+    id="f8e9d611b3b84875864e3b93f0939eab",
+    preview_id="<ID_OF_PREVIEW_KV_NAMESPACE_FOR_LOCAL_DEVELOPMENT>"
 }
 ]
 
