@@ -1,4 +1,15 @@
 name = "my-worker"
 compatibility_date = "2025-08-30"
 [assets]
-directory = "./"
+directory = "."
+
+# 排除不该被上传的文件/目录
+exclude = [
+  "wrangler.toml",
+  "package.json",
+  "package-lock.json",
+  "node_modules",
+  ".git",
+  ".gitignore",
+  "README.md"
+]
