@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 156-青鸟的虚像\青鸟的虚影_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：156-青鸟的虚像\青鸟的虚影_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/a105e0f18fe29519f04746ac8371b2ed85d1d1bf.bin', 'https://i0.hdslb.com/bfs/openplatform/cb98a362eaba61f5c8ad1fe31719bc04a641c6fe.bin', 'https://i0.hdslb.com/bfs/openplatform/127b2c36b1b952762f4cf062c35ffe271db43b2e.bin', 'https://i0.hdslb.com/bfs/openplatform/319a7aeaeaf8b7dc98c01eefda787ef1a058f3d0.bin', 'https://i0.hdslb.com/bfs/openplatform/0ab7ac2507d21cbb61ed8e8420e549ad69f8d4e3.bin', 'https://i0.hdslb.com/bfs/openplatform/53d3b2b7e9f275d5c7b6f090a8b44e0d46f6a8b1.bin', 'https://i0.hdslb.com/bfs/openplatform/c32c6fda133ae92f9c007a15fd99da4b210b5170.bin', 'https://i0.hdslb.com/bfs/openplatform/84f9496945b39c17a981db1c3b9fe24d7d456e0d.bin', 'https://i0.hdslb.com/bfs/openplatform/0a9025c5982cb29972354a21aaec9f9697ae0785.bin', 'https://i0.hdslb.com/bfs/openplatform/eadc8fa3531b77a0dbc7d18c4011555b87a62020.bin', 'https://i0.hdslb.com/bfs/openplatform/71eb609a363fd70d1c5ae58cce24afcb4a5b87fa.bin', 'https://i0.hdslb.com/bfs/openplatform/34c8f152aa5834b967040a220f2c3ce337a5cf6b.bin', 'https://i0.hdslb.com/bfs/openplatform/ef3bcb6de5cdd9de1d1d8aea5e33d593a025691d.bin', 'https://i0.hdslb.com/bfs/openplatform/d1bf15efa74ac9d21510be48172828f5806ba5b1.bin', 'https://i0.hdslb.com/bfs/openplatform/e0525f353d288716f2a20a07af5c8f9a3edccf41.bin', 'https://i0.hdslb.com/bfs/openplatform/11224d5d7f470d254d9cdb6c26cf505969aab22b.bin', 'https://i0.hdslb.com/bfs/openplatform/77270ab398bbb2557fee45e17ec501ce1a0e8f32.bin', 'https://i0.hdslb.com/bfs/openplatform/4a0432456d5a2f371716f519dfd00d5dbcab7821.bin', 'https://i0.hdslb.com/bfs/openplatform/76dbc37257ed7cd615fea500959574f521ef42b6.bin', 'https://i0.hdslb.com/bfs/openplatform/ca97a8db3c31ae53d4fc13c73dcea50a20200b7f.bin', 'https://i0.hdslb.com/bfs/openplatform/b32ff049a23bf43aae0052528415c71b27c30c69.bin', 'https://i0.hdslb.com/bfs/openplatform/1c08ccbe7b8e54afa26df456213eb0743639a6ee.bin', 'https://i0.hdslb.com/bfs/openplatform/23d03f2e71a1b26a1b74fbace7d16a342f46cc92.bin', 'https://i0.hdslb.com/bfs/openplatform/9603fa5708c4eab337ea6c18eec9cc84f9b00112.bin', 'https://i0.hdslb.com/bfs/openplatform/cd76737bfa1091302f379e044580ed2fb41dedd6.bin', 'https://i0.hdslb.com/bfs/openplatform/82c283bf9a3d77fa09a53540fe996a6e4e3c63f2.bin', 'https://i0.hdslb.com/bfs/openplatform/21573b5ac26fbb51cd870e12f14fe3a9fa120944.bin', 'https://i0.hdslb.com/bfs/openplatform/28e1ce8fe7aa4b9767445d619334f5b7b1c41b86.bin', 'https://i0.hdslb.com/bfs/openplatform/c5573e62891056c453d33e9bef5c5b0aa48697de.bin', 'https://i0.hdslb.com/bfs/openplatform/2a3de17aa46e6808fdee897fd04ab81a481db95f.bin', 'https://i0.hdslb.com/bfs/openplatform/e5858a9b6ac4ec0e4f9ef93a5a429fe6b8203321.bin', 'https://i0.hdslb.com/bfs/openplatform/5d663b6a904aa62a7747fb74870ccd46f851e53f.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '156-青鸟的虚像\青鸟的虚影_Windows.7z',
+    types: [{
+      description: '156-青鸟的虚像\青鸟的虚影_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

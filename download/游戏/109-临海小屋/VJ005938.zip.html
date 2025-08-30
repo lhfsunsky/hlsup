@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 109-临海小屋\VJ005938.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：109-临海小屋\VJ005938.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/54bf2c8fff9fe88c37548bdbe901671890113ee1.bin', 'https://i0.hdslb.com/bfs/openplatform/268e9dedac8f56aacf20838e2ff3ea5d3b90327d.bin', 'https://i0.hdslb.com/bfs/openplatform/87f65b976d405e381a47b39253407589f45ae5f9.bin', 'https://i0.hdslb.com/bfs/openplatform/b02d749c31e86777bc1900b990df8e5fafa2977f.bin', 'https://i0.hdslb.com/bfs/openplatform/6a42740b882f349392472acc3a07625aec9d2a46.bin', 'https://i0.hdslb.com/bfs/openplatform/3a077a2464ab678835c09b65caa52c041fe84e93.bin', 'https://i0.hdslb.com/bfs/openplatform/8cca103edabcb39bb5d11aad6aa74104370f6b9c.bin', 'https://i0.hdslb.com/bfs/openplatform/e48c85682b60bf30e59beeff49449c90f4af8c6c.bin', 'https://i0.hdslb.com/bfs/openplatform/bcecc2d87b1d4cde283c2041c6607fdb5487d276.bin', 'https://i0.hdslb.com/bfs/openplatform/535f445ca8096fb7d28d090c689822429859edd4.bin', 'https://i0.hdslb.com/bfs/openplatform/cd274ff1ec0d8c6bae12210be5e9d4afdac3f23a.bin', 'https://i0.hdslb.com/bfs/openplatform/d41a727bbc8caa218b721758d1174fc3c0c49359.bin', 'https://i0.hdslb.com/bfs/openplatform/c8efc73ec830afdc4903c984ae6f4dd187ee45c2.bin', 'https://i0.hdslb.com/bfs/openplatform/aff9e9dbba37736c7fa37e3daa30ef19fa7b8499.bin', 'https://i0.hdslb.com/bfs/openplatform/dbee08dd1e1bbd531c861bd89fd2315650e6591a.bin', 'https://i0.hdslb.com/bfs/openplatform/a9479ca5b41227ecf7392e524261acf1b287b047.bin', 'https://i0.hdslb.com/bfs/openplatform/ed8bed001a90b289d479ac145a2e9d7cf1de6b7a.bin', 'https://i0.hdslb.com/bfs/openplatform/090702fcfa58efe0ddd9b453ac6e794c13012bc9.bin', 'https://i0.hdslb.com/bfs/openplatform/218194f9fa203e8a316ed771a044f82cfa1996fe.bin', 'https://i0.hdslb.com/bfs/openplatform/7720ada4de1d25db5b4130958c370262c55dd6d5.bin', 'https://i0.hdslb.com/bfs/openplatform/351acf04ad2e344315603b6fa5b4eda5f5d67637.bin', 'https://i0.hdslb.com/bfs/openplatform/074d9dd24559020afbfedee5de614b407e75f625.bin', 'https://i0.hdslb.com/bfs/openplatform/a7027214f363293759c689eb8aad2fd087ab9e48.bin', 'https://i0.hdslb.com/bfs/openplatform/a2fb3fdd092069768d9a45fddb033a0ff4842f5e.bin', 'https://i0.hdslb.com/bfs/openplatform/270cfedcd472362e8715aad0c8785a89504dd8d0.bin', 'https://i0.hdslb.com/bfs/openplatform/e6c1afdb2b99a19caf5576072a78d2c67c10eb80.bin', 'https://i0.hdslb.com/bfs/openplatform/144feccb3987c90890c1bd9ceec13076c70680dc.bin', 'https://i0.hdslb.com/bfs/openplatform/c0d99762dae41894e0d7ed4e48e24bbadf1429dd.bin', 'https://i0.hdslb.com/bfs/openplatform/c51e4906c3661e0d76369fd390fa9f8753b79313.bin', 'https://i0.hdslb.com/bfs/openplatform/09088e3c15220cf3795b47056f41fe20b9ce3a54.bin', 'https://i0.hdslb.com/bfs/openplatform/ac03eecf002b4e8d666414932dd696312c925c66.bin', 'https://i0.hdslb.com/bfs/openplatform/f2427bfd9a8a7d67dc9a6fcfdb2d261dd6ed3461.bin', 'https://i0.hdslb.com/bfs/openplatform/54e458a2cfe27ffacf37dfedae7ee98eeed83f6a.bin', 'https://i0.hdslb.com/bfs/openplatform/2add57bfa2a1acb91632ddd849fc29bf0f8b56d5.bin', 'https://i0.hdslb.com/bfs/openplatform/07544a60243e8de47dd7e947e77495ff8906150a.bin', 'https://i0.hdslb.com/bfs/openplatform/2b6efb60b33eca92502ea84e33e9e7e8420e1dce.bin', 'https://i0.hdslb.com/bfs/openplatform/69a083f2540689b706de3e0aeff63d79bd4f3129.bin', 'https://i0.hdslb.com/bfs/openplatform/a0aa8301ba88ff779f50946f45678016762a552e.bin', 'https://i0.hdslb.com/bfs/openplatform/7fc3ddd40cf88959f43e0b1997a3884c420da2ce.bin', 'https://i0.hdslb.com/bfs/openplatform/60d9bba36c3a1e738a6defa7c9fc2f2bfdaeeb49.bin', 'https://i0.hdslb.com/bfs/openplatform/ef75822cb3e5cdc5e48c4d7204ea7b92bd23e4b2.bin', 'https://i0.hdslb.com/bfs/openplatform/2725ec926905173b59a42642ec85fe6c506c3a0c.bin', 'https://i0.hdslb.com/bfs/openplatform/38f6795a00d5faab692403334be5f14d00b4f9ff.bin', 'https://i0.hdslb.com/bfs/openplatform/3a51319be80d5b34a5169631457f96767e958a83.bin', 'https://i0.hdslb.com/bfs/openplatform/7b76867f5155fe47fe7b89592bbdd2592287c653.bin', 'https://i0.hdslb.com/bfs/openplatform/0cb4087c33fd5f04fe5860d86ff9079ae5d2f67d.bin', 'https://i0.hdslb.com/bfs/openplatform/89602fe780f6b84cf217f5838d3b48e4accb0e7d.bin', 'https://i0.hdslb.com/bfs/openplatform/32304575689f5cd50c97a7bf2320965d115c180a.bin', 'https://i0.hdslb.com/bfs/openplatform/fc5eb5da52da4022c52aedd1591d5fee0daa96e3.bin', 'https://i0.hdslb.com/bfs/openplatform/5f789545568b4f841d413b0445634fcb210cddde.bin', 'https://i0.hdslb.com/bfs/openplatform/94b360a67de90f18ec2a6d81bc56f0424184c2bd.bin', 'https://i0.hdslb.com/bfs/openplatform/4e22bdde415f612892a12e26dbe6e37deba18d15.bin', 'https://i0.hdslb.com/bfs/openplatform/dee0c7f323cde54d3ba5bdb38f0c7c97a27b5dfb.bin', 'https://i0.hdslb.com/bfs/openplatform/14e360c8f245521f17959bb1e833b9b2e454bd72.bin', 'https://i0.hdslb.com/bfs/openplatform/88a9e921921dbd1e026c895e807e772410a991c5.bin', 'https://i0.hdslb.com/bfs/openplatform/3c4b0167ba25a8a0aaf9620ed3c1eea9d286c25c.bin', 'https://i0.hdslb.com/bfs/openplatform/7b258ae95769009658f13e3b440ffcaee7da7036.bin', 'https://i0.hdslb.com/bfs/openplatform/74b4c89042c4a64ce34d468e21ecb7b3257de543.bin', 'https://i0.hdslb.com/bfs/openplatform/a7379c95426586dc67a2fe867078d459a62ac95a.bin', 'https://i0.hdslb.com/bfs/openplatform/86aa5b71b628436d7231aa1bcc88cbd5b10fc5f4.bin', 'https://i0.hdslb.com/bfs/openplatform/34fc788b971290d038f5c40e1e22db6c39117b0d.bin', 'https://i0.hdslb.com/bfs/openplatform/1a7b35e823c291ff6e9f2338f2667b07a7f5d6d8.bin', 'https://i0.hdslb.com/bfs/openplatform/3b64561adc578fef33e19b48a6dd198fafcc6db1.bin', 'https://i0.hdslb.com/bfs/openplatform/83c5e5ba051f295b7e1e3ec742d8d88455acfe3e.bin', 'https://i0.hdslb.com/bfs/openplatform/18bda147c7977b2bbba217c971d6c85064f52673.bin', 'https://i0.hdslb.com/bfs/openplatform/a822e4df1d04f746a89038bff2be23fa49b0c164.bin', 'https://i0.hdslb.com/bfs/openplatform/b03c7aaee03efaaab7b00bb2d927901a69915062.bin', 'https://i0.hdslb.com/bfs/openplatform/d49f367cd5ca5527040f16d69c995c9eb0161bb2.bin', 'https://i0.hdslb.com/bfs/openplatform/a8ebe1981c3479ecc4d158b06091759f011d33a5.bin', 'https://i0.hdslb.com/bfs/openplatform/14ba3b28b0cadd6d7e1555c0b2ce011d539c926b.bin', 'https://i0.hdslb.com/bfs/openplatform/d5dd0cbe8b21e291189a89a4a2760e6c2209191e.bin', 'https://i0.hdslb.com/bfs/openplatform/002a85e66a00c3414832a6ee07d96786a3953343.bin', 'https://i0.hdslb.com/bfs/openplatform/e7417a9888263ac6552719bc16c7a9c9eee5cc2e.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '109-临海小屋\VJ005938.zip',
+    types: [{
+      description: '109-临海小屋\VJ005938.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

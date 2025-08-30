@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 105-EA\EA_Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：105-EA\EA_Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/3da86adb93f4a73e9f18bedbf38d1d688c8fb308.bin', 'https://i0.hdslb.com/bfs/openplatform/0c591909115b697f0636afe5a86d876055d6cf1e.bin', 'https://i0.hdslb.com/bfs/openplatform/ee6e5852ae5544e150b93df596705d72c0c95037.bin', 'https://i0.hdslb.com/bfs/openplatform/83a28799bb95136ccbd2ed68659f630fccfc4278.bin', 'https://i0.hdslb.com/bfs/openplatform/dc25ae3953c5278ac7f62162e7b8699f97877e4d.bin', 'https://i0.hdslb.com/bfs/openplatform/e98dd122a114b1351a97d28b3337eaa2cf388821.bin', 'https://i0.hdslb.com/bfs/openplatform/7c28d59e0c9c35e9e2d813a07fdb470ca2ca7676.bin', 'https://i0.hdslb.com/bfs/openplatform/52be6ee088b324408991d68b75ab1fd0fdcb9a6c.bin', 'https://i0.hdslb.com/bfs/openplatform/84792dd49d3aa6ab8df451ade22c60eac5f90d5f.bin', 'https://i0.hdslb.com/bfs/openplatform/f1c99c520413ed65435609912499a2289d87064a.bin', 'https://i0.hdslb.com/bfs/openplatform/895360d59a8c99e20da7916343fc075156fd8825.bin', 'https://i0.hdslb.com/bfs/openplatform/66709b60aa4de2c5f808e178d1a273930089789f.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '105-EA\EA_Windows.zip',
+    types: [{
+      description: '105-EA\EA_Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

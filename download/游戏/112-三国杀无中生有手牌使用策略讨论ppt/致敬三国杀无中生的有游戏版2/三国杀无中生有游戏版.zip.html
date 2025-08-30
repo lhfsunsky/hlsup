@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 112-三国杀无中生有手牌使用策略讨论ppt\致敬三国杀无中生的有游戏版2\三国杀无中生有游戏版.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：112-三国杀无中生有手牌使用策略讨论ppt\致敬三国杀无中生的有游戏版2\三国杀无中生有游戏版.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/83b5e4c769bb91bcaac50d8ce9fc2fecbcb3185b.bin', 'https://i0.hdslb.com/bfs/openplatform/eae32d3c438367213fb1f1b142a58f735024173d.bin', 'https://i0.hdslb.com/bfs/openplatform/240b877aac2c7a57f99c6f7ae8c037abb2217800.bin', 'https://i0.hdslb.com/bfs/openplatform/9973f290db0908a710615a7c50bfc9c8efc26094.bin', 'https://i0.hdslb.com/bfs/openplatform/85c8ebd17483fc15b45384e27b432f6bd3795b59.bin', 'https://i0.hdslb.com/bfs/openplatform/249820be4ba09502d5d9512136a33eefc233a738.bin', 'https://i0.hdslb.com/bfs/openplatform/c37631b2b4c9cac69ab0200859fa545b8f1e88ec.bin', 'https://i0.hdslb.com/bfs/openplatform/7aa4d992d698ce5d45ddb5174a61cc3ba040722f.bin', 'https://i0.hdslb.com/bfs/openplatform/80faed6c2eff8b2f23aefbbf2f7f90f0d87706f6.bin', 'https://i0.hdslb.com/bfs/openplatform/136259b6476463e6698a27339680a1691ef267bd.bin', 'https://i0.hdslb.com/bfs/openplatform/61346c84c5df25cccb91ba5e2d3e8f4b4f85cacb.bin', 'https://i0.hdslb.com/bfs/openplatform/66eb4fb1adbcfaa8351cd0f24b093abf085d838a.bin', 'https://i0.hdslb.com/bfs/openplatform/536ca663bc87ab3979ad23a58caf0f9fd5b054cc.bin', 'https://i0.hdslb.com/bfs/openplatform/253fa181381ed535b3b8ee2c631147fced896821.bin', 'https://i0.hdslb.com/bfs/openplatform/9de39fe5ff886b9f1c790bd6ba94e050a892434c.bin', 'https://i0.hdslb.com/bfs/openplatform/53cb94d6f709309f019c865fea19c1f904712d97.bin', 'https://i0.hdslb.com/bfs/openplatform/0995a445b4f6e20978ef7170eb9992383d2f2972.bin', 'https://i0.hdslb.com/bfs/openplatform/7fce2962f4f23d0eb3d9396c5e46e43a6bfe03a3.bin', 'https://i0.hdslb.com/bfs/openplatform/fa5f8a554c0e49b5fbfc68e5f1123d8330347fdf.bin', 'https://i0.hdslb.com/bfs/openplatform/5a7469a48aa6e59a02ba861749e9ec5008a32aaf.bin', 'https://i0.hdslb.com/bfs/openplatform/7e95e1596fed92ad962dd7f35f27885cffb59fbb.bin', 'https://i0.hdslb.com/bfs/openplatform/e9ae05f7446f3cce1e8c44ff8436e0d1c6c413f3.bin', 'https://i0.hdslb.com/bfs/openplatform/744550441284e1f93d82dcce972027dbe49ab452.bin', 'https://i0.hdslb.com/bfs/openplatform/dd9ccac580b2590cadd4d102bac3258cf5f9bf10.bin', 'https://i0.hdslb.com/bfs/openplatform/29c74acb38fe2c93b61bdd6d26f4192981e801ec.bin', 'https://i0.hdslb.com/bfs/openplatform/c8cf3db87d2a612212fef3600c6321e4e4aaeb86.bin', 'https://i0.hdslb.com/bfs/openplatform/63601783a57a4b7e97c4788d82a1066485e890f7.bin', 'https://i0.hdslb.com/bfs/openplatform/879a1251f8947eeddf4f47e5789036ab95aa9554.bin', 'https://i0.hdslb.com/bfs/openplatform/7c2110aded67e131fe89007071049920d836b748.bin', 'https://i0.hdslb.com/bfs/openplatform/faf72a84f5bf43b293eea59877aae0f9c09b2858.bin', 'https://i0.hdslb.com/bfs/openplatform/26ad99b1ee5060ee35ef6d9149a3122c534afe3e.bin', 'https://i0.hdslb.com/bfs/openplatform/66f05074d0a6f9828b98fd32418c0ccc94264034.bin', 'https://i0.hdslb.com/bfs/openplatform/934355526a21ae9a26f389fba98d70231e132d3a.bin', 'https://i0.hdslb.com/bfs/openplatform/eaae363fba9e342256145eee36089d8df626299f.bin', 'https://i0.hdslb.com/bfs/openplatform/92e9a16f2255f3ee83cbaaf38986037364b28eb8.bin', 'https://i0.hdslb.com/bfs/openplatform/5b102874c7e7315c909bc47d86da69cc97fc37c4.bin', 'https://i0.hdslb.com/bfs/openplatform/6ad51db1daacc71326a8403b2a8a7ae5a31e4373.bin', 'https://i0.hdslb.com/bfs/openplatform/d41330e6070c2ab8649b9cc891163a8a42c59640.bin', 'https://i0.hdslb.com/bfs/openplatform/25f49341d60ddac5b2a42cecafbf6af01b10ff64.bin', 'https://i0.hdslb.com/bfs/openplatform/b75666243c0e50ca20bc0f984ce1c03620d16f8f.bin', 'https://i0.hdslb.com/bfs/openplatform/06a08827a4b4a1404d9d3cd984ecef0c9705fdf6.bin', 'https://i0.hdslb.com/bfs/openplatform/9db9927e6ff098a06b6aee26da6a331a11ad9faa.bin', 'https://i0.hdslb.com/bfs/openplatform/09dc4544888ff6bc5e9c6325feab2f0da2dda44a.bin', 'https://i0.hdslb.com/bfs/openplatform/90055f77a4d745aa4defb48ac83367fef8ca45e2.bin', 'https://i0.hdslb.com/bfs/openplatform/19be9bf1c0b1cdf12f0edd03a4aed315053dc3c4.bin', 'https://i0.hdslb.com/bfs/openplatform/d2e0c972e323bf3a5698c104da41d9f2c441aab0.bin', 'https://i0.hdslb.com/bfs/openplatform/aabd93899d26d28ef63c97d462b73554a599b30b.bin', 'https://i0.hdslb.com/bfs/openplatform/0858d46423599977d36fd7a54aca9ddddc4a90a2.bin', 'https://i0.hdslb.com/bfs/openplatform/10de85f8b35b4b85bf1980bb64a929ae2c501097.bin', 'https://i0.hdslb.com/bfs/openplatform/cacfc30b255dbd6a675764b4c21c3ee64d0ea026.bin', 'https://i0.hdslb.com/bfs/openplatform/887a184861f0ad702897df071de5ee3b825374d1.bin', 'https://i0.hdslb.com/bfs/openplatform/32e224738e4d9e4b0ea124cc2082c99e0b6bd499.bin', 'https://i0.hdslb.com/bfs/openplatform/56ea30181e057be5b6d0283af877b5f1c9c90d72.bin', 'https://i0.hdslb.com/bfs/openplatform/6cf7fbea0482b414bc5664885bb7562e3f132514.bin', 'https://i0.hdslb.com/bfs/openplatform/a7d264233152244f289311eafa5e92d70c90efc4.bin', 'https://i0.hdslb.com/bfs/openplatform/9a61195ca2be66cba3d5dc79f24d6df01ef05172.bin', 'https://i0.hdslb.com/bfs/openplatform/a1d25d048bd4ded2d5b15dccd3270b35dc55eacd.bin', 'https://i0.hdslb.com/bfs/openplatform/be04825f06c548e13911c035df54a43449bda5d9.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '112-三国杀无中生有手牌使用策略讨论ppt\致敬三国杀无中生的有游戏版2\三国杀无中生有游戏版.zip',
+    types: [{
+      description: '112-三国杀无中生有手牌使用策略讨论ppt\致敬三国杀无中生的有游戏版2\三国杀无中生有游戏版.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 工具\JoiPlay模拟器\JoiPlay_1.20.20.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：工具\JoiPlay模拟器\JoiPlay_1.20.20.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/87b7ce78fe6e3a31b7a1c178dbd807fe33873520.bin', 'https://i0.hdslb.com/bfs/openplatform/dda3046a574570f185ec7b27b48f7106fa201d35.bin', 'https://i0.hdslb.com/bfs/openplatform/c34109d56fcafedd01f8f6d73ef2efd92e2f1deb.bin', 'https://i0.hdslb.com/bfs/openplatform/ceddfed8b91655f63c4ca73ead70f978cb892f36.bin', 'https://i0.hdslb.com/bfs/openplatform/bb6352780f36c1cf67f7fc1eec20a39e53a81346.bin', 'https://i0.hdslb.com/bfs/openplatform/2880d2297e71c8fa9a745b700da783b20e67cdfa.bin', 'https://i0.hdslb.com/bfs/openplatform/e3f15db8c45b4d89e52d143de019acb81ba19a87.bin', 'https://i0.hdslb.com/bfs/openplatform/3845bdaa4c5999e0e6c17963361d3d324b923b81.bin', 'https://i0.hdslb.com/bfs/openplatform/cfc92a47d932713c49fe239102bacd47ab58676e.bin', 'https://i0.hdslb.com/bfs/openplatform/2db11d084d641de89232cfe3558eaab2d71f7829.bin', 'https://i0.hdslb.com/bfs/openplatform/76a1c967f1698ba8e3b229eaad69d243ad12a058.bin', 'https://i0.hdslb.com/bfs/openplatform/b76eceb3741f56b1a2da49bf4e454fdf6ec23f3f.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '工具\JoiPlay模拟器\JoiPlay_1.20.20.7z',
+    types: [{
+      description: '工具\JoiPlay模拟器\JoiPlay_1.20.20.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 185-班重\班重同人_Android.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：185-班重\班重同人_Android.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/bc2f1b9dd820b877b6816700c16cf0739fb60560.bin', 'https://i0.hdslb.com/bfs/openplatform/24ada7cce7d0c86b4018d8f0215c7e9341334123.bin', 'https://i0.hdslb.com/bfs/openplatform/57243136f603c5b6a51ae490d9219f0a953ca1d3.bin', 'https://i0.hdslb.com/bfs/openplatform/9088bbc5b5db1615ffdf4ef0f57ca7cca206a972.bin', 'https://i0.hdslb.com/bfs/openplatform/1acd36568af2a32b8aba8ee87ba812e8bac747e8.bin', 'https://i0.hdslb.com/bfs/openplatform/275bf8701b06d4c31d2ecf7f4c72bd682ac4a0d3.bin', 'https://i0.hdslb.com/bfs/openplatform/0ceaa217e3a4babacff238c96f394e23d2294440.bin', 'https://i0.hdslb.com/bfs/openplatform/8bddc4c1d45615dfaf567ce4524f18b52ff09341.bin', 'https://i0.hdslb.com/bfs/openplatform/6e12be1e43cb196563bb9d5a558926d519fefe81.bin', 'https://i0.hdslb.com/bfs/openplatform/d03cc4d6c4db489b1e30051675d9d0a9af535153.bin', 'https://i0.hdslb.com/bfs/openplatform/20e648c333b3dfd4572459e9cfffa9d0d0e4049b.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '185-班重\班重同人_Android.7z',
+    types: [{
+      description: '185-班重\班重同人_Android.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

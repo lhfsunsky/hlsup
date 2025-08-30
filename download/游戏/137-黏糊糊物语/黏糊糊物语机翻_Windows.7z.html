@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 137-黏糊糊物语\黏糊糊物语机翻_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：137-黏糊糊物语\黏糊糊物语机翻_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/0ba5729043ddebe71cc59d4a2e25cb388d92233e.bin', 'https://i0.hdslb.com/bfs/openplatform/943b6fe85d65645be86812b39c1e5d87df61563b.bin', 'https://i0.hdslb.com/bfs/openplatform/d35db0cb9cfcbd5f88d2d113f3a36a32bdbcfa9c.bin', 'https://i0.hdslb.com/bfs/openplatform/098a26300de5cddcd2aacc9c6cfbf0d8c2d01edd.bin', 'https://i0.hdslb.com/bfs/openplatform/3a821ba9d34634676e5aa61ada2b8aff274f7f90.bin', 'https://i0.hdslb.com/bfs/openplatform/b9c8f9fb581a939c1cbf38cb2e92560358eae059.bin', 'https://i0.hdslb.com/bfs/openplatform/44f7fd4056e8cd57691854d38a60f9ee2c2250aa.bin', 'https://i0.hdslb.com/bfs/openplatform/05df29536774e41179c6564b68581e7aa2417c27.bin', 'https://i0.hdslb.com/bfs/openplatform/f3fb8014170e3e665e3383b0a219f151f6f5f439.bin', 'https://i0.hdslb.com/bfs/openplatform/a42e623a356c8923fb9db7cf543199d5b732ad1c.bin', 'https://i0.hdslb.com/bfs/openplatform/13791e951b3aa4804a6ed54807222082573d520b.bin', 'https://i0.hdslb.com/bfs/openplatform/8ec9fd4e01541275d01f8b1ba6de8ef8ff1e36a2.bin', 'https://i0.hdslb.com/bfs/openplatform/70d1f7806635f565e6afbc0fef8f499a2de349b5.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '137-黏糊糊物语\黏糊糊物语机翻_Windows.7z',
+    types: [{
+      description: '137-黏糊糊物语\黏糊糊物语机翻_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

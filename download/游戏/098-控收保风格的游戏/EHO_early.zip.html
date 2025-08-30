@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 098-控收保风格的游戏\EHO_early.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：098-控收保风格的游戏\EHO_early.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/8cfb9b71a78d36cff44b8ac7a3e68fadb32d06a7.bin', 'https://i0.hdslb.com/bfs/openplatform/ad9ff685065d8c1ff959430160c4a20eca80c525.bin', 'https://i0.hdslb.com/bfs/openplatform/ee0fcfd1ec86e214cc6b8922bec39d1974c4d9b5.bin', 'https://i0.hdslb.com/bfs/openplatform/a5afe7a72deedbf6dfad798f8839d8bb2502aeb4.bin', 'https://i0.hdslb.com/bfs/openplatform/d4f524bff7f9fbfc9990fc78c7e8d75d04205a74.bin', 'https://i0.hdslb.com/bfs/openplatform/a158303a6ba44e1d53cb0545ed1d56373324132f.bin', 'https://i0.hdslb.com/bfs/openplatform/738d139a00b21d3ee989afa6272f2fcec9529c02.bin', 'https://i0.hdslb.com/bfs/openplatform/a75d112ffe86e29e464e4c977cd63c45fbac705a.bin', 'https://i0.hdslb.com/bfs/openplatform/070d3fecf9abe0f611fb0910fdb49eeb32271f57.bin', 'https://i0.hdslb.com/bfs/openplatform/6f3f059097b7f0d3a3026838d4b8a6d3a0f4e59f.bin', 'https://i0.hdslb.com/bfs/openplatform/9e24dbe4a09d9f3aefc47ab6f339bf4a0fd8d322.bin', 'https://i0.hdslb.com/bfs/openplatform/b86fae65f99f18f8f09b71ca36b24dcd25fb216a.bin', 'https://i0.hdslb.com/bfs/openplatform/b5a82577179ff52a4039472903ff2d28ccaf896e.bin', 'https://i0.hdslb.com/bfs/openplatform/cf6f1c350d7faff5b57de08d6d6b3e8bdb94d58c.bin', 'https://i0.hdslb.com/bfs/openplatform/61af86022ccd61d191dd4ed618e6c302a48f2018.bin', 'https://i0.hdslb.com/bfs/openplatform/f0d1b3e2b810e730eedaff6f38c0afc2d4f061dc.bin', 'https://i0.hdslb.com/bfs/openplatform/569e6d85c78d0f999674f286f4d0ef59b4452ea2.bin', 'https://i0.hdslb.com/bfs/openplatform/4dc53bddecc60f13d504b92a07aa7f23eb253128.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '098-控收保风格的游戏\EHO_early.zip',
+    types: [{
+      description: '098-控收保风格的游戏\EHO_early.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 090-impact\オナ見っくImpact!.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：090-impact\オナ見っくImpact!.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/99fa7284b2b9cab4c8631221ff89729f517da388.bin', 'https://i0.hdslb.com/bfs/openplatform/613d9ae9f90a50a14bdf3c9e42ba270667b9c274.bin', 'https://i0.hdslb.com/bfs/openplatform/7180a2a54c3adf24cf985c4b56c0bcd32d417003.bin', 'https://i0.hdslb.com/bfs/openplatform/9a498a74e492b19ab172e866f8e85064ac8bfe73.bin', 'https://i0.hdslb.com/bfs/openplatform/3b233fa94b90a501b81e085e7ce582297e05b2cf.bin', 'https://i0.hdslb.com/bfs/openplatform/b08322b953e977dea2f0ab971e825513e3302592.bin', 'https://i0.hdslb.com/bfs/openplatform/7f3fef87797e79db591508d27161f238044aefd0.bin', 'https://i0.hdslb.com/bfs/openplatform/4cd0a81d4c4d36ce85b81a5c4e4dba2761ed2b0d.bin', 'https://i0.hdslb.com/bfs/openplatform/dd6d44c0cf0caa42844f654057e4542f4443aec9.bin', 'https://i0.hdslb.com/bfs/openplatform/f529bc06cf618e57ddf8859064a5eaa1c18b5ff0.bin', 'https://i0.hdslb.com/bfs/openplatform/379389a666d1163839a6b93beb9b14dd3c00e2fc.bin', 'https://i0.hdslb.com/bfs/openplatform/f8bf872421ea10e9e47f70c64ac707ee681f7b5a.bin', 'https://i0.hdslb.com/bfs/openplatform/2dff4358ee9201e29d62eb39e1535b204003ce9e.bin', 'https://i0.hdslb.com/bfs/openplatform/13c61858470f7e2ae7a6102ac1fa1bd3d8fc246a.bin', 'https://i0.hdslb.com/bfs/openplatform/b60f1efdfdd14e1529e0b5002faf6da511c6b403.bin', 'https://i0.hdslb.com/bfs/openplatform/6272957478fdf36277497672155d9fba999b7052.bin', 'https://i0.hdslb.com/bfs/openplatform/15adfacd79a6779eafddb56ab718ff8fbc14ecbb.bin', 'https://i0.hdslb.com/bfs/openplatform/641acb302fb67b8a3cd34146db7d093d3305656b.bin', 'https://i0.hdslb.com/bfs/openplatform/4bdb94e987d06498c963fef0ed4d80b39facb78b.bin', 'https://i0.hdslb.com/bfs/openplatform/9a58eaf8eff5c1ee7a8d364544a5b321e207db7d.bin', 'https://i0.hdslb.com/bfs/openplatform/d4bd3d4c18debb41ba239a0cc6537d7fb50705b3.bin', 'https://i0.hdslb.com/bfs/openplatform/b58715a92f61cd671d0fdd3feaf302a3c3d6e56d.bin', 'https://i0.hdslb.com/bfs/openplatform/40df2b0bb6e0dc8dabd2327a431375ec2a779c49.bin', 'https://i0.hdslb.com/bfs/openplatform/dbeee974ce57223b61f585f867e4e23826d0adfc.bin', 'https://i0.hdslb.com/bfs/openplatform/3c4241ec9bb0138eec93a25717748bb423f3faee.bin', 'https://i0.hdslb.com/bfs/openplatform/7f7a6700cd5ae744af3865674e19953711c64aa4.bin', 'https://i0.hdslb.com/bfs/openplatform/d406df35874b655e4481afaad77a23784da34925.bin', 'https://i0.hdslb.com/bfs/openplatform/c4af6b037a7fb651ef3a9375d144a38fbd1c9f78.bin', 'https://i0.hdslb.com/bfs/openplatform/0bd17e0feea4bada37c8fb68126d9635bade4d8c.bin', 'https://i0.hdslb.com/bfs/openplatform/7b1f89c2c424fb038da6a6b898ebe18051f6b8e6.bin', 'https://i0.hdslb.com/bfs/openplatform/835012eb5357ef79ed1e659b078f7ae6719c2a1b.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '090-impact\オナ見っくImpact!.zip',
+    types: [{
+      description: '090-impact\オナ見っくImpact!.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

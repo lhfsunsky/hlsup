@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 188-學笙时代\學笙时代_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：188-學笙时代\學笙时代_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/a64d0e4c3846a86eccf5d0b32ba94d079f26ed9f.bin', 'https://i0.hdslb.com/bfs/openplatform/c0b6d6d587e861f21bfdffbe95bf57f0a1e05ac0.bin', 'https://i0.hdslb.com/bfs/openplatform/16e6bd403dde32983d9629e4f8d9e8f10bd2106e.bin', 'https://i0.hdslb.com/bfs/openplatform/f4ed0842623394997ca180f05355f53a1ab460cd.bin', 'https://i0.hdslb.com/bfs/openplatform/ef22f00885647a7d40f6cfc95c97d57aff175f31.bin', 'https://i0.hdslb.com/bfs/openplatform/845b9a24f21084dcd580e3647a303ef43f897915.bin', 'https://i0.hdslb.com/bfs/openplatform/c272720c8f7f3f05ab861a56949c13c0cbd6c893.bin', 'https://i0.hdslb.com/bfs/openplatform/8bb1bf8ffd7a61bcf1fae487422dd430d55a5918.bin', 'https://i0.hdslb.com/bfs/openplatform/32bc6d6073a4f2c5df6b9f1362d2ea187fddf144.bin', 'https://i0.hdslb.com/bfs/openplatform/e648afa66d9dd9d70542d9474ee77e1bbdc1fb6b.bin', 'https://i0.hdslb.com/bfs/openplatform/57dac43261d0aced2700792b9b0651735b201cd1.bin', 'https://i0.hdslb.com/bfs/openplatform/13f83ccaaf7be53020b3306a7d4063da899e9356.bin', 'https://i0.hdslb.com/bfs/openplatform/b12b11080ff6b94b75cc913700bbfc27b3ea6b68.bin', 'https://i0.hdslb.com/bfs/openplatform/0c9c230f4df7453d60e301fc136b25e44e7db4dd.bin', 'https://i0.hdslb.com/bfs/openplatform/25e55adb43853dd1842e6aa666d2f42374692974.bin', 'https://i0.hdslb.com/bfs/openplatform/b70ee96a65269de3e74984cb7f3f3b27fb207d94.bin', 'https://i0.hdslb.com/bfs/openplatform/fcda57422802d73d3e549fd52a4a77a8f1833683.bin', 'https://i0.hdslb.com/bfs/openplatform/d133a360d696f93f300c8d62a26f47ccc9f818d6.bin', 'https://i0.hdslb.com/bfs/openplatform/5603b1cb86c6029bc4f772453ddb1cfb3837d443.bin', 'https://i0.hdslb.com/bfs/openplatform/a061644b361e14ac371fddcdcaeec6067f09ce93.bin', 'https://i0.hdslb.com/bfs/openplatform/03c98a110452c73d7ef8de021d11677d17265b0d.bin', 'https://i0.hdslb.com/bfs/openplatform/7b7dd9ddf1e71dc4de2290cc8a551a30e4daf5c1.bin', 'https://i0.hdslb.com/bfs/openplatform/eaa76f601fb05b5083019038377f435785f8f6d5.bin', 'https://i0.hdslb.com/bfs/openplatform/29b0a8788ca2a517336236217c8aab0566fdbc3f.bin', 'https://i0.hdslb.com/bfs/openplatform/2fd7f0e4525819b5956f36236d244639eacf4564.bin', 'https://i0.hdslb.com/bfs/openplatform/0cc5cd0427f5d505665c9c664dc8fb3982221848.bin', 'https://i0.hdslb.com/bfs/openplatform/cffc27766ed38d537120ae330546b7fc54772527.bin', 'https://i0.hdslb.com/bfs/openplatform/3ee5431400013221e670664643fc36493e096099.bin', 'https://i0.hdslb.com/bfs/openplatform/2ce146ec862f23de5d6ce1a8f1680ef6bf32cba8.bin', 'https://i0.hdslb.com/bfs/openplatform/650664c1c74bb7f824f83f4476b70774cc7e2f94.bin', 'https://i0.hdslb.com/bfs/openplatform/68bfe83ad05c5c23edebe92407671eb1ea4d54e1.bin', 'https://i0.hdslb.com/bfs/openplatform/a1b12468dec0af6ef3ee15e6f61138ada3ab7702.bin', 'https://i0.hdslb.com/bfs/openplatform/432ba5f5cd1802824ecbefc2856b0d57c863bd3c.bin', 'https://i0.hdslb.com/bfs/openplatform/73ab87ff8e53a44e8162211e707befe3c59f1027.bin', 'https://i0.hdslb.com/bfs/openplatform/48d0f11b33208b44454b25e8f8b081189833ab16.bin', 'https://i0.hdslb.com/bfs/openplatform/1c022d555c269736b1ced1b3e17e408e21d89917.bin', 'https://i0.hdslb.com/bfs/openplatform/ded6fce5970cbc7e05665d1086bfefdc7d994580.bin', 'https://i0.hdslb.com/bfs/openplatform/5b39407e3bab69e76ce00422bdf617d1d2984b08.bin', 'https://i0.hdslb.com/bfs/openplatform/efc88e910459c3e39f9509c8c050ed6435cfb6d7.bin', 'https://i0.hdslb.com/bfs/openplatform/bbc46b4289ceb39bfee22c6b8ff0be4efd7295ce.bin', 'https://i0.hdslb.com/bfs/openplatform/2bdb1b150b2c562d9402772789ba53a90dd4612e.bin', 'https://i0.hdslb.com/bfs/openplatform/e250ad418837d19c26ce04bdf8db1236bb39b650.bin', 'https://i0.hdslb.com/bfs/openplatform/11923f5401929d4c6208be048d69f3ee1dde4e72.bin', 'https://i0.hdslb.com/bfs/openplatform/5a4a709af2833e60f56faed3b8c18982b8dd4e54.bin', 'https://i0.hdslb.com/bfs/openplatform/5070eb5dbf61e30dcf57760cdb32702cad271aca.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '188-學笙时代\學笙时代_Windows.7z',
+    types: [{
+      description: '188-學笙时代\學笙时代_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

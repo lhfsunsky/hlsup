@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 132-讨伐魔王\讨伐魔王_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：132-讨伐魔王\讨伐魔王_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/23cadae7575956a153b85184322c552c1e0ed78a.bin', 'https://i0.hdslb.com/bfs/openplatform/655b6b46fc9c446d980c5f0f1bfcf245f91fb9b3.bin', 'https://i0.hdslb.com/bfs/openplatform/e409487ccc25835cd72c301a4f30e091c3369e02.bin', 'https://i0.hdslb.com/bfs/openplatform/d33c75d86fdef92cf1309928b17595303d36897e.bin', 'https://i0.hdslb.com/bfs/openplatform/d765792f0d070e9f8c19a2cdedd7e1dee6a39679.bin', 'https://i0.hdslb.com/bfs/openplatform/f7e287e2cc7f41af200db2e458accfb440c6bc6f.bin', 'https://i0.hdslb.com/bfs/openplatform/60652704afaf078ad28c0f93534714e122de136e.bin', 'https://i0.hdslb.com/bfs/openplatform/9226f107f9ecff9ed8cc20378a082883abef7198.bin', 'https://i0.hdslb.com/bfs/openplatform/b36ed01ffd87bca146bdade81bb5886432c8432e.bin', 'https://i0.hdslb.com/bfs/openplatform/d9eb37ac3a75bac0f363dc02cfa7eff666f4a5c6.bin', 'https://i0.hdslb.com/bfs/openplatform/e1171b935fd94a2ef675bd0e9aee8511e364507c.bin', 'https://i0.hdslb.com/bfs/openplatform/5ad0595164f3356e91d7b29e920ab6e4da2a6848.bin', 'https://i0.hdslb.com/bfs/openplatform/ae1c9c41fd4772dba22a5dc40a2c8bfe46838686.bin', 'https://i0.hdslb.com/bfs/openplatform/440ed8326700a3fc1c9c95acc7a4f3d5f9ca883f.bin', 'https://i0.hdslb.com/bfs/openplatform/8421c9c37d70c837e27edfa3e6a124a7609b17a3.bin', 'https://i0.hdslb.com/bfs/openplatform/71e7af8a1712d0950986d61fb8f21acfd56a8883.bin', 'https://i0.hdslb.com/bfs/openplatform/b7d9db2d76422f2ce1790bdff51a8bb8ea78fc18.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '132-讨伐魔王\讨伐魔王_Windows.7z',
+    types: [{
+      description: '132-讨伐魔王\讨伐魔王_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

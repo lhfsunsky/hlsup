@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 111-hadaka\Hadaka直装版_Windows\hadaka.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：111-hadaka\Hadaka直装版_Windows\hadaka.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/0789f533308326f83dbd96bb32af079aef341805.bin', 'https://i0.hdslb.com/bfs/openplatform/cd7e20dfac45e0005ecbac9966f90289efcee56e.bin', 'https://i0.hdslb.com/bfs/openplatform/9b2fcb2c71f3f81ba29ec68fe4ef47694657f710.bin', 'https://i0.hdslb.com/bfs/openplatform/3c19c8764ff2f0ba872b1f65f3f6b38b0ee8bd98.bin', 'https://i0.hdslb.com/bfs/openplatform/10747f64ff3a2c416c1ba62857c5ffc715d03dce.bin', 'https://i0.hdslb.com/bfs/openplatform/fb2070fa9f20e8e067533c4976dd6b679554ac9b.bin', 'https://i0.hdslb.com/bfs/openplatform/a394539f7bde2065c7f8611229b5053b10380d70.bin', 'https://i0.hdslb.com/bfs/openplatform/bc4785fe9b62bfd6bab4a49d70ed02227a7b1599.bin', 'https://i0.hdslb.com/bfs/openplatform/e2d8f055e4ee262291b48db0336551cd4c545077.bin', 'https://i0.hdslb.com/bfs/openplatform/5420a7ee5730ff647e816d4b1297b9b172ed7841.bin', 'https://i0.hdslb.com/bfs/openplatform/b22aafa748b0c3e9b3cfaad3c4fd34fe98d343f2.bin', 'https://i0.hdslb.com/bfs/openplatform/3887d6650c050001b7371e98d14d33b48c06390a.bin', 'https://i0.hdslb.com/bfs/openplatform/d65694b3acd709a90ddae54022e57c7c7938947b.bin', 'https://i0.hdslb.com/bfs/openplatform/443709b86aaaf15527d9504b0ba90d9d39f63f0e.bin', 'https://i0.hdslb.com/bfs/openplatform/4a0e46f38e44f9394d87d190746e97104f50fdc2.bin', 'https://i0.hdslb.com/bfs/openplatform/1644e51609cb04b872c2c3f7c797d517e6e8bf4d.bin', 'https://i0.hdslb.com/bfs/openplatform/f28a0fe1753ca2e6f5e8e3d639b04133b2689c52.bin', 'https://i0.hdslb.com/bfs/openplatform/fd5b7cb73983cab62bda9a8e9a1a96fd01e29163.bin', 'https://i0.hdslb.com/bfs/openplatform/8c175dc78990a1cc1d2706adc1c1b06bdfbd956f.bin', 'https://i0.hdslb.com/bfs/openplatform/ba0e6cf37beec6c39b6d00237dda931b3539a123.bin', 'https://i0.hdslb.com/bfs/openplatform/62698d35b62d09d3d970995bf371f8131d40a555.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '111-hadaka\Hadaka直装版_Windows\hadaka.zip',
+    types: [{
+      description: '111-hadaka\Hadaka直装版_Windows\hadaka.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 134-触手图鉴2\触手図鑑Vol.2_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：134-触手图鉴2\触手図鑑Vol.2_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/d59cd714914ab98a5975d52a7bf01eae203f50ec.bin', 'https://i0.hdslb.com/bfs/openplatform/30e0c4542421b70477c31e5bbcce57515b043adc.bin', 'https://i0.hdslb.com/bfs/openplatform/bb63c2c5ad26d060473e7acdb49b9ea2db5d79ae.bin', 'https://i0.hdslb.com/bfs/openplatform/61c9cd8aff1151c28e4acb4c55f748653c9ce5c0.bin', 'https://i0.hdslb.com/bfs/openplatform/ddcfccccf2649a385963da4bef22432bc24426a7.bin', 'https://i0.hdslb.com/bfs/openplatform/626cdfdbba719ad6786c788d3a2e88eda2cc6efc.bin', 'https://i0.hdslb.com/bfs/openplatform/05d8d327adccd23bb6d54574cfc6f19c9be9b8e5.bin', 'https://i0.hdslb.com/bfs/openplatform/075cb8a86e1440fa8002698f9535cdd90a70e918.bin', 'https://i0.hdslb.com/bfs/openplatform/7cfb302ffd46a44900448afd14f8fab57ad9ba7f.bin', 'https://i0.hdslb.com/bfs/openplatform/2bb57ce020c056152fb611760ef5864db56018ac.bin', 'https://i0.hdslb.com/bfs/openplatform/23a1cee0f6f5b1790fd11f1c04348d41f2e97b50.bin', 'https://i0.hdslb.com/bfs/openplatform/63b0df58b10e5ff06f582c1d4a9b2976b51e04dc.bin', 'https://i0.hdslb.com/bfs/openplatform/c29b636bc7619c3e57b1b05ad851cdf65b30ea12.bin', 'https://i0.hdslb.com/bfs/openplatform/eebb885b53ab9145b3ee922d9856ec0d5ff2736d.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '134-触手图鉴2\触手図鑑Vol.2_Windows.7z',
+    types: [{
+      description: '134-触手图鉴2\触手図鑑Vol.2_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

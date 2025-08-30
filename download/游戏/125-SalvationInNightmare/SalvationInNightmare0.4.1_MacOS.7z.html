@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 125-SalvationInNightmare\SalvationInNightmare0.4.1_MacOS.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：125-SalvationInNightmare\SalvationInNightmare0.4.1_MacOS.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/23752032b9b9c35829277b73a919f5912c5bf90f.bin', 'https://i0.hdslb.com/bfs/openplatform/6130c86819ddc125d890997d4f93f9fcd48732ed.bin', 'https://i0.hdslb.com/bfs/openplatform/def90265b6e019772d204a789c912c4f3b179722.bin', 'https://i0.hdslb.com/bfs/openplatform/60de1a2cfd39cd3b0166e6a2c91d0d7d92a940af.bin', 'https://i0.hdslb.com/bfs/openplatform/3116cfa0740b099d7221058a75d99053408647f9.bin', 'https://i0.hdslb.com/bfs/openplatform/8a1431a6a2dfc06b2373d718058a29e7b138fd7e.bin', 'https://i0.hdslb.com/bfs/openplatform/b5d5b5d0c240f9e8ae77555a216f2e5561f206eb.bin', 'https://i0.hdslb.com/bfs/openplatform/02c2f7f2f0736e5887a1770baeebc5d5cc19c6e4.bin', 'https://i0.hdslb.com/bfs/openplatform/eed0b1daec3015bd70f68a7c1522a5aa2ab83a49.bin', 'https://i0.hdslb.com/bfs/openplatform/d1f9380527419686ce55ec22a6641aa73b0c4af5.bin', 'https://i0.hdslb.com/bfs/openplatform/e3ba95ed6e0e1aa69449c7294f63d3c16ead7fd9.bin', 'https://i0.hdslb.com/bfs/openplatform/b864a72545e48c65ecb6bd572dd5c910433bc2e8.bin', 'https://i0.hdslb.com/bfs/openplatform/08b6680063121b331124d1ef4a7d9632c19b54f5.bin', 'https://i0.hdslb.com/bfs/openplatform/52731fc02b9c641e63ab330bb178a90eacbba7a8.bin', 'https://i0.hdslb.com/bfs/openplatform/1bb8ba3c809eb40570c41c93992813f4e67e0bab.bin', 'https://i0.hdslb.com/bfs/openplatform/0f275adace40a3b4f7f0aa3c818e71d66b69d0c5.bin', 'https://i0.hdslb.com/bfs/openplatform/bf25b63ac69ae8de44d73e9741f211d78e17cae6.bin', 'https://i0.hdslb.com/bfs/openplatform/9ba778d29559920a543586ec230ef46d986da320.bin', 'https://i0.hdslb.com/bfs/openplatform/837e982fa75136e51719c9745e16dbb534893789.bin', 'https://i0.hdslb.com/bfs/openplatform/24b267f6458c5016229093e3f53396bd13165961.bin', 'https://i0.hdslb.com/bfs/openplatform/f51541ac377265ed884ceab8167648ad00cd5d45.bin', 'https://i0.hdslb.com/bfs/openplatform/fcbe27317b258e7a6a4449014ac75cf0602c8fef.bin', 'https://i0.hdslb.com/bfs/openplatform/0c86124913b56a075b5096c293d2ccfb42f65c05.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '125-SalvationInNightmare\SalvationInNightmare0.4.1_MacOS.7z',
+    types: [{
+      description: '125-SalvationInNightmare\SalvationInNightmare0.4.1_MacOS.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

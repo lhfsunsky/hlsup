@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 124-Sliver Chaos\Silver Chaos1.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：124-Sliver Chaos\Silver Chaos1.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/3e0d89502c10dde82eb3ff13c86b38a9a2e7203a.bin', 'https://i0.hdslb.com/bfs/openplatform/071ae7fbe720e8ef8fdcc3451906dced7065cf3e.bin', 'https://i0.hdslb.com/bfs/openplatform/cc8427ab6575026671625ee42fe4423fab27cecf.bin', 'https://i0.hdslb.com/bfs/openplatform/408f2c670082dc111efdb807da02fd3a898990d0.bin', 'https://i0.hdslb.com/bfs/openplatform/9584dbd5264868a1cc6a93ffe512b2a0555691aa.bin', 'https://i0.hdslb.com/bfs/openplatform/56cf0025e65a9a5e4082d11ba5896efd342622e6.bin', 'https://i0.hdslb.com/bfs/openplatform/78a364e39818fbc2367deabdf182985000f86a50.bin', 'https://i0.hdslb.com/bfs/openplatform/befc11ff362b30753b6a00fd4898db0d961d5389.bin', 'https://i0.hdslb.com/bfs/openplatform/d9f5d6ced3384703114847edbb420bc9ee4134d4.bin', 'https://i0.hdslb.com/bfs/openplatform/1d865628deb4897bcb5096e55b528e5c922b4456.bin', 'https://i0.hdslb.com/bfs/openplatform/0c8b3d15171dd475605b6fe1f1c152b70b2f6150.bin', 'https://i0.hdslb.com/bfs/openplatform/b3fa3c6c679e27922221602ae071e8e0111c62f5.bin', 'https://i0.hdslb.com/bfs/openplatform/f73545ffc3fac321c72d6071aec69dc0a64657b4.bin', 'https://i0.hdslb.com/bfs/openplatform/b2f83d616535a35e952d5a7e2ef615f056cc7511.bin', 'https://i0.hdslb.com/bfs/openplatform/6df24b690702447a2d8291d581fc241a3b9a7ab4.bin', 'https://i0.hdslb.com/bfs/openplatform/32cfe9ee0aa273fb4cd5a3f7bdb7d2e3bc356b7c.bin', 'https://i0.hdslb.com/bfs/openplatform/a9b876c57f361b3a9664813055cceea05060eaef.bin', 'https://i0.hdslb.com/bfs/openplatform/55831c6127f7de8ce3787a2d57cc26b8d82d9cbc.bin', 'https://i0.hdslb.com/bfs/openplatform/27a0d41ac3c7c1324142b924f296efd197c694d9.bin', 'https://i0.hdslb.com/bfs/openplatform/bd37dc0247e59eb99b0ed634a3768a88e54e736a.bin', 'https://i0.hdslb.com/bfs/openplatform/836eeb41eced80e3bae5ffbfee2e8b6172be2a5c.bin', 'https://i0.hdslb.com/bfs/openplatform/450d84c5586973c529a012d000ea580d67ba1274.bin', 'https://i0.hdslb.com/bfs/openplatform/2a6a0f7eebe79bb31398243bc94aeb1a1e7322fe.bin', 'https://i0.hdslb.com/bfs/openplatform/c625b7c4b9d6db3a973d13b4818bd7e3776a97ad.bin', 'https://i0.hdslb.com/bfs/openplatform/872351389386d7dd8a3ca1e9a1e306bc3154ed81.bin', 'https://i0.hdslb.com/bfs/openplatform/9a17ab82b1611d3103c4db47585676c4147440d2.bin', 'https://i0.hdslb.com/bfs/openplatform/f1c4d0c1eb5f2a684457004b51bdd57f5dbcef20.bin', 'https://i0.hdslb.com/bfs/openplatform/effe8cf941284835037eca72c518905b891d8052.bin', 'https://i0.hdslb.com/bfs/openplatform/ced6d1f4987043da83cffbe872a6b457b77ab253.bin', 'https://i0.hdslb.com/bfs/openplatform/f94cc15cd883e6a782bc01f50ed051c5652c6640.bin', 'https://i0.hdslb.com/bfs/openplatform/42c414cbd56a3b3263c0637690bd2a245572b912.bin', 'https://i0.hdslb.com/bfs/openplatform/0b8c11da09150486f3b506422c978383f01a605f.bin', 'https://i0.hdslb.com/bfs/openplatform/94219af43300bf2d9e71f51518451820fe80c3e4.bin', 'https://i0.hdslb.com/bfs/openplatform/851b16d9139f5dc3ea761ef9fa610a093f02a98a.bin', 'https://i0.hdslb.com/bfs/openplatform/c1ae8d9bc01819eafbc0a067e5135efc0018f810.bin', 'https://i0.hdslb.com/bfs/openplatform/a4b901bf1b6736f9c313b2e076f0112d05bd5265.bin', 'https://i0.hdslb.com/bfs/openplatform/1a41fac1a4c6550f28c7a83a8c7020fa558c5acb.bin', 'https://i0.hdslb.com/bfs/openplatform/e4fff06d8b4c03d5cfc2d1deb32a04f9bc875884.bin', 'https://i0.hdslb.com/bfs/openplatform/2dce60899f088b32a5856fa700f2d97e525f69a3.bin', 'https://i0.hdslb.com/bfs/openplatform/b0597c1b9b2878fdc1c1e73896442ada7e52c385.bin', 'https://i0.hdslb.com/bfs/openplatform/462c800ccaa3e13a42a39ab3425d2ee92cff633c.bin', 'https://i0.hdslb.com/bfs/openplatform/e148032910e30ecc8a8bf29373eeb58bb82cfc98.bin', 'https://i0.hdslb.com/bfs/openplatform/f7786983cdffc70ed245f9c23c07bc3a55260a73.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '124-Sliver Chaos\Silver Chaos1.7z',
+    types: [{
+      description: '124-Sliver Chaos\Silver Chaos1.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

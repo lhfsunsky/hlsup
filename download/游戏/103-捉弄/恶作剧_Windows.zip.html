@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 103-捉弄\恶作剧_Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：103-捉弄\恶作剧_Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/3d5d5706a2a6c105617562ddcbc52533ed49429e.bin', 'https://i0.hdslb.com/bfs/openplatform/0d29ee81bdaacb96cf55b410c12c0ebb216dc82e.bin', 'https://i0.hdslb.com/bfs/openplatform/b29e49186a2e0d2b5ae881758de65c02d48c55e4.bin', 'https://i0.hdslb.com/bfs/openplatform/8deec546ca44f0aba9afde541803ae8871ee37e2.bin', 'https://i0.hdslb.com/bfs/openplatform/4f41801822bc2aa8bfcfebcd647beff74a8f2930.bin', 'https://i0.hdslb.com/bfs/openplatform/d9984de58d32145cced4108f7efdd80cca4275ce.bin', 'https://i0.hdslb.com/bfs/openplatform/5d7c222a1adac7f45c9ffaf900f8fa874d1a8d96.bin', 'https://i0.hdslb.com/bfs/openplatform/75f11bf1abb66bf2cc8d38c7898ae819b7556c3a.bin', 'https://i0.hdslb.com/bfs/openplatform/1fcb8fa864a2932d24080af7d3367beb39dcac85.bin', 'https://i0.hdslb.com/bfs/openplatform/c1bfae6e71633a766fb12ba45f807e7e4c35e6a0.bin', 'https://i0.hdslb.com/bfs/openplatform/1b3675b03fc3a369d7365219f67cf892a4a4725a.bin', 'https://i0.hdslb.com/bfs/openplatform/e18ff5a223d0946f962880be7d77b820bd5d8478.bin', 'https://i0.hdslb.com/bfs/openplatform/874effd144a7d7fa4837d53aa0c7ac5f04c21edc.bin', 'https://i0.hdslb.com/bfs/openplatform/761a996589713822d0f53f68b7ea41ff92725aa9.bin', 'https://i0.hdslb.com/bfs/openplatform/b1aefd8e6d6e9f954f450637ab6d1852c5acc7a4.bin', 'https://i0.hdslb.com/bfs/openplatform/11713f17d60c211f71314b3bdf8b377423dba337.bin', 'https://i0.hdslb.com/bfs/openplatform/c074a47677cb4ac7c4f3669a1940387a96612fce.bin', 'https://i0.hdslb.com/bfs/openplatform/b88a8c05c478b08ebc9e1a2615e227f85bf3d4f5.bin', 'https://i0.hdslb.com/bfs/openplatform/b4f50084bc010a01f816885211d8dd7e06f56096.bin', 'https://i0.hdslb.com/bfs/openplatform/b79ae98363ed8d1c65f363d8d2b383e9bf9c7bf5.bin', 'https://i0.hdslb.com/bfs/openplatform/629235721224e3847cf71cec7bf1c83cab8a1506.bin', 'https://i0.hdslb.com/bfs/openplatform/a9a33b901e357561fc9c289edf3e4913599d279b.bin', 'https://i0.hdslb.com/bfs/openplatform/996d466c111bbbd60ab779a851173853bab32ad6.bin', 'https://i0.hdslb.com/bfs/openplatform/0f751aec452e2fd3854bb6683a98f04ffaa61e90.bin', 'https://i0.hdslb.com/bfs/openplatform/2fb3fad5964935a16ec4a44399635ddd154c4c87.bin', 'https://i0.hdslb.com/bfs/openplatform/92fafb7c7ff01c3241d4b3e585668ca2b26a5759.bin', 'https://i0.hdslb.com/bfs/openplatform/bd344a4e6d5238834ebecf6800d2c029905bbe86.bin', 'https://i0.hdslb.com/bfs/openplatform/64a973a81e5be17ac1e56696e44cb75891a761f3.bin', 'https://i0.hdslb.com/bfs/openplatform/84671a7d41285f56231cec59a412ce403991beb6.bin', 'https://i0.hdslb.com/bfs/openplatform/eed49f15a52b5a0e82c4ac8a7800a2898b6c4976.bin', 'https://i0.hdslb.com/bfs/openplatform/46b712509c0c39ca1e117418f9d3b84bb0c1b443.bin', 'https://i0.hdslb.com/bfs/openplatform/b6bf31abc7b435773f39349a2443dc6290a77350.bin', 'https://i0.hdslb.com/bfs/openplatform/0402cccdd18c9303553227a6a4e011173fb29471.bin', 'https://i0.hdslb.com/bfs/openplatform/23060a457b06c8a07d334139975714e9fe0852ba.bin', 'https://i0.hdslb.com/bfs/openplatform/361e73593460e5102311d5fef74e08ae67659954.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '103-捉弄\恶作剧_Windows.zip',
+    types: [{
+      description: '103-捉弄\恶作剧_Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

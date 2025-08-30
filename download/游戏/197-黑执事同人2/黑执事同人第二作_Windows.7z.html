@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 197-黑执事同人2\黑执事同人第二作_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：197-黑执事同人2\黑执事同人第二作_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/5601738bf3b2b7d4f0812e210cbd9cbeb414c7b8.bin', 'https://i0.hdslb.com/bfs/openplatform/e91923af1f51c3dd15cd98f82908ec4dbff9a6c1.bin', 'https://i0.hdslb.com/bfs/openplatform/f717aa61c61a8d23b724bd924bdb56edb9946b69.bin', 'https://i0.hdslb.com/bfs/openplatform/a6b5e54b4b9d44f35a64b9b57f66604bb89c633c.bin', 'https://i0.hdslb.com/bfs/openplatform/722e587cdddeb7ddadc46d49c72864902c1a34c7.bin', 'https://i0.hdslb.com/bfs/openplatform/2e41957be5f349e13ca5f83210fe28ca2506771d.bin', 'https://i0.hdslb.com/bfs/openplatform/6ebb9f88bff806a5d667d07509f19a233dbc6be6.bin', 'https://i0.hdslb.com/bfs/openplatform/6e18543757848b747c3fbf3704b72174d6d11617.bin', 'https://i0.hdslb.com/bfs/openplatform/387d6e7e353a9a99df92055e00a7977a6363280f.bin', 'https://i0.hdslb.com/bfs/openplatform/ccbd0b2a75e9dc60d67d1ec97c4c601b8cc1ad27.bin', 'https://i0.hdslb.com/bfs/openplatform/76b8f995b40860879a604582b27b6b29acec7479.bin', 'https://i0.hdslb.com/bfs/openplatform/af8d6d2b6daa8bff19ba3ec58e7aa90be9f4854d.bin', 'https://i0.hdslb.com/bfs/openplatform/5dbb2ffbd966880fb346e5aa6963ec14ee88d60e.bin', 'https://i0.hdslb.com/bfs/openplatform/4579a0d4f9ba2cda0532a5f44a5fe0e7a181d016.bin', 'https://i0.hdslb.com/bfs/openplatform/f006fc162a1e4cfe4d36afa70b669bb8deeb30cd.bin', 'https://i0.hdslb.com/bfs/openplatform/7ed92d0764c5a2b852a729fbaa0f42f868146b20.bin', 'https://i0.hdslb.com/bfs/openplatform/d044f0ce29833949ceb6ec2eb1df29dfd6b67028.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '197-黑执事同人2\黑执事同人第二作_Windows.7z',
+    types: [{
+      description: '197-黑执事同人2\黑执事同人第二作_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

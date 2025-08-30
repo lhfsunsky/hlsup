@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 159-五印圣剑\五印圣剑_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：159-五印圣剑\五印圣剑_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/dd027ac2bc7115ca85d798375d310cb470430630.bin', 'https://i0.hdslb.com/bfs/openplatform/a6499e1f307a2791992de1f62ea73b23ff6f82d5.bin', 'https://i0.hdslb.com/bfs/openplatform/2d3a0049908c689da53925c44685b2661fc18cd1.bin', 'https://i0.hdslb.com/bfs/openplatform/5633da72da20cccfc10dad9750ea6e680a6514b5.bin', 'https://i0.hdslb.com/bfs/openplatform/876084dafbff0065dde552e9a478b62f06b6df78.bin', 'https://i0.hdslb.com/bfs/openplatform/417a1f99b50919d02acc92dd6d420d715bae7ef9.bin', 'https://i0.hdslb.com/bfs/openplatform/7ef3d5f4465992a93527328e68df1baf794277b2.bin', 'https://i0.hdslb.com/bfs/openplatform/57824def0bcc851c2d84dc707a6dd00278547630.bin', 'https://i0.hdslb.com/bfs/openplatform/ed84ae16d4073b73f82f5f3918397eb44773e6af.bin', 'https://i0.hdslb.com/bfs/openplatform/89ccb3f53f5a8d9842759edadc1caf43117180aa.bin', 'https://i0.hdslb.com/bfs/openplatform/7cf5f3a026e8e0ca34e8115f68774bd33779044a.bin', 'https://i0.hdslb.com/bfs/openplatform/a3640c3fd0bc5f9c71e6bd1bd3bfd1d6ffd3667e.bin', 'https://i0.hdslb.com/bfs/openplatform/30b0a9aa04773a223479e69a874280821a753b3b.bin', 'https://i0.hdslb.com/bfs/openplatform/0a35422b8dad3166b5057825c22f080b588da465.bin', 'https://i0.hdslb.com/bfs/openplatform/c324d10d8eb84a1ee93f5eedfcc70d96d1588d74.bin', 'https://i0.hdslb.com/bfs/openplatform/3342edcfb2393f39ea0f7544bcd62181733c3b9b.bin', 'https://i0.hdslb.com/bfs/openplatform/4c31a4e4601de1f292932c42b9e53a7842f11576.bin', 'https://i0.hdslb.com/bfs/openplatform/1e2c26cb76b5bff657ab404eb1fcc1fa66da64e9.bin', 'https://i0.hdslb.com/bfs/openplatform/cf5ed291bfbcb659d9d2f41f500d0fccd3fc0e22.bin', 'https://i0.hdslb.com/bfs/openplatform/884540a6a6727edcf69efcc1efa4ebd6aaf16436.bin', 'https://i0.hdslb.com/bfs/openplatform/32c079595dfec26f28086b24c8ef99dd9a3c23ae.bin', 'https://i0.hdslb.com/bfs/openplatform/fe8c0ededb470e3cdadd68679dc0d43592008842.bin', 'https://i0.hdslb.com/bfs/openplatform/11fab48de29f824180dccdec5179042689b9a697.bin', 'https://i0.hdslb.com/bfs/openplatform/d9e7971bed26b2487de2ac9e525df2b41b58f373.bin', 'https://i0.hdslb.com/bfs/openplatform/d5ddde6cb45ec971acb69f2abaf15739b82afdef.bin', 'https://i0.hdslb.com/bfs/openplatform/fa44361815ad573fee10d6ce7201864d78231366.bin', 'https://i0.hdslb.com/bfs/openplatform/534d0252c2d49ccc4b69a25f50c86dd3ef2f0d3f.bin', 'https://i0.hdslb.com/bfs/openplatform/e460d1e57c93e7c087d290fd3c72c012e24428f6.bin', 'https://i0.hdslb.com/bfs/openplatform/ca70e91b143c430ea0c6df819a758d94f77a4a25.bin', 'https://i0.hdslb.com/bfs/openplatform/23f4bbf7905ce4beb3b5e6677057fc1ee38493da.bin', 'https://i0.hdslb.com/bfs/openplatform/157eb6bda5fc1823346408eda831c2d81735ff18.bin', 'https://i0.hdslb.com/bfs/openplatform/0e16a291b8e6fa9e33d345fdde4b085e1bcc7b0f.bin', 'https://i0.hdslb.com/bfs/openplatform/9920b8c433a6fe450af5f7a27bb6a5d44cd4e519.bin', 'https://i0.hdslb.com/bfs/openplatform/acf0c0a680145b4dfadf32754601bc3e6fdcf44f.bin', 'https://i0.hdslb.com/bfs/openplatform/e88d4d4455514b537ef815c3ce74879927048d5f.bin', 'https://i0.hdslb.com/bfs/openplatform/92ab518e2f95c357a4bce6022482f80064294b1e.bin', 'https://i0.hdslb.com/bfs/openplatform/140eef3784acecdad21035dca233849c4bc13fdb.bin', 'https://i0.hdslb.com/bfs/openplatform/dd54b83d786a46b619ff9024033e3624e4f61bd1.bin', 'https://i0.hdslb.com/bfs/openplatform/de3bd135fdefe97b8331f0fc747c216eb930165c.bin', 'https://i0.hdslb.com/bfs/openplatform/0b0d768a5abb0bf481c2ea36b50ab5c68bec9c1f.bin', 'https://i0.hdslb.com/bfs/openplatform/17ec2e5ad53cc7aae8c2e7a6674ce249af02c5f5.bin', 'https://i0.hdslb.com/bfs/openplatform/c7e8831cf4ce547d28baaa01fbe16811bfee58ec.bin', 'https://i0.hdslb.com/bfs/openplatform/b4bdac29b4e3d0c8535cc174b7e0ab162c4d8764.bin', 'https://i0.hdslb.com/bfs/openplatform/0b4ff673d1e7da4bb17dc92106d18af7f8af4f40.bin', 'https://i0.hdslb.com/bfs/openplatform/dad7b51774642113e1fe99bf35dcc37e23a5b2a3.bin', 'https://i0.hdslb.com/bfs/openplatform/5891bf5e9f8884d4767732dde36b58dbca91f4fb.bin', 'https://i0.hdslb.com/bfs/openplatform/ef56ea56e5e04ed8942ddff82f399aa687b29ffb.bin', 'https://i0.hdslb.com/bfs/openplatform/9aebe29e6c41e6fa03ddc42ffb38a074a62e9b48.bin', 'https://i0.hdslb.com/bfs/openplatform/e9cc7da9d1e19b4a1c9da3ba5bc47612e38f0cc4.bin', 'https://i0.hdslb.com/bfs/openplatform/f1ea84a67ae116f646449f98c2deb64c09e91912.bin', 'https://i0.hdslb.com/bfs/openplatform/c5c5822c546e190c2536bf4893495bb0c8fff71c.bin', 'https://i0.hdslb.com/bfs/openplatform/2b781f48fbd38af8691cf019af5615a851d65d46.bin', 'https://i0.hdslb.com/bfs/openplatform/3a5ba970f463115892db1af50e0ec2faf178dc87.bin', 'https://i0.hdslb.com/bfs/openplatform/bc5d4438a16eead201d5c39304591493bd9e7b18.bin', 'https://i0.hdslb.com/bfs/openplatform/e38c1c16f50e7f73223a3b8cb658bf20b65ca754.bin', 'https://i0.hdslb.com/bfs/openplatform/10c958617230e4e0c3c30511da4741805c744f99.bin', 'https://i0.hdslb.com/bfs/openplatform/e22349c3793b2065670ff2ae1068b5d6cefd043e.bin', 'https://i0.hdslb.com/bfs/openplatform/4dc2bf9d9663ba3394d9056b12b2a24b990c7430.bin', 'https://i0.hdslb.com/bfs/openplatform/9e01d218948a0131b38578dfb7b0da48654887ef.bin', 'https://i0.hdslb.com/bfs/openplatform/81dfbb36f55798ffba4d70122bc1dcf6e9b73d46.bin', 'https://i0.hdslb.com/bfs/openplatform/6831140826609232af2f27c22cb7d8210626fba3.bin', 'https://i0.hdslb.com/bfs/openplatform/90f7e25bb690f549deaec9591984818467215234.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '159-五印圣剑\五印圣剑_Windows.7z',
+    types: [{
+      description: '159-五印圣剑\五印圣剑_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

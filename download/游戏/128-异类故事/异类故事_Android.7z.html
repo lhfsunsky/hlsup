@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 128-异类故事\异类故事_Android.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：128-异类故事\异类故事_Android.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/acd2151e13f4fa446a2bb19d68aef9941d268d11.bin', 'https://i0.hdslb.com/bfs/openplatform/1549264d820876ac9d904430ace350feb5a19490.bin', 'https://i0.hdslb.com/bfs/openplatform/f955970e5b901568d054e1fb1ed12a50b45cc3bd.bin', 'https://i0.hdslb.com/bfs/openplatform/34abdb58efec822e82eac390b30a9b5d606f398c.bin', 'https://i0.hdslb.com/bfs/openplatform/08587267c347983ddbb4c17d01ed551c7361e3c0.bin', 'https://i0.hdslb.com/bfs/openplatform/e4998696bb9450dcad85e129c7ba1c8591752821.bin', 'https://i0.hdslb.com/bfs/openplatform/a870488911fe5343a12f7f460dc02c7ddd157cd2.bin', 'https://i0.hdslb.com/bfs/openplatform/0c670150373a0c441d88ca869f6146a6aab72ced.bin', 'https://i0.hdslb.com/bfs/openplatform/825e60a42ac4d97c3556941e8083ff5cd8cc6aa7.bin', 'https://i0.hdslb.com/bfs/openplatform/d02074d0841cbfff0eccee9101a052525b6be89e.bin', 'https://i0.hdslb.com/bfs/openplatform/42fe7744b25f724fcd32f335f7efeb1c400c70ea.bin', 'https://i0.hdslb.com/bfs/openplatform/71f6c40eb7c07f03c7ced94773208e2acc67e91d.bin', 'https://i0.hdslb.com/bfs/openplatform/95ab3fadaa9084259bb725c079211ae017d5a329.bin', 'https://i0.hdslb.com/bfs/openplatform/ecb0d16973de112ddc9ea32f2784dd4678940ad1.bin', 'https://i0.hdslb.com/bfs/openplatform/af07a8d8aa9bfa99e3b830523860997e0f4abe63.bin', 'https://i0.hdslb.com/bfs/openplatform/3df1accf07eb98f9cb2603e3ef11fce763e5c185.bin', 'https://i0.hdslb.com/bfs/openplatform/c76265bd3280eeff65b4f4ba0d536d25934290c0.bin', 'https://i0.hdslb.com/bfs/openplatform/9a889380cc7b7218f814f3e3e423f037de62a2d3.bin', 'https://i0.hdslb.com/bfs/openplatform/ea2bd7116bfa9d33318be3d542c800abd7047e93.bin', 'https://i0.hdslb.com/bfs/openplatform/42d8c75b3ba811eb3a72af7422e178c24fa9f21b.bin', 'https://i0.hdslb.com/bfs/openplatform/248faea2ded204b2fa5f7772e6ba4894150508c4.bin', 'https://i0.hdslb.com/bfs/openplatform/cd35c9c16c90c4d8e8397b72c566794926679af6.bin', 'https://i0.hdslb.com/bfs/openplatform/5897905c8c671cb4c9ad9d51774ae7afe517424f.bin', 'https://i0.hdslb.com/bfs/openplatform/744640bef195a74deb28c978040b273815087510.bin', 'https://i0.hdslb.com/bfs/openplatform/f623c402637d77487a26e20a16673e469fbae408.bin', 'https://i0.hdslb.com/bfs/openplatform/25240e29800a175c3d59654ca738b490baa18b3a.bin', 'https://i0.hdslb.com/bfs/openplatform/937da161c5c85177909bae01d86b4b18d80149fd.bin', 'https://i0.hdslb.com/bfs/openplatform/4bd9dcd5b58b2861051374a049ee9e1e3680f871.bin', 'https://i0.hdslb.com/bfs/openplatform/188573e9d205ff90912db4e6216ada4e7b7913db.bin', 'https://i0.hdslb.com/bfs/openplatform/702329a1e60c549fa1ed0c7079e7d2de3dcd6247.bin', 'https://i0.hdslb.com/bfs/openplatform/500f315e54b7bd051ab9d39124c1e05e9a71f34c.bin', 'https://i0.hdslb.com/bfs/openplatform/7fc570b25c58a7ea7aabeaaa4ca792c0e1585670.bin', 'https://i0.hdslb.com/bfs/openplatform/965259c781eaaea9c21aa7997ba9c5ded3bb924a.bin', 'https://i0.hdslb.com/bfs/openplatform/3c7b5919c9500320ef983fa187b7576899fc7f3b.bin', 'https://i0.hdslb.com/bfs/openplatform/c3af41c9cb158f923dad694aa10cb94ca2c73a32.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '128-异类故事\异类故事_Android.7z',
+    types: [{
+      description: '128-异类故事\异类故事_Android.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 162-终于等到魔王复活的砍猪勇者\终于等到魔王复活的砍猪勇者_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：162-终于等到魔王复活的砍猪勇者\终于等到魔王复活的砍猪勇者_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/10275510f5bb319ec8b9e9dac3e1291644729034.bin', 'https://i0.hdslb.com/bfs/openplatform/53ef5021d48b5279297412506a0a88666a5e1e78.bin', 'https://i0.hdslb.com/bfs/openplatform/e6c6a5563d26b873e1ec17137608b4e61f132e7b.bin', 'https://i0.hdslb.com/bfs/openplatform/bbe7211d63d19d2327132da658ce2a8582caca86.bin', 'https://i0.hdslb.com/bfs/openplatform/7d2694f11975ca320d6bd2e5bd174550242b816a.bin', 'https://i0.hdslb.com/bfs/openplatform/329c0ecfdb5ac3ab3c48ca9d13e4cc697e3412a5.bin', 'https://i0.hdslb.com/bfs/openplatform/dde22a968b34900b74c7b5d06b7291c2abd14361.bin', 'https://i0.hdslb.com/bfs/openplatform/619f17522dcd7a3426ced85a2392c37be80f9e35.bin', 'https://i0.hdslb.com/bfs/openplatform/a35a2062f797d5ed44b4f640e56266c491dde819.bin', 'https://i0.hdslb.com/bfs/openplatform/beadc23e53d037dae0536b113544378b40a55109.bin', 'https://i0.hdslb.com/bfs/openplatform/79522e968dfca80d771416622f5f3fe4d68f12d8.bin', 'https://i0.hdslb.com/bfs/openplatform/79b4180c570d0d556c34de2a102274bc712a6efb.bin', 'https://i0.hdslb.com/bfs/openplatform/712afbb3c355214bdb8c999eb3fc9833ac386651.bin', 'https://i0.hdslb.com/bfs/openplatform/915a1f9b309a5ff1ba44fd84ad632e5b9ce871dc.bin', 'https://i0.hdslb.com/bfs/openplatform/b1c0fe9e52a6e888f57887354cae66fead2828c6.bin', 'https://i0.hdslb.com/bfs/openplatform/bcf24c0d1a86b6bb04f7f585cb8e7357e8fb64d5.bin', 'https://i0.hdslb.com/bfs/openplatform/ae5051b1f7f68456e08a716c51ca542d4f014bb9.bin', 'https://i0.hdslb.com/bfs/openplatform/d4a37710f7fa31b0622434b10c49ab7f11a7c1af.bin', 'https://i0.hdslb.com/bfs/openplatform/103003dcd747404aecfa76d8d3846541ec7c0a8d.bin', 'https://i0.hdslb.com/bfs/openplatform/161e627c621f2d6e7c45ea2a0ded1def4d276091.bin', 'https://i0.hdslb.com/bfs/openplatform/cbf5c489688735171c853d50086f61ca7d635217.bin', 'https://i0.hdslb.com/bfs/openplatform/2dfc38b7d2dae00d417e26bbeeb9e272dac45f88.bin', 'https://i0.hdslb.com/bfs/openplatform/a6294f8c045929070577dd7a0ef4752bf6ed556f.bin', 'https://i0.hdslb.com/bfs/openplatform/41da28bac39761bfa87609d2bc02e0e6f9be0ed0.bin', 'https://i0.hdslb.com/bfs/openplatform/1ad3629ed873d39371a5152ad195fcd80e509a9b.bin', 'https://i0.hdslb.com/bfs/openplatform/ab25d98f7114093a5e18daf4c5b65a4556a63217.bin', 'https://i0.hdslb.com/bfs/openplatform/0bdf4ae63eb09464e3b84e8ee03e05e0ff373680.bin', 'https://i0.hdslb.com/bfs/openplatform/85da26579cfa70d7ebc36e335e6822ee47244f79.bin', 'https://i0.hdslb.com/bfs/openplatform/de5196c713f473f5e3651ea1efb6d05edc6b0535.bin', 'https://i0.hdslb.com/bfs/openplatform/f5cb985c31487be2ae2c3dba309ee0b56da47167.bin', 'https://i0.hdslb.com/bfs/openplatform/6e533c8ba4d3ba0859f439ff81bd48bc8952574a.bin', 'https://i0.hdslb.com/bfs/openplatform/d985d0949636e40116357b24dee543bb186c767e.bin', 'https://i0.hdslb.com/bfs/openplatform/ae58a9806b0833fcf7266180edade47d8c4d2fc2.bin', 'https://i0.hdslb.com/bfs/openplatform/eb41cf415287a3a5ba555ca8643651760b060a7b.bin', 'https://i0.hdslb.com/bfs/openplatform/11463ca52e35b667e0b028fcf6fd3dfff1e53646.bin', 'https://i0.hdslb.com/bfs/openplatform/047729f513f3be83908c5484b77b85b528ec39ae.bin', 'https://i0.hdslb.com/bfs/openplatform/fc9bca36b4c073aefbd5dad0da68a4ff36fc44ea.bin', 'https://i0.hdslb.com/bfs/openplatform/368e4f898db08e646f845dfd713efe9646c29107.bin', 'https://i0.hdslb.com/bfs/openplatform/0ce8a0f55ef4476502fb557754638a11af56bf82.bin', 'https://i0.hdslb.com/bfs/openplatform/d4582e5c187ed133e4676b07bcb7de820ed47d25.bin', 'https://i0.hdslb.com/bfs/openplatform/439545ba5a159fd6bd772d25224cb0d084822e68.bin', 'https://i0.hdslb.com/bfs/openplatform/b7b4edca115edf07aab5eabfa5086356232b0278.bin', 'https://i0.hdslb.com/bfs/openplatform/a2b7ea40164afe8887399251a4d6fd49bdc95509.bin', 'https://i0.hdslb.com/bfs/openplatform/55ee643bab4d4c3bf4a96a8620ffdc9a17b264ef.bin', 'https://i0.hdslb.com/bfs/openplatform/87cfafac3534499d5dc31d5a7a3a5b23ceb2ee1b.bin', 'https://i0.hdslb.com/bfs/openplatform/acf0ab4662e364e8cbb378fb9db682e569f24090.bin', 'https://i0.hdslb.com/bfs/openplatform/4a7652a3dbb42b8ad063b18030847147d92ed47f.bin', 'https://i0.hdslb.com/bfs/openplatform/22460927bb1feccfd4dc9dee410248080ed15db0.bin', 'https://i0.hdslb.com/bfs/openplatform/efb907854d280d65c8f9d8ff443e01f352265932.bin', 'https://i0.hdslb.com/bfs/openplatform/457ca7ad5c515d1173ff7f41ca662e2f10adc03b.bin', 'https://i0.hdslb.com/bfs/openplatform/9c66f055d5af37f62c06dd9d20b5a1c006c91292.bin', 'https://i0.hdslb.com/bfs/openplatform/9f5c477b76f2b39c4ef944d00c5b7af10a9ca16f.bin', 'https://i0.hdslb.com/bfs/openplatform/1c5606e61ac1ba5ad160922650bea3300e480913.bin', 'https://i0.hdslb.com/bfs/openplatform/b663a142d3854f3b5b14716a3344b767df66895d.bin', 'https://i0.hdslb.com/bfs/openplatform/0a5f586467cffb9921fae3ed638dd118460fbe66.bin', 'https://i0.hdslb.com/bfs/openplatform/8221e9a92079257c39911ab95043f219355e3a9b.bin', 'https://i0.hdslb.com/bfs/openplatform/ae8d5ec5ec92d506f36fb83f41678f9bb5931e76.bin', 'https://i0.hdslb.com/bfs/openplatform/4691c51e082224ebda1d6773a6f201bb200ecb15.bin', 'https://i0.hdslb.com/bfs/openplatform/2e5f36a7f3c855285a62dc795840a546a9320783.bin', 'https://i0.hdslb.com/bfs/openplatform/2f83b09c735b1a37c7ae0b79bfb98fc13ae47cfe.bin', 'https://i0.hdslb.com/bfs/openplatform/c5b1f3adc14dbb1deb6d24a7abcf4b484d91cf14.bin', 'https://i0.hdslb.com/bfs/openplatform/357abad08d5410c670104b43ad0993700b4507a7.bin', 'https://i0.hdslb.com/bfs/openplatform/890a5cc714b98af841db445ab4687d6f07f0b1b6.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '162-终于等到魔王复活的砍猪勇者\终于等到魔王复活的砍猪勇者_Windows.7z',
+    types: [{
+      description: '162-终于等到魔王复活的砍猪勇者\终于等到魔王复活的砍猪勇者_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

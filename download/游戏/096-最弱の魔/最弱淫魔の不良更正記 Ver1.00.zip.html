@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 096-最弱の魔\最弱淫魔の不良更正記 Ver1.00.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：096-最弱の魔\最弱淫魔の不良更正記 Ver1.00.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/d8a6c7fa58453c90b3689d3a20275bd44ea5e086.bin', 'https://i0.hdslb.com/bfs/openplatform/c50dfe89f2e9496891e02e93ee7499052bde24fb.bin', 'https://i0.hdslb.com/bfs/openplatform/ccadf26e6e0fbe11e39a2d881faed84f643b9186.bin', 'https://i0.hdslb.com/bfs/openplatform/5c3ece25b8294750bdc14a81ed8f352a748b5b8f.bin', 'https://i0.hdslb.com/bfs/openplatform/e9b8f1e26bf6b56938cf3f2d7608a582208d52d4.bin', 'https://i0.hdslb.com/bfs/openplatform/7fdc6ddc5c4ab2da87f2dfe89fe8986279ee1fdb.bin', 'https://i0.hdslb.com/bfs/openplatform/af1b1404f90f778d98844e9161427c3896a3a7e5.bin', 'https://i0.hdslb.com/bfs/openplatform/4735924938e1e05cac74d0206e9c8393d4d85e08.bin', 'https://i0.hdslb.com/bfs/openplatform/c133961a58efc734ac81926e1e36077e0311c66d.bin', 'https://i0.hdslb.com/bfs/openplatform/cd35b035ec5bcbdacd73f5e27ecbc4c3d5b462cd.bin', 'https://i0.hdslb.com/bfs/openplatform/abefb81d1369550f289315c1df2d71da1f871ffb.bin', 'https://i0.hdslb.com/bfs/openplatform/91eb5237c46bfa95745ea642cfbee5dee46b856d.bin', 'https://i0.hdslb.com/bfs/openplatform/8d5d82bd02ac47d5e2a7b3d99d9ac3986813c1d4.bin', 'https://i0.hdslb.com/bfs/openplatform/a2f19cc986456e64bc4764428c92782ce3ee9c10.bin', 'https://i0.hdslb.com/bfs/openplatform/c4ef87cf618956cfa9ac24d6466ee54201b73131.bin', 'https://i0.hdslb.com/bfs/openplatform/985c4d3500a03a1b10e4c8114c83ca72a51de265.bin', 'https://i0.hdslb.com/bfs/openplatform/c4522b84b898c29ca04eb2b1b0f9623aac859c7d.bin', 'https://i0.hdslb.com/bfs/openplatform/8aa80dcf93b7610d5664f673639e5c22284834ef.bin', 'https://i0.hdslb.com/bfs/openplatform/b1c4c689fb33d9d6f4f98f5ac20ca9989b37c646.bin', 'https://i0.hdslb.com/bfs/openplatform/7cb1880bffe82095ebc84db43d6b31da571964a7.bin', 'https://i0.hdslb.com/bfs/openplatform/448b11aa137a7ece42887f271616ad3159fa2647.bin', 'https://i0.hdslb.com/bfs/openplatform/3e4cee42f1d7c8eafc2da64ec29e420d433e314a.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '096-最弱の魔\最弱淫魔の不良更正記 Ver1.00.zip',
+    types: [{
+      description: '096-最弱の魔\最弱淫魔の不良更正記 Ver1.00.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

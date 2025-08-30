@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 158-大胃王\大胃王机翻_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：158-大胃王\大胃王机翻_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/a75228f42d76a842a913adf933d531fef295b26f.bin', 'https://i0.hdslb.com/bfs/openplatform/166d4899e872f500661e952515e0b450eb477ce1.bin', 'https://i0.hdslb.com/bfs/openplatform/6ce5ccb50bf41a34d96d3e5ed2f657bff0125895.bin', 'https://i0.hdslb.com/bfs/openplatform/b67ca6a890fdf5a8ca2cb80f534ae4aab548763e.bin', 'https://i0.hdslb.com/bfs/openplatform/a7250fdf86de88c47030be22b29bbef588b62302.bin', 'https://i0.hdslb.com/bfs/openplatform/232705c30be504e4d6ad98ea3f0ba0484cf8a5c5.bin', 'https://i0.hdslb.com/bfs/openplatform/a142169517644655900dd220d24f70260b821d6e.bin', 'https://i0.hdslb.com/bfs/openplatform/9858db59d0f942f8c908a6c54954e81919a6cbc5.bin', 'https://i0.hdslb.com/bfs/openplatform/490ae14fafd1ae510ae9e5ac342a8e1f8cf5d60d.bin', 'https://i0.hdslb.com/bfs/openplatform/231541b616680883ee79a935c4e0cf5d11739fa7.bin', 'https://i0.hdslb.com/bfs/openplatform/6e9dc40b7c6a7e04acc812df5b7fa3c7d2bb59a6.bin', 'https://i0.hdslb.com/bfs/openplatform/649899127e2c2e306fb66ed1e95b47967e62bbba.bin', 'https://i0.hdslb.com/bfs/openplatform/59bf9961ca817278698fe6e83ae4875d0a6f365b.bin', 'https://i0.hdslb.com/bfs/openplatform/b4fd62a559650df989ad72bc73679b756d251b43.bin', 'https://i0.hdslb.com/bfs/openplatform/02bada68c226e9257e406b875d9b9a2ec59c6f14.bin', 'https://i0.hdslb.com/bfs/openplatform/3f19de35e2fd0dfe106eb819305cf2a84c3ff437.bin', 'https://i0.hdslb.com/bfs/openplatform/4b37c374766bc7d13eba15b2a4260b279f5c6e31.bin', 'https://i0.hdslb.com/bfs/openplatform/aab98c82a2cc9500685a61583a2815ccb9b21609.bin', 'https://i0.hdslb.com/bfs/openplatform/b16de638a54d4027c6e8cd865ca7b1f1141c6bd9.bin', 'https://i0.hdslb.com/bfs/openplatform/ffee65c88c568f11f2096d6cbda9c50f393c9e93.bin', 'https://i0.hdslb.com/bfs/openplatform/00b2af64fc9893d72969ee6d8246a8ca61f8aaf7.bin', 'https://i0.hdslb.com/bfs/openplatform/91b7fcb6982e8f5bb80b92440b3b5953f4799310.bin', 'https://i0.hdslb.com/bfs/openplatform/23d03b1693038edd1743d9f4d268fc2d8a06c0c0.bin', 'https://i0.hdslb.com/bfs/openplatform/61153412e562352a446803ebd248833f957cc098.bin', 'https://i0.hdslb.com/bfs/openplatform/91ff26f615987393a93c05d1cb4cbabc4f422423.bin', 'https://i0.hdslb.com/bfs/openplatform/71708b1cbbdc2f81586989b350e29e04efb97717.bin', 'https://i0.hdslb.com/bfs/openplatform/997b49952d0d6c9e65eb68cf8a3dc30cfdcfc133.bin', 'https://i0.hdslb.com/bfs/openplatform/7b931ba801f0490599360fe78dea14cbe870796f.bin', 'https://i0.hdslb.com/bfs/openplatform/883b17dc6eee575cf0a8488f3acfdce3ad43a899.bin', 'https://i0.hdslb.com/bfs/openplatform/3efa2ce9999ff5e3e70e0dc03c5ff654c3dae8ed.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '158-大胃王\大胃王机翻_Windows.7z',
+    types: [{
+      description: '158-大胃王\大胃王机翻_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

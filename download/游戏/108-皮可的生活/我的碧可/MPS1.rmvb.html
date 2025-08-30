@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 108-皮可的生活\我的碧可\MPS1.rmvb</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：108-皮可的生活\我的碧可\MPS1.rmvb</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/f6a0e447ff6e19e3dbd1c021a2026f3b598bb830.bin', 'https://i0.hdslb.com/bfs/openplatform/79af5c9c2f7794248b5f6b621bd26951c2f3aa97.bin', 'https://i0.hdslb.com/bfs/openplatform/77e96a101af3350c881d64164951d4ac99932c2d.bin', 'https://i0.hdslb.com/bfs/openplatform/1a4f8205549cab949c42b322a013785c076ecfde.bin', 'https://i0.hdslb.com/bfs/openplatform/f3e3821ccf805c2c5593bb45970aee252ac2b464.bin', 'https://i0.hdslb.com/bfs/openplatform/aeae92119e3ea6df3958c3de6184e26f3c5b38c7.bin', 'https://i0.hdslb.com/bfs/openplatform/1a26426dcab19a963ed06a21561f0b66248b3641.bin', 'https://i0.hdslb.com/bfs/openplatform/4c4cfc1f361dfd17cfba655ad5346aac4577948b.bin', 'https://i0.hdslb.com/bfs/openplatform/a89837c18af0c4d2a3a876a35c31c91c1e2d01e2.bin', 'https://i0.hdslb.com/bfs/openplatform/fd7a00664a460a28a7fbb6089919cdc2c11b12b6.bin', 'https://i0.hdslb.com/bfs/openplatform/b12d51d7e0bd5490445f07b578af749c5006f843.bin', 'https://i0.hdslb.com/bfs/openplatform/10cadbf0c41c04f138263ec7aafe9ddce14d8756.bin', 'https://i0.hdslb.com/bfs/openplatform/c3f13952e42df9a7f4065f95f17ea562af2fdebe.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '108-皮可的生活\我的碧可\MPS1.rmvb',
+    types: [{
+      description: '108-皮可的生活\我的碧可\MPS1.rmvb 文件',
+      accept: {'*/*': ['.rmvb']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

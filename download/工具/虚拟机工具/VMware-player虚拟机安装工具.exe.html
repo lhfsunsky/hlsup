@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 工具\虚拟机工具\VMware-player虚拟机安装工具.exe</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：工具\虚拟机工具\VMware-player虚拟机安装工具.exe</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/8d64ed0b58537a1e2555ef2e8122c3e3a4ca2892.bin', 'https://i0.hdslb.com/bfs/openplatform/b174541912ed2297ab00e7ffb56727f165c5a4be.bin', 'https://i0.hdslb.com/bfs/openplatform/f6d741dc2e77c3580e5e652a83da8981cc58d3e1.bin', 'https://i0.hdslb.com/bfs/openplatform/d2042e5fd403a9cffc30760de9033df6b6bdd15f.bin', 'https://i0.hdslb.com/bfs/openplatform/5a51ea8f31d6eab4f733fd7d254c92f319a9bc73.bin', 'https://i0.hdslb.com/bfs/openplatform/f8d11030027267e5ba8937b40cd6e096cd4d4ea1.bin', 'https://i0.hdslb.com/bfs/openplatform/4e57848718fa22f9f1aa7000065b0d0b266dec87.bin', 'https://i0.hdslb.com/bfs/openplatform/6f119006f0cb3fa7ec8f90fdfab6d2a33972fddd.bin', 'https://i0.hdslb.com/bfs/openplatform/2f721510382e0e4b4c0a71eedf9e1993d775e73b.bin', 'https://i0.hdslb.com/bfs/openplatform/8eeef5d42c4fab7d9e59646323ce5839ff41244d.bin', 'https://i0.hdslb.com/bfs/openplatform/fdad7febc693d16708106a6064268ddf5ccb3b30.bin', 'https://i0.hdslb.com/bfs/openplatform/70afc01ccae3fc2c8c3511ba8f2664cc60f73d7d.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '工具\虚拟机工具\VMware-player虚拟机安装工具.exe',
+    types: [{
+      description: '工具\虚拟机工具\VMware-player虚拟机安装工具.exe 文件',
+      accept: {'*/*': ['.exe']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

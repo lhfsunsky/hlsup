@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 119-Erotas2\EROTAS2 -Ordeal from Fairy-.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：119-Erotas2\EROTAS2 -Ordeal from Fairy-.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/44deef0916f72c87a02d29d14f5b48abb358de02.bin', 'https://i0.hdslb.com/bfs/openplatform/b7cff58cf9305e4cac778ff1b6c3365ff2b961c3.bin', 'https://i0.hdslb.com/bfs/openplatform/1c1642d8a89de5290abb5645c10c638a1fb543e3.bin', 'https://i0.hdslb.com/bfs/openplatform/75e8d05fef0633f4eb728dcffe1002b03785f692.bin', 'https://i0.hdslb.com/bfs/openplatform/982e05494b7d41b2b9e2d14dca07558ec8178e89.bin', 'https://i0.hdslb.com/bfs/openplatform/303330e2bfa8637073b3bc7c6e06dad1aa300688.bin', 'https://i0.hdslb.com/bfs/openplatform/c79082278725066793a479cc637bc2d9b6d43a0c.bin', 'https://i0.hdslb.com/bfs/openplatform/288eb2424329d7c7dbacb819c07f11d7667b589b.bin', 'https://i0.hdslb.com/bfs/openplatform/78a4cde7fe37b781f9b480ae7ec3ebfc0a0a7a4d.bin', 'https://i0.hdslb.com/bfs/openplatform/2a17ed821905427bc0105d865d3a755139fb8523.bin', 'https://i0.hdslb.com/bfs/openplatform/d86020a7cbae2f430c1c49969a659cdbbbeb55a0.bin', 'https://i0.hdslb.com/bfs/openplatform/cf850179fae7a9a5faaa18ed72705c6776b3b20e.bin', 'https://i0.hdslb.com/bfs/openplatform/29a4a83092119284adc1bf1de926d61f8b09deda.bin', 'https://i0.hdslb.com/bfs/openplatform/b709574ebace709d7eae70086da18d61618af93c.bin', 'https://i0.hdslb.com/bfs/openplatform/3cc34121d55ab1bf17b23307ad5bdb447676445d.bin', 'https://i0.hdslb.com/bfs/openplatform/b73b59ac5d2dec5a2ba86772cf62ab5ed0b42824.bin', 'https://i0.hdslb.com/bfs/openplatform/10ad934654cc1a13c9e910f4fd4f3ce1cfd0ba84.bin', 'https://i0.hdslb.com/bfs/openplatform/f80b790b5e05c3f16a4e908685115988ac29e9ed.bin', 'https://i0.hdslb.com/bfs/openplatform/f842deb5adc5b1f6cdbd41a7eac73a90cb1373d5.bin', 'https://i0.hdslb.com/bfs/openplatform/0a02ab58b4dd261940c667ccbac2114d76aa6702.bin', 'https://i0.hdslb.com/bfs/openplatform/76b34e57685ed3c7ed08b5a36977144a44ccab98.bin', 'https://i0.hdslb.com/bfs/openplatform/b2c53b0e5cd6d92654d436871cb45c06a309668d.bin', 'https://i0.hdslb.com/bfs/openplatform/244fd5d07ecbd5cfa3bedfd63390d08e242f50fa.bin', 'https://i0.hdslb.com/bfs/openplatform/ea9b7191e84e0e2ec9b529bed152d18c49bb3639.bin', 'https://i0.hdslb.com/bfs/openplatform/c8faed2f96f507e2ca003b059a0f0ef4dbd19082.bin', 'https://i0.hdslb.com/bfs/openplatform/cd744cedca3ca4e8b24107068421e5d32a85a8d4.bin', 'https://i0.hdslb.com/bfs/openplatform/d4192b3bdb224a508608d448864c1ea3d755a6b6.bin', 'https://i0.hdslb.com/bfs/openplatform/a262d8459b5adf3cd364201ca8148a22d877a999.bin', 'https://i0.hdslb.com/bfs/openplatform/d1709e6b614915bac81b0f3717d12eed7d048eea.bin', 'https://i0.hdslb.com/bfs/openplatform/86a41e4ea9818829c68582d6aae17444c021e3f0.bin', 'https://i0.hdslb.com/bfs/openplatform/e4bcd97061f018023927e9103bf87901844c2cdf.bin', 'https://i0.hdslb.com/bfs/openplatform/184af810680f09e9be9fe7fad0f57badbae55613.bin', 'https://i0.hdslb.com/bfs/openplatform/c0bca80b1c1e00769b9c2a4dc181566da37da31d.bin', 'https://i0.hdslb.com/bfs/openplatform/3be046faf364a46c6fadb619df9946ddfc12351a.bin', 'https://i0.hdslb.com/bfs/openplatform/c8714f2104ca9278b2c0d3d2be81a09b8a5ae622.bin', 'https://i0.hdslb.com/bfs/openplatform/d00a889031553e164f3f48ea674da4d05505cced.bin', 'https://i0.hdslb.com/bfs/openplatform/5feace0ead880ecee68dc0173d18f8aac8f36855.bin', 'https://i0.hdslb.com/bfs/openplatform/1bcfc210ccc5d4c84f390c2bb1bd478e2c6c5b8d.bin', 'https://i0.hdslb.com/bfs/openplatform/864feeabc38a63fd605b55d9e565086ef7248307.bin', 'https://i0.hdslb.com/bfs/openplatform/6362aa45ddd341cab20be2a8643c9d55bcadeab1.bin', 'https://i0.hdslb.com/bfs/openplatform/487c23c93b94b9bd39370bd66c879379a3e9eabd.bin', 'https://i0.hdslb.com/bfs/openplatform/c89ddb250239d4cb26297cd302e80e0c3ca93ba2.bin', 'https://i0.hdslb.com/bfs/openplatform/136a0209a423663fb28893c35f4114fd86bd2d98.bin', 'https://i0.hdslb.com/bfs/openplatform/438bc4a3622574a479e677ada4ff4161d1115386.bin', 'https://i0.hdslb.com/bfs/openplatform/7013a57cec2f021db049c0f4ec1a551d36595b26.bin', 'https://i0.hdslb.com/bfs/openplatform/4b29449a0d71ae5c72795fc15e9e6e49458ecfb9.bin', 'https://i0.hdslb.com/bfs/openplatform/dd3c8c202957b0364ed6255dac40eb161473a39b.bin', 'https://i0.hdslb.com/bfs/openplatform/4b9983aaccd3105d02ba6880f1602ae98b340d5a.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '119-Erotas2\EROTAS2 -Ordeal from Fairy-.zip',
+    types: [{
+      description: '119-Erotas2\EROTAS2 -Ordeal from Fairy-.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

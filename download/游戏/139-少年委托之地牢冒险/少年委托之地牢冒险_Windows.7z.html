@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 139-少年委托之地牢冒险\少年委托之地牢冒险_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：139-少年委托之地牢冒险\少年委托之地牢冒险_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/f4205dd030ddbdf69313cef1c0e007a3d739ebfc.bin', 'https://i0.hdslb.com/bfs/openplatform/9a8f11a7563916c33b0610b5f94a45e53586d20d.bin', 'https://i0.hdslb.com/bfs/openplatform/154c8719c3251eba15e48c572f36db7acf9bf321.bin', 'https://i0.hdslb.com/bfs/openplatform/bbbc083110e089699829e093d03442fe48d7d9d8.bin', 'https://i0.hdslb.com/bfs/openplatform/86c74a53fe6b67a3a420b0750b455c0226fe9d8d.bin', 'https://i0.hdslb.com/bfs/openplatform/b6a3b45e1e8da93f45cdddca786d5e7b6678acf4.bin', 'https://i0.hdslb.com/bfs/openplatform/5f67252bcbf7cdc5bf038925763d325ff497bcec.bin', 'https://i0.hdslb.com/bfs/openplatform/289bfa966fd1e8232b859d792cf086248c368d0b.bin', 'https://i0.hdslb.com/bfs/openplatform/588cd685a76d35d80002777c0c3f2914c458fa11.bin', 'https://i0.hdslb.com/bfs/openplatform/39f047b013b265678e80a20bac69e66649092694.bin', 'https://i0.hdslb.com/bfs/openplatform/f6c5b93a4ae06bbcd62d667d97dad49772d37626.bin', 'https://i0.hdslb.com/bfs/openplatform/5b1c1759c4619e80e17331e254c4ed8109f09db1.bin', 'https://i0.hdslb.com/bfs/openplatform/ee2735d7f784dff82989bc2228fb972460632e76.bin', 'https://i0.hdslb.com/bfs/openplatform/00695db8a7e76242a521dfa67e3d8242e6585efc.bin', 'https://i0.hdslb.com/bfs/openplatform/aace406e7a5665049154ee519bfc65addce33dd1.bin', 'https://i0.hdslb.com/bfs/openplatform/1ab6d3dca75fb18ad8cc89ca8cc193a4425eb9bd.bin', 'https://i0.hdslb.com/bfs/openplatform/51e1c42adadada51a09503e26bf638365a4b8e9a.bin', 'https://i0.hdslb.com/bfs/openplatform/591135948836d5fabfb6d2114b9e248afcfe26e1.bin', 'https://i0.hdslb.com/bfs/openplatform/abc31c964c295e97041bb8f4eb4807b0974d0fa0.bin', 'https://i0.hdslb.com/bfs/openplatform/972e644e03bebb74458dab58b83e40f24c4c2dca.bin', 'https://i0.hdslb.com/bfs/openplatform/e1b5f968d1f97e4a93959ae2682e91e80c378a4e.bin', 'https://i0.hdslb.com/bfs/openplatform/5887808d71eee01c45b4373d2d6c9506cd965e17.bin', 'https://i0.hdslb.com/bfs/openplatform/4982dced0903f047d5a626962538addb2532a528.bin', 'https://i0.hdslb.com/bfs/openplatform/f3cad06d40bd6633105543cb0cd4f6858440cfa3.bin', 'https://i0.hdslb.com/bfs/openplatform/dbb620a1b78ca95fa9c7b5811a9ad9350757f5e6.bin', 'https://i0.hdslb.com/bfs/openplatform/bb6701a837f993a27ee9de1aa37ce2a2a1179afb.bin', 'https://i0.hdslb.com/bfs/openplatform/6ec03c56dd9ff7c526c2ad376f4d0300f73f324b.bin', 'https://i0.hdslb.com/bfs/openplatform/dc504c324cc30d4c2a8685753b40462578c7583e.bin', 'https://i0.hdslb.com/bfs/openplatform/785de788328f4e2940a49fc6895ac424c96b195c.bin', 'https://i0.hdslb.com/bfs/openplatform/5921c573c7061152ad34832926a95d84d66ee793.bin', 'https://i0.hdslb.com/bfs/openplatform/0055611ffc1b12e88bcfa0f88d68058bf586b55b.bin', 'https://i0.hdslb.com/bfs/openplatform/91ff0241c21f33c9f198ea3a4168db01ad8d1063.bin', 'https://i0.hdslb.com/bfs/openplatform/e51461f2049e811d7249f494ed1c265020018705.bin', 'https://i0.hdslb.com/bfs/openplatform/49762f3d26ee9274e0f506447ccae7643722add5.bin', 'https://i0.hdslb.com/bfs/openplatform/cdd2e7df3e4b9d65ab47fa2252c9038e10517975.bin', 'https://i0.hdslb.com/bfs/openplatform/6bd7206bd91cd7295cba534c1d04a1c8f72a6d12.bin', 'https://i0.hdslb.com/bfs/openplatform/eec62246a6e78ec1fd81ce3a4edf9cc50d705bc5.bin', 'https://i0.hdslb.com/bfs/openplatform/4961dcbcdebeca73e243e6acc060566eee82b8e1.bin', 'https://i0.hdslb.com/bfs/openplatform/13595b84c010d4cc4f54503e875a4917f92cabfb.bin', 'https://i0.hdslb.com/bfs/openplatform/bdedcc26a3122d239c5b8518503dde4c6d1fff18.bin', 'https://i0.hdslb.com/bfs/openplatform/c9c46d51ee3bb6d8ea204ded3e8379137c7deb86.bin', 'https://i0.hdslb.com/bfs/openplatform/d371ba1d3c3510b93e0fa28bbe811fd67c0956a9.bin', 'https://i0.hdslb.com/bfs/openplatform/64f1d63e8359f78de4cd938af9b679c78f803024.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '139-少年委托之地牢冒险\少年委托之地牢冒险_Windows.7z',
+    types: [{
+      description: '139-少年委托之地牢冒险\少年委托之地牢冒险_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

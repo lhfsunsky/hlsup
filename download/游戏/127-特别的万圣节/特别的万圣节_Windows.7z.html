@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 127-特别的万圣节\特别的万圣节_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：127-特别的万圣节\特别的万圣节_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/bb727c1fa8c9c7322e66bf1560fded5c20bbabc6.bin', 'https://i0.hdslb.com/bfs/openplatform/a7086b8092185d0dd389f7aeb84179c42e8fee25.bin', 'https://i0.hdslb.com/bfs/openplatform/972b6f5ca8ae0ae358d3c8f6ed5405b7f752fd58.bin', 'https://i0.hdslb.com/bfs/openplatform/3630110750da150071ce32beef4857baea2445a1.bin', 'https://i0.hdslb.com/bfs/openplatform/30189a3b873e817e486a812dac8cbe86aa288867.bin', 'https://i0.hdslb.com/bfs/openplatform/3053327a9b3dabd7a21ac17cd7935119801adee8.bin', 'https://i0.hdslb.com/bfs/openplatform/ab0b29bcccd6ee948041bfc0b9026c7398b6eeba.bin', 'https://i0.hdslb.com/bfs/openplatform/d638f0e25e9d98f99465a875b6cf7d668cc77962.bin', 'https://i0.hdslb.com/bfs/openplatform/9d0ed3d9a068bb27e0d04ef41380566192ac1ee2.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '127-特别的万圣节\特别的万圣节_Windows.7z',
+    types: [{
+      description: '127-特别的万圣节\特别的万圣节_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

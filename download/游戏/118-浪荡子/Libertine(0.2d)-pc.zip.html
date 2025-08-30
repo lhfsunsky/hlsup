@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 118-浪荡子\Libertine(0.2d)-pc.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：118-浪荡子\Libertine(0.2d)-pc.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/0cba3aa90fb83f42062264c332467ce8bae7392a.bin', 'https://i0.hdslb.com/bfs/openplatform/89c9297255c25c2e750d68753d382391309fe577.bin', 'https://i0.hdslb.com/bfs/openplatform/f4021036cf44c7f7fd7ae11bd68a41000abfb9e3.bin', 'https://i0.hdslb.com/bfs/openplatform/ee763f98236ee33a8b2f2ec97bb529507d8683f1.bin', 'https://i0.hdslb.com/bfs/openplatform/e15a0609d2e6a02283df545e9dc70e4fc04c8d7f.bin', 'https://i0.hdslb.com/bfs/openplatform/60eea80fe23e482903eec674b66b81409e796c93.bin', 'https://i0.hdslb.com/bfs/openplatform/8d0612f000971d733e9e251188d04b77c9e6734c.bin', 'https://i0.hdslb.com/bfs/openplatform/d84974e3a9460bd5b45362f3594df1fb09e1d88a.bin', 'https://i0.hdslb.com/bfs/openplatform/1e7df6efc1a3e30786fab70a2a0b2df3db500a4b.bin', 'https://i0.hdslb.com/bfs/openplatform/b8e92400cfe5076db5d65bcaa34a534b1816e761.bin', 'https://i0.hdslb.com/bfs/openplatform/ad6d0c55bda21c2f5d30e53c3fae3d43912020fe.bin', 'https://i0.hdslb.com/bfs/openplatform/501e8f7022f77c1c65798a82e43485bbb41fb3b1.bin', 'https://i0.hdslb.com/bfs/openplatform/1a312de0097846992f7f7e3fcec09f1d54e1ebff.bin', 'https://i0.hdslb.com/bfs/openplatform/28f2b24e1c6eb76cbe6b50007c5ba6f10b1c8565.bin', 'https://i0.hdslb.com/bfs/openplatform/31857953c6f226c2a59b5734beb9b441cdf9c0ab.bin', 'https://i0.hdslb.com/bfs/openplatform/8906c327fba220fcca0bb7065242128c07994d95.bin', 'https://i0.hdslb.com/bfs/openplatform/7c61bb0872b21206b464bfc9ef203d1c2dc634d1.bin', 'https://i0.hdslb.com/bfs/openplatform/20adf549094db1267972eb5cc0102195febda7ae.bin', 'https://i0.hdslb.com/bfs/openplatform/97c81fca76f40f27d208fd3dc56d61446eaa6aae.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '118-浪荡子\Libertine(0.2d)-pc.zip',
+    types: [{
+      description: '118-浪荡子\Libertine(0.2d)-pc.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

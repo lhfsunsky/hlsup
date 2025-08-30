@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 118-浪荡子\libertine02.android.apk</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：118-浪荡子\libertine02.android.apk</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/b5da89e28417241b31aa4ce6cc627678530f360f.bin', 'https://i0.hdslb.com/bfs/openplatform/d38b061d31af726a25456f2d504a7ff5d979ab9d.bin', 'https://i0.hdslb.com/bfs/openplatform/3eb8df761a99d9b1fc5ec112be83884fe4d8f95b.bin', 'https://i0.hdslb.com/bfs/openplatform/7e033a0342d32cf88e81c310cca0b3c4e51eebdb.bin', 'https://i0.hdslb.com/bfs/openplatform/fca4dff03db9a5cfdea467d4f9c2df6fa7565bcc.bin', 'https://i0.hdslb.com/bfs/openplatform/af1efb96e49d99dd1485883250f4afc88ed66d54.bin', 'https://i0.hdslb.com/bfs/openplatform/bb31b58261d353420f4b77843775549c686a60ae.bin', 'https://i0.hdslb.com/bfs/openplatform/e51f61f7c5a462015db0b53105e40da6a45207a2.bin', 'https://i0.hdslb.com/bfs/openplatform/df4c4d589505fdadc81016e04fea898b82626f2e.bin', 'https://i0.hdslb.com/bfs/openplatform/4f3a51a2eaaf5d926a7009205fe90afaacddfc27.bin', 'https://i0.hdslb.com/bfs/openplatform/04827dffd2e1365165a1773f35e52637e6905b01.bin', 'https://i0.hdslb.com/bfs/openplatform/b143500c29dc0625b624fe985e8f1f61e84c6468.bin', 'https://i0.hdslb.com/bfs/openplatform/80acc1624092b0de7b754dabda6d29970d627d53.bin', 'https://i0.hdslb.com/bfs/openplatform/6d6dcd806df824955ce7cfd0569681cce6ce7ae6.bin', 'https://i0.hdslb.com/bfs/openplatform/7d795a7355e6c77f3e93b16d377eaa942811c2f7.bin', 'https://i0.hdslb.com/bfs/openplatform/1e008c26e21d1a7611d51a7a75b09e68572c4d94.bin', 'https://i0.hdslb.com/bfs/openplatform/66206973561c83968e58635e963edd4656705dd9.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '118-浪荡子\libertine02.android.apk',
+    types: [{
+      description: '118-浪荡子\libertine02.android.apk 文件',
+      accept: {'*/*': ['.apk']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

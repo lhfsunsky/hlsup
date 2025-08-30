@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 111-hadaka\Hadaka光驱版_Windows\hadaka.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：111-hadaka\Hadaka光驱版_Windows\hadaka.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/d99d4e482c9d98447c448e3beab54695f546253d.bin', 'https://i0.hdslb.com/bfs/openplatform/bec20c89daf77120cdcd5c9bff4b4f9922bf1c71.bin', 'https://i0.hdslb.com/bfs/openplatform/490020a468f11e531a30f029366d644c81520af1.bin', 'https://i0.hdslb.com/bfs/openplatform/3d95fe2405c3958254e48a4d62c3df326fc79053.bin', 'https://i0.hdslb.com/bfs/openplatform/24a13975fa4aaf53261703e9c0ca47142a21f025.bin', 'https://i0.hdslb.com/bfs/openplatform/06356ebf79e63bda1b541adbb1f2a4d7fa90ab90.bin', 'https://i0.hdslb.com/bfs/openplatform/c9e52a16e595b42ef0f02b0727c036f1c27d070a.bin', 'https://i0.hdslb.com/bfs/openplatform/23f19d39f6056acbda85c458925ddf7d5207c423.bin', 'https://i0.hdslb.com/bfs/openplatform/ff9dbb809202d9fb12b6374da09091e860db51d4.bin', 'https://i0.hdslb.com/bfs/openplatform/fdfa11c4e6bd86641675b95cbe51938f089cf284.bin', 'https://i0.hdslb.com/bfs/openplatform/be697172a36bf9069ea9069b0fe9f677c502503f.bin', 'https://i0.hdslb.com/bfs/openplatform/a2f0bfe7a8359975363d4807b1b39e2f7f187725.bin', 'https://i0.hdslb.com/bfs/openplatform/8417781ab3bbaa8c1d78f6568df2121962c9a741.bin', 'https://i0.hdslb.com/bfs/openplatform/2f62c24a6589f258084f181efb5dfc0bfc89395f.bin', 'https://i0.hdslb.com/bfs/openplatform/807654afafebae1dfc24ea4545d49c09a10f68af.bin', 'https://i0.hdslb.com/bfs/openplatform/174522ed3901ee784b8d97ea1fb636d4e86e988f.bin', 'https://i0.hdslb.com/bfs/openplatform/525a98506270407ea3dd38ab396c924627275167.bin', 'https://i0.hdslb.com/bfs/openplatform/d3236f1f9f9b0873f551882f169e50f19229c0a7.bin', 'https://i0.hdslb.com/bfs/openplatform/9c280f16bbb940949955bc56d4a5998f50fc1c85.bin', 'https://i0.hdslb.com/bfs/openplatform/251b4a00d28667f215edb68d9014864266811c62.bin', 'https://i0.hdslb.com/bfs/openplatform/509a070032cd2bc50cc5a2d84553fb2d6f1ee6c2.bin', 'https://i0.hdslb.com/bfs/openplatform/c888f188bdc4cc3220b47797622d31bab15de02f.bin', 'https://i0.hdslb.com/bfs/openplatform/ad182a62e450eb74361e23c33c85185f2a6abf89.bin', 'https://i0.hdslb.com/bfs/openplatform/bd4b2f8076df6f7144c44bddf1b78a5740dd1c9c.bin', 'https://i0.hdslb.com/bfs/openplatform/afc38ca8768e7a6a6339e208dd65d25865a8f0b4.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '111-hadaka\Hadaka光驱版_Windows\hadaka.zip',
+    types: [{
+      description: '111-hadaka\Hadaka光驱版_Windows\hadaka.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

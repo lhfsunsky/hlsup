@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 091-Flatcheez 3\Flatcheez 3 (English).zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：091-Flatcheez 3\Flatcheez 3 (English).zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/a68155aede839120f5839bd031c899c78b7dc43e.bin', 'https://i0.hdslb.com/bfs/openplatform/b370fcb988322cb761154e0f224010cdaf42babe.bin', 'https://i0.hdslb.com/bfs/openplatform/76f1eacac121ed5b17f72ad182a0fe30e1866308.bin', 'https://i0.hdslb.com/bfs/openplatform/bf7530ee39c9eae651e9bd7a7acbb72d974ff311.bin', 'https://i0.hdslb.com/bfs/openplatform/e16ce90ca0301f71d073e9f8c9cd5d009b5a453b.bin', 'https://i0.hdslb.com/bfs/openplatform/641b75fd798b633abe29b3508013bc417db370a8.bin', 'https://i0.hdslb.com/bfs/openplatform/4baa9f1e19f386aedb543cc66e7286b5ae710a2a.bin', 'https://i0.hdslb.com/bfs/openplatform/b0238198e78f68d496ae93ef179a1d66e5c880ac.bin', 'https://i0.hdslb.com/bfs/openplatform/603f81dd3faa9651e86a04c5bddcfcb9d3d583e5.bin', 'https://i0.hdslb.com/bfs/openplatform/d60722c92c44aac27c86d18d5c0c812990dcd5ac.bin', 'https://i0.hdslb.com/bfs/openplatform/294c82ea4ebd0f1df7f8eba0434b6ba001e4ec3f.bin', 'https://i0.hdslb.com/bfs/openplatform/2060b1e41e76dc2f7807d91ad9a13fd1bb821fc9.bin', 'https://i0.hdslb.com/bfs/openplatform/0c2fb5707afedf2940770bf4eb93257eac0d31d9.bin', 'https://i0.hdslb.com/bfs/openplatform/ea5416262d8a125348c1e8cac48ec1091cd59830.bin', 'https://i0.hdslb.com/bfs/openplatform/845690a90ca4daaed2a78f735f705782b37d1541.bin', 'https://i0.hdslb.com/bfs/openplatform/926cac5bc2540d7d721d7cbe6344bae8d9f4c1ea.bin', 'https://i0.hdslb.com/bfs/openplatform/878cbcf733ec3f57209e61391d1c9298eeb1317f.bin', 'https://i0.hdslb.com/bfs/openplatform/88a8de6395540fc4c090863f91c022b243fe8ee7.bin', 'https://i0.hdslb.com/bfs/openplatform/7a898d6322f884305ac96e05ea2c6344a63c9f7d.bin', 'https://i0.hdslb.com/bfs/openplatform/ef2a66423d191857e114ace2d3a4080e0c7ba3a6.bin', 'https://i0.hdslb.com/bfs/openplatform/d6ddda05a884e53f65eb11d5c1b374b4b7ad47d6.bin', 'https://i0.hdslb.com/bfs/openplatform/93ab73f909a7a4212133454d529158fb1e609b15.bin', 'https://i0.hdslb.com/bfs/openplatform/2d8d78677f5172f9ca61fbd51d3259b51814bf5b.bin', 'https://i0.hdslb.com/bfs/openplatform/4fb03acbc9ac6bc82e8a122b70e61b0602e65476.bin', 'https://i0.hdslb.com/bfs/openplatform/0af2cd2d699592ffb1d6b7a1e5d1d5c8ecb40b30.bin', 'https://i0.hdslb.com/bfs/openplatform/234a25b632bdda1bd95a44eea8eb4ef0aeaea0c4.bin', 'https://i0.hdslb.com/bfs/openplatform/c494d89539c5c27604ed179f36171a438b69807b.bin', 'https://i0.hdslb.com/bfs/openplatform/159691d79f9ab9eed42df8330e5af0a57ddb9329.bin', 'https://i0.hdslb.com/bfs/openplatform/d15cd7b93bc48f660647d273323197709e882b79.bin', 'https://i0.hdslb.com/bfs/openplatform/61d0a1ecf4b7c8d4203a7d277776e6970e3f5ea3.bin', 'https://i0.hdslb.com/bfs/openplatform/c7298d6244f87746c109f9309128e9ae1034ae88.bin', 'https://i0.hdslb.com/bfs/openplatform/f71503cd68b4b3ac70a5ca05e0bdee1c3e69343d.bin', 'https://i0.hdslb.com/bfs/openplatform/1c6830ee831867f99691de4a4c1275a90160afee.bin', 'https://i0.hdslb.com/bfs/openplatform/ab4e518cde4203e05433e0972b4b5c36ed53334f.bin', 'https://i0.hdslb.com/bfs/openplatform/4c1a70e4b3c8201664be156a5472d64290e99848.bin', 'https://i0.hdslb.com/bfs/openplatform/54e716a9c62195010b1b538a6241a64f1df501c7.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '091-Flatcheez 3\Flatcheez 3 (English).zip',
+    types: [{
+      description: '091-Flatcheez 3\Flatcheez 3 (English).zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 105-EA\EmilysAdventure-1.0.1-mac.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：105-EA\EmilysAdventure-1.0.1-mac.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/8afd9e3ef95924348619d0666e4fe444b5f7688f.bin', 'https://i0.hdslb.com/bfs/openplatform/1d1952b1b2d35b5fe0277ebed284aeb6525c201b.bin', 'https://i0.hdslb.com/bfs/openplatform/b2f0647826ca1f177bd64b5e3f699b6e089bccfa.bin', 'https://i0.hdslb.com/bfs/openplatform/898fd1faf9fd8234d3f9926b1155d21c044d4fee.bin', 'https://i0.hdslb.com/bfs/openplatform/a4c5f3a46c26695ca63169f6cbc2db7279c93ce1.bin', 'https://i0.hdslb.com/bfs/openplatform/1592a3701d93b185dafd4772f8b30514ce0844af.bin', 'https://i0.hdslb.com/bfs/openplatform/e39702b3761b96bd3a1e108b973637ae465cb809.bin', 'https://i0.hdslb.com/bfs/openplatform/e3429000230c8758e7e21188d3b7af535e5b80f6.bin', 'https://i0.hdslb.com/bfs/openplatform/5c89017c48e6cb1f9eb85190ef1b4bb600413d83.bin', 'https://i0.hdslb.com/bfs/openplatform/f7db900b3248ce9b38a959d3eb1510125d0d20d5.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '105-EA\EmilysAdventure-1.0.1-mac.zip',
+    types: [{
+      description: '105-EA\EmilysAdventure-1.0.1-mac.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

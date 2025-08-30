@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 118-浪荡子\浪荡子0.2机翻__Windows.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：118-浪荡子\浪荡子0.2机翻__Windows.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/38472658c87b6c5610a91a1a055bf4f280dbca73.bin', 'https://i0.hdslb.com/bfs/openplatform/4aaff9d8e8e7ebc265142e7ca66786204c2f6d17.bin', 'https://i0.hdslb.com/bfs/openplatform/2c3d14d9f2cbd500e1e48ad169da33d71a74e782.bin', 'https://i0.hdslb.com/bfs/openplatform/9e556f55b7a657812cc525dc575bbb2e69186fa3.bin', 'https://i0.hdslb.com/bfs/openplatform/02e96b8860630a947319d3ce82b35738c48c5144.bin', 'https://i0.hdslb.com/bfs/openplatform/1c6ab100e7d3baf20f373194c0d57c05905f725b.bin', 'https://i0.hdslb.com/bfs/openplatform/ee95bf02cd2dd920f6c9ce7b3127d09cbcedd8f8.bin', 'https://i0.hdslb.com/bfs/openplatform/e13d5253e6c5cf93bf4b3d361f8851666d36293d.bin', 'https://i0.hdslb.com/bfs/openplatform/533948d52f2a4cbc76926bd19222e24b8696fc7a.bin', 'https://i0.hdslb.com/bfs/openplatform/a216ce1785366bab43779747b1c148a2937b29f8.bin', 'https://i0.hdslb.com/bfs/openplatform/6f9f25a03d313960757a37ccb01082745ae4aa68.bin', 'https://i0.hdslb.com/bfs/openplatform/b6c11d1af8a6b0701e2379ac579cd6b295d4ca5f.bin', 'https://i0.hdslb.com/bfs/openplatform/177384415ca0090612780ba310764a24f90d6357.bin', 'https://i0.hdslb.com/bfs/openplatform/e8ac407e40ae0bdb182a023a64ffb722fc38e079.bin', 'https://i0.hdslb.com/bfs/openplatform/2bd23f447740977de6b02d237651e9510586d76a.bin', 'https://i0.hdslb.com/bfs/openplatform/dbb13ed439a806006039f13ae08193004945b97d.bin', 'https://i0.hdslb.com/bfs/openplatform/ca4dd7d326ba5b004e3fa090816e76ee654533da.bin', 'https://i0.hdslb.com/bfs/openplatform/54e83bccb16dc91c1246c19d094577e0162d7635.bin', 'https://i0.hdslb.com/bfs/openplatform/20f4681acc1b2be079441d102921b824959b3542.bin', 'https://i0.hdslb.com/bfs/openplatform/aabc926b1e81fc365222726176215314c5f8ffd2.bin', 'https://i0.hdslb.com/bfs/openplatform/e8006b319a4b7903269d1d26adc0acd2add3e82d.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '118-浪荡子\浪荡子0.2机翻__Windows.zip',
+    types: [{
+      description: '118-浪荡子\浪荡子0.2机翻__Windows.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

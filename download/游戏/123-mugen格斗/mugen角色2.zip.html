@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 123-mugen格斗\mugen角色2.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：123-mugen格斗\mugen角色2.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/0eb2800b7152ce2e924fec4dfd8a4a82ed1b48ac.bin', 'https://i0.hdslb.com/bfs/openplatform/6aea954ce550c2c53789d9e10615d0c193e32538.bin', 'https://i0.hdslb.com/bfs/openplatform/ed33c9d574f8a8680ad3c99dc925a9eb4aa4fe61.bin', 'https://i0.hdslb.com/bfs/openplatform/9aaf60a639722288705b3a3e053088268c3bc07e.bin', 'https://i0.hdslb.com/bfs/openplatform/f28ffde53e602142341e75094e7001418b803bd2.bin', 'https://i0.hdslb.com/bfs/openplatform/b0119610494523f81ab6a780637a7278f52cb434.bin', 'https://i0.hdslb.com/bfs/openplatform/de41b5f81940fa63054047920b4a9235f8c9961f.bin', 'https://i0.hdslb.com/bfs/openplatform/2ac3b59fa4ca3369f146bdbf6e4ebb1261ba0454.bin', 'https://i0.hdslb.com/bfs/openplatform/f27e78ab385ff9434430ddd602100316e0ed4022.bin', 'https://i0.hdslb.com/bfs/openplatform/f2d80087d46e4968930e2943515c2da51033b046.bin', 'https://i0.hdslb.com/bfs/openplatform/41929d504b4a9e11906bf7523513c1cb009d7225.bin', 'https://i0.hdslb.com/bfs/openplatform/504d3875e56740a34298a73eaefcb81196f7502f.bin', 'https://i0.hdslb.com/bfs/openplatform/bc6e424dc4b4e1b8f1555443f6bdc543a4fb52be.bin', 'https://i0.hdslb.com/bfs/openplatform/da23c74be98c877730b0e832c0d8bac429c6a2fc.bin', 'https://i0.hdslb.com/bfs/openplatform/b007497e1759cf6db750d2fc5af62333524be4f6.bin', 'https://i0.hdslb.com/bfs/openplatform/056704f2c1b470223a2d052c8cdec6ca54879e6d.bin', 'https://i0.hdslb.com/bfs/openplatform/64836e1d16c1271a7af9721bdb4875cdb5a5bc4f.bin', 'https://i0.hdslb.com/bfs/openplatform/1390e3231eda9d5ed3c9544fdcabb3fe5ce20280.bin', 'https://i0.hdslb.com/bfs/openplatform/de44d80ddacf683221941ec4d5e87f3837330ac0.bin', 'https://i0.hdslb.com/bfs/openplatform/4848aad8454b40e70faba08e8e550d935d399c2b.bin', 'https://i0.hdslb.com/bfs/openplatform/eb7177506c328df24b6c9d0930e8da46362b925e.bin', 'https://i0.hdslb.com/bfs/openplatform/7965b12a575446d1aa960ab820f7599e8eb974a3.bin', 'https://i0.hdslb.com/bfs/openplatform/9e320ac983c5424ddfe4050ee94e8b34ca50ffee.bin', 'https://i0.hdslb.com/bfs/openplatform/12b02406a5f9e9df9a72d9086e62adc31231254b.bin', 'https://i0.hdslb.com/bfs/openplatform/5f67093b0ff9c2d13f7afd28b4cb0f06cfa70939.bin', 'https://i0.hdslb.com/bfs/openplatform/2e637d089d2189bd758014f69af9897d9ec00172.bin', 'https://i0.hdslb.com/bfs/openplatform/3176212b74dba051744a64ab6fe9b5e63d0d0f28.bin', 'https://i0.hdslb.com/bfs/openplatform/623894076947753c9b7146216068ffd54df18340.bin', 'https://i0.hdslb.com/bfs/openplatform/6257beeb631eb45c7749352e87020952fd272033.bin', 'https://i0.hdslb.com/bfs/openplatform/a5fd682aff272f4107721dd27fc3758d963de9af.bin', 'https://i0.hdslb.com/bfs/openplatform/4b6df9f684d90e6a5cefd546cf1c805d3ce4f0f7.bin', 'https://i0.hdslb.com/bfs/openplatform/851700047c31e3ad49527c68739a90228e1272e0.bin', 'https://i0.hdslb.com/bfs/openplatform/beffd4f0f635af2fbb296d1c26dd558d731763f6.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '123-mugen格斗\mugen角色2.zip',
+    types: [{
+      description: '123-mugen格斗\mugen角色2.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

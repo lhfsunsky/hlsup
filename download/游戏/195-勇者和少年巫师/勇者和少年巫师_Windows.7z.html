@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 195-勇者和少年巫师\勇者和少年巫师_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：195-勇者和少年巫师\勇者和少年巫师_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/5f8ba11b61077853bf1846495e0e669c11ecd2c8.bin', 'https://i0.hdslb.com/bfs/openplatform/c25e68592bb230dbbe76ad2a622fdeacecdbd454.bin', 'https://i0.hdslb.com/bfs/openplatform/ad363d556259fdde2aed94f1037d1e08165ded3c.bin', 'https://i0.hdslb.com/bfs/openplatform/8875cad75d132c08ad9ac7dc22e9aaee25de203f.bin', 'https://i0.hdslb.com/bfs/openplatform/46348abb124ee60df162e8cf5317a3715d3b8ccb.bin', 'https://i0.hdslb.com/bfs/openplatform/7d198eabfbfff2e4db3d0f8ddfe57d0bec51eda9.bin', 'https://i0.hdslb.com/bfs/openplatform/88999d3e24944d2db7b8a5d8a87478980bf1fa10.bin', 'https://i0.hdslb.com/bfs/openplatform/0be40ca972356a6a6311e08bdc8fdfa9e254c339.bin', 'https://i0.hdslb.com/bfs/openplatform/2c83ebe6276b42b1aa1d1fa36fafa807a07162f3.bin', 'https://i0.hdslb.com/bfs/openplatform/e1dc87f6399db3fb9dfe1a8b5f0b1522d26af645.bin', 'https://i0.hdslb.com/bfs/openplatform/fb6c4440b03517b139e628bd5a8cc898d17c7416.bin', 'https://i0.hdslb.com/bfs/openplatform/59a57010a29f230a926604f716ee3071cd7631a9.bin', 'https://i0.hdslb.com/bfs/openplatform/b2756e133f6f2ca0300ca3c00644e27180b56127.bin', 'https://i0.hdslb.com/bfs/openplatform/f41a8268af994d5d04146418a454aa1057a1bc09.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '195-勇者和少年巫师\勇者和少年巫师_Windows.7z',
+    types: [{
+      description: '195-勇者和少年巫师\勇者和少年巫师_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

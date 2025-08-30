@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 153-像素宝可梦\像素宝可梦6.0测试版_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：153-像素宝可梦\像素宝可梦6.0测试版_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/025f18d2c54c4a274de8148454b6b4ead720b22e.bin', 'https://i0.hdslb.com/bfs/openplatform/4e06dcc32b97664a2f19f8230126fd7713f7b394.bin', 'https://i0.hdslb.com/bfs/openplatform/48b3c4ce68a520e61a582d2e0162b573b0270d79.bin', 'https://i0.hdslb.com/bfs/openplatform/b9f7b3b5354dd6ae00ee99b7a7b227d4175b56b8.bin', 'https://i0.hdslb.com/bfs/openplatform/de5cf91234019beea6466abdb3aaadba0e52d1ef.bin', 'https://i0.hdslb.com/bfs/openplatform/61a146f1fdde2720a8856331196a237cc706b85a.bin', 'https://i0.hdslb.com/bfs/openplatform/144c7af10b754e3182672a413384a99b28e1658f.bin', 'https://i0.hdslb.com/bfs/openplatform/30d676c7cc7b98bf1b7a5bc71fad78c7d1605b0b.bin', 'https://i0.hdslb.com/bfs/openplatform/186a1f074e439cbf91aed5673aa12ebb65d2c18b.bin', 'https://i0.hdslb.com/bfs/openplatform/c2f64cf7255a586af5ab89f267bded26811429db.bin', 'https://i0.hdslb.com/bfs/openplatform/d4318a9b06d6b022a7452d5c5e7c4e945d961195.bin', 'https://i0.hdslb.com/bfs/openplatform/acd6a886bdb775e74c07b13af16a2e9ac34ed1fc.bin', 'https://i0.hdslb.com/bfs/openplatform/919275c03d56f83272b73897f24264c64a2c92fe.bin', 'https://i0.hdslb.com/bfs/openplatform/07fdaa481b2c14fd69232917adc2378ac06ed18e.bin', 'https://i0.hdslb.com/bfs/openplatform/fec498c4c8a10bedf34c6ecc63b85ca7208e9a07.bin', 'https://i0.hdslb.com/bfs/openplatform/f491305714fc616327e9be37b413df74de4a2df4.bin', 'https://i0.hdslb.com/bfs/openplatform/39aaf187512e69db6bada40a60b3fae68f24e988.bin', 'https://i0.hdslb.com/bfs/openplatform/d26a224be32a179603c23f3258d0c6d1d2c9d8e7.bin', 'https://i0.hdslb.com/bfs/openplatform/a18bd09b7fdf8ce7b2862271dc9906a015717d8f.bin', 'https://i0.hdslb.com/bfs/openplatform/99e21c649ceeeab81d4efa445fb96921eb4730be.bin', 'https://i0.hdslb.com/bfs/openplatform/ea44ef1da7451a0439ddf643e3deb04dbae02aeb.bin', 'https://i0.hdslb.com/bfs/openplatform/d7a4f8f3075cf60d0984ec98aada3a98b1f29620.bin', 'https://i0.hdslb.com/bfs/openplatform/00f8549a660302aa723e4615a67bce189ae37312.bin', 'https://i0.hdslb.com/bfs/openplatform/e8230575fd31e6515569be1adf1fdd8c54931190.bin', 'https://i0.hdslb.com/bfs/openplatform/8d801d18d46066dde7ce1946e2242e3c74099ed0.bin', 'https://i0.hdslb.com/bfs/openplatform/7616d5e8ebd1754161ceb72d027f3516fd7d2869.bin', 'https://i0.hdslb.com/bfs/openplatform/8b88a5a919524f4ddeb7e5b97c28cd249394b96c.bin', 'https://i0.hdslb.com/bfs/openplatform/ec77c9de696485d8755fccd49051fcac598451fb.bin', 'https://i0.hdslb.com/bfs/openplatform/dcf44e33a0b877ed12a34c2d85bb4051205417d3.bin', 'https://i0.hdslb.com/bfs/openplatform/fde7f6e7ba604f9f98fbb935c5bd3edc72635511.bin', 'https://i0.hdslb.com/bfs/openplatform/a4c5f59ab841b02d57f87dba5096e68d8e9ba3f3.bin', 'https://i0.hdslb.com/bfs/openplatform/879ad61125b5b20e5978243709fb968e4d9875b5.bin', 'https://i0.hdslb.com/bfs/openplatform/2200342e59a788fe8ad1f365afd7fd89508a8ee1.bin', 'https://i0.hdslb.com/bfs/openplatform/71205b3fe661c9c5de75f35a90f0ed7757e2432b.bin', 'https://i0.hdslb.com/bfs/openplatform/a8b4f81c465fac981e135fc4d5372dfa4523cc6e.bin', 'https://i0.hdslb.com/bfs/openplatform/855b732bebe340cc5d1f6facd88ee25544d01574.bin', 'https://i0.hdslb.com/bfs/openplatform/ac83205d08d99f8b8d1568cb3a54421c036e631f.bin', 'https://i0.hdslb.com/bfs/openplatform/6bf97fe399d2271a74454c0a26eaeec5085e2df9.bin', 'https://i0.hdslb.com/bfs/openplatform/2f2dabfa99cd39d8b4b7f46279e43e65e9d689fb.bin', 'https://i0.hdslb.com/bfs/openplatform/45eb299c6daf199d2cfdaa6ed2e0764cf1319862.bin', 'https://i0.hdslb.com/bfs/openplatform/ff98e3cff51a9f79d46fc513467cb62bdd3d1d8a.bin', 'https://i0.hdslb.com/bfs/openplatform/b8b0b8dbf2a97feb078da2d9d04254a9dd7bdea4.bin', 'https://i0.hdslb.com/bfs/openplatform/fcbae03991e445327697bb26bbd1927d2ded3633.bin', 'https://i0.hdslb.com/bfs/openplatform/5d9536874057bd4a82fa2acad6863d980b6dd216.bin', 'https://i0.hdslb.com/bfs/openplatform/9959ab7de56d8461a4bf6fe5edae5270cb40c6c0.bin', 'https://i0.hdslb.com/bfs/openplatform/0eaf0c94806b124e79e82692bfe70841780a3d40.bin', 'https://i0.hdslb.com/bfs/openplatform/5569d941029ed063cec45563a61bdf7c8d76c2ab.bin', 'https://i0.hdslb.com/bfs/openplatform/a055871eb17a6e1c3a66104936112769ecc0bd26.bin', 'https://i0.hdslb.com/bfs/openplatform/6e0fc2101c8450820eb834956db0531f1dd56d01.bin', 'https://i0.hdslb.com/bfs/openplatform/8eb15ec9b8e686caca9951a11c026bb8350b40e5.bin', 'https://i0.hdslb.com/bfs/openplatform/1ad62a76f84cc33899d0e996596978bddd5cbde4.bin', 'https://i0.hdslb.com/bfs/openplatform/74e99070a6e32e2b1d3922d9417db75c7a8f9fdc.bin', 'https://i0.hdslb.com/bfs/openplatform/1f7e53de5ad99d45236b6a7102754bf1ad854cfe.bin', 'https://i0.hdslb.com/bfs/openplatform/dbb6638a33f7a95999c83dd9e137c94663602573.bin', 'https://i0.hdslb.com/bfs/openplatform/52acc6ec30185884d3f6e35cae27364d5f3ee67d.bin', 'https://i0.hdslb.com/bfs/openplatform/e83260c98e7d3e30d46d6f9248379061b21f492b.bin', 'https://i0.hdslb.com/bfs/openplatform/6b1b40a3644687ffa1871efb2f9c7385a3ecb9c3.bin', 'https://i0.hdslb.com/bfs/openplatform/bb76e4e8808ac8a6799bae071fbb855849987586.bin', 'https://i0.hdslb.com/bfs/openplatform/bc7e5dadfb67c679d26395f48c455f313859efab.bin', 'https://i0.hdslb.com/bfs/openplatform/abd6a442f527140bfd7bf896497f87a132866667.bin', 'https://i0.hdslb.com/bfs/openplatform/5ab6c35efb3a71d2bdeeab9132964fe8eabe4282.bin', 'https://i0.hdslb.com/bfs/openplatform/a4c90fa300b0e3fd9fa8eb95f9162d54c8ea31c2.bin', 'https://i0.hdslb.com/bfs/openplatform/8b6bdede58d45ec907ce2398af2309a0c0350419.bin', 'https://i0.hdslb.com/bfs/openplatform/8cc519e2aa575807715fc5a758360d5945e4f377.bin', 'https://i0.hdslb.com/bfs/openplatform/ab692289fe84be56ae95f60fda336551cf1ca570.bin', 'https://i0.hdslb.com/bfs/openplatform/b0e6c5c057dcd9b7adf1d3e6eeaf38edf526734a.bin', 'https://i0.hdslb.com/bfs/openplatform/d914e29fb5ba156146ca54bcc0f9dfeb6fd12156.bin', 'https://i0.hdslb.com/bfs/openplatform/783f1ccaca460ad125c8caa1b04bfdf3de0bfc5e.bin', 'https://i0.hdslb.com/bfs/openplatform/391a8b08619ef16d3c6954883fd20f831efbbead.bin', 'https://i0.hdslb.com/bfs/openplatform/748d4d55fd11e5ac20310a12fe768aa591f314e3.bin', 'https://i0.hdslb.com/bfs/openplatform/e350872de27e7b21c304f9b011eff9aa1a2b1d78.bin', 'https://i0.hdslb.com/bfs/openplatform/6e47dbd0e15f926f242d639574d622e978bf15f6.bin', 'https://i0.hdslb.com/bfs/openplatform/6aeed1c9c943eb19e8d72a9a76f352b62a9a7451.bin', 'https://i0.hdslb.com/bfs/openplatform/c9b649206b6833b302e1acd274ef86a6adf4f1df.bin', 'https://i0.hdslb.com/bfs/openplatform/887017018aa63ea4e01a6524c4262489cb251e83.bin', 'https://i0.hdslb.com/bfs/openplatform/b1a5e43e9079c0503723a14109a5f83bae261936.bin', 'https://i0.hdslb.com/bfs/openplatform/9ad6f9a83ef5987b6402930d4c59aaeb5c8d55ae.bin', 'https://i0.hdslb.com/bfs/openplatform/875d80667ff1c47cd51136de520f3dd924d7fde3.bin', 'https://i0.hdslb.com/bfs/openplatform/1450792a67967d78765aa5d94f0d225b666d5224.bin', 'https://i0.hdslb.com/bfs/openplatform/9698acdfab39e1716ee6932271d1114c28202f79.bin', 'https://i0.hdslb.com/bfs/openplatform/f9736ced851ae30c1aa31f9ca630d7625ac41b4f.bin', 'https://i0.hdslb.com/bfs/openplatform/a86a2bf6d060def200a3b84cd39028a3a3f28209.bin', 'https://i0.hdslb.com/bfs/openplatform/a89498050e52c81757b663e3ffa7a1e0542f220e.bin', 'https://i0.hdslb.com/bfs/openplatform/5a9252fa74ff54f1d4c46ad41d5a7e4d0c2a56e2.bin', 'https://i0.hdslb.com/bfs/openplatform/d0ebef76f136fe59f4d475a5b684af8226db6d31.bin', 'https://i0.hdslb.com/bfs/openplatform/e05f5f36d711e95f4c41c789b999100dbe74d845.bin', 'https://i0.hdslb.com/bfs/openplatform/b9dbe86dd82a1c549b1e19775ad94c74e0a4292c.bin', 'https://i0.hdslb.com/bfs/openplatform/af3aab7efa19f5dda8852b0bb15a716b186f430f.bin', 'https://i0.hdslb.com/bfs/openplatform/dcf5c21b038139b49113a02fe8f2cacef480316f.bin', 'https://i0.hdslb.com/bfs/openplatform/2be5c99d8619f54d057bb6ec14f3643916e5d2a7.bin', 'https://i0.hdslb.com/bfs/openplatform/a75f31e22840be13628d416ba1b5ae1fc48ad90e.bin', 'https://i0.hdslb.com/bfs/openplatform/6d43dd580814717e0b63377d7bfe51cfd395db9b.bin', 'https://i0.hdslb.com/bfs/openplatform/90db1f3b695a08f9583366801809e6e44527ebb0.bin', 'https://i0.hdslb.com/bfs/openplatform/c6f808473cb86475d413ba1a22c5e6264e2f5a51.bin', 'https://i0.hdslb.com/bfs/openplatform/51ede90dfb94e4cf363e5969d4d74450656b0909.bin', 'https://i0.hdslb.com/bfs/openplatform/e2fb5cdb15f5e6f76ec9bb4e3657c25401181efc.bin', 'https://i0.hdslb.com/bfs/openplatform/9b60cf1a1881a31e26c7d57f82ecea218f9aac03.bin', 'https://i0.hdslb.com/bfs/openplatform/34b2de514d82d7ca5d391231159131cb8afb60cc.bin', 'https://i0.hdslb.com/bfs/openplatform/0b746899aa212b678e134dbffcb74110713e17d8.bin', 'https://i0.hdslb.com/bfs/openplatform/644a276c9a58ea6da50948177d5585919c0bcee8.bin', 'https://i0.hdslb.com/bfs/openplatform/257b3cde449032f5dbdc7bb7c1fac63bc999faad.bin', 'https://i0.hdslb.com/bfs/openplatform/a07897968defa62e0c95de518a1634ef2c1c946b.bin', 'https://i0.hdslb.com/bfs/openplatform/b0b3ac81326cc8818ff07df7b28d359560ffe574.bin', 'https://i0.hdslb.com/bfs/openplatform/fff64d897e88bae8faccf23027d238d03ef406f7.bin', 'https://i0.hdslb.com/bfs/openplatform/699e0f52fdf29a0048da1af5309e9b2bc4b98740.bin', 'https://i0.hdslb.com/bfs/openplatform/77ee7a23b17b99561bee9e2cfe9cdbd36e61d947.bin', 'https://i0.hdslb.com/bfs/openplatform/40fce9a149dfd24cdd375babc6152f4bd43ba56d.bin', 'https://i0.hdslb.com/bfs/openplatform/fc0d056fde9b91a76f4e14fe18a0fdecfb25c9ad.bin', 'https://i0.hdslb.com/bfs/openplatform/4063ebf3886d9360c8b19d537964b50d205e52a2.bin', 'https://i0.hdslb.com/bfs/openplatform/7187acaa20e6b15477313158420ff9a6f7afc7ed.bin', 'https://i0.hdslb.com/bfs/openplatform/b396fbd931d42674c82073a927b0cbd9e96cc4fc.bin', 'https://i0.hdslb.com/bfs/openplatform/86ee4afd242222a6016a3e478669ebc9b4a8cfab.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '153-像素宝可梦\像素宝可梦6.0测试版_Windows.7z',
+    types: [{
+      description: '153-像素宝可梦\像素宝可梦6.0测试版_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

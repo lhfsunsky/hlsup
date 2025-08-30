@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 083-VR男孩\未知数据.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：083-VR男孩\未知数据.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/63e44cfbbd4482776c3c924db09293ca32945544.bin', 'https://i0.hdslb.com/bfs/openplatform/73beafe6125b904a349e124679eabcf3c14da642.bin', 'https://i0.hdslb.com/bfs/openplatform/a2d8a819cdcbbbc1859d89c06825be9f10fc26a8.bin', 'https://i0.hdslb.com/bfs/openplatform/da79ba28bd14fd5b8639c5071f16f4832c481482.bin', 'https://i0.hdslb.com/bfs/openplatform/27bafd90e45169e609bdf56fdf915fb9c76a4b24.bin', 'https://i0.hdslb.com/bfs/openplatform/f0d56955d5aa010db0bf340817152eb945c58253.bin', 'https://i0.hdslb.com/bfs/openplatform/2623da2e6d7a3470c89bb0f3200eb003ca3448a8.bin', 'https://i0.hdslb.com/bfs/openplatform/32e7b1b1330e4b6856346d8acd5fdc989496829a.bin', 'https://i0.hdslb.com/bfs/openplatform/7cecbcf959ae1a33728a13402cd52693f94403cd.bin', 'https://i0.hdslb.com/bfs/openplatform/0b1399daa99fdfce18e6bf61353938af00ed293b.bin', 'https://i0.hdslb.com/bfs/openplatform/dcadfdcfb4dcdec14d73ad6068a97cfb29fbd65a.bin', 'https://i0.hdslb.com/bfs/openplatform/a12f5211df30cabb21450d564fc146acb9d3f4c0.bin', 'https://i0.hdslb.com/bfs/openplatform/012351c84aef3946d279a94cb2ff14a5d00fbaeb.bin', 'https://i0.hdslb.com/bfs/openplatform/1e08fc9b693d65e993ce497378fe74446675d9d0.bin', 'https://i0.hdslb.com/bfs/openplatform/b75ef5e51cf907c8653688af2773a70b72eac3d9.bin', 'https://i0.hdslb.com/bfs/openplatform/90996c779aea4df048a837ed1f96cecbfdb13a26.bin', 'https://i0.hdslb.com/bfs/openplatform/2c3f0391bfc74e78d416f8f1d5fc307442461d1a.bin', 'https://i0.hdslb.com/bfs/openplatform/dc9c2e52f328263c3ed9828d2bdaa03c136fd07e.bin', 'https://i0.hdslb.com/bfs/openplatform/ecaff57e9c0d614a4c6673ff2839273d79830ae3.bin', 'https://i0.hdslb.com/bfs/openplatform/c88c0ef350a0fd5d8bf514d17b20c20a7507b339.bin', 'https://i0.hdslb.com/bfs/openplatform/f0ba56a1b8e25c025ba5cbd69f1a92da26358823.bin', 'https://i0.hdslb.com/bfs/openplatform/a7a55a1b194f74b5dd7b344358b56b3c1c2629ef.bin', 'https://i0.hdslb.com/bfs/openplatform/e83a39a89567377c3de09bac1690b37441f197ce.bin', 'https://i0.hdslb.com/bfs/openplatform/ae1eccf55e783e1ea288450387ba37e942724952.bin', 'https://i0.hdslb.com/bfs/openplatform/ec8654fb292a18b6eaa47ce11332f1c90e7477e4.bin', 'https://i0.hdslb.com/bfs/openplatform/b646b802dd04db4c20ca230dd3ed1248e017dee9.bin', 'https://i0.hdslb.com/bfs/openplatform/37a4edebf4b59d6ec0733a55401a9d9ca78259fc.bin', 'https://i0.hdslb.com/bfs/openplatform/e718f0e0af14fa332f1d17f0dc3c2b33b5c9873d.bin', 'https://i0.hdslb.com/bfs/openplatform/7f7c874b94a8542e664162630a98c6dc989c795f.bin', 'https://i0.hdslb.com/bfs/openplatform/e411d7e9252c4a5593f479bb0c846c1f06ca8c55.bin', 'https://i0.hdslb.com/bfs/openplatform/503cac0b48592e10c1d9492e5fa811e04cd93709.bin', 'https://i0.hdslb.com/bfs/openplatform/dcd9f7db03156381372b2fd99e10914aee8f8f46.bin', 'https://i0.hdslb.com/bfs/openplatform/6b5ad0e9073d5790cb3c05342867f6feea236ad4.bin', 'https://i0.hdslb.com/bfs/openplatform/6a0156b024af5583e7d7434363d1e2dba83cec14.bin', 'https://i0.hdslb.com/bfs/openplatform/1179762be74bac7243e15f309f79b4ea2f77fe01.bin', 'https://i0.hdslb.com/bfs/openplatform/735e49f5d7b959cf3514c24bc13a64f5c8602c1a.bin', 'https://i0.hdslb.com/bfs/openplatform/a97f18b7588d43b9a37bc945a2ff4bc35c53dc50.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '083-VR男孩\未知数据.zip',
+    types: [{
+      description: '083-VR男孩\未知数据.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 146-真是拿你没办法，哥哥重制版\真是拿你没办法啊哥哥重制版源文件_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：146-真是拿你没办法，哥哥重制版\真是拿你没办法啊哥哥重制版源文件_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/4d909286e45baebb6cfc0683f3ab97baeebdb1a1.bin', 'https://i0.hdslb.com/bfs/openplatform/8d3302db2c0924f9bed76b7a7c0af0c83728fdfa.bin', 'https://i0.hdslb.com/bfs/openplatform/b594f0785af7d142756f3f36c855687d49e832dd.bin', 'https://i0.hdslb.com/bfs/openplatform/8e4592c711121bd887cbc04aec23a061c22fbad0.bin', 'https://i0.hdslb.com/bfs/openplatform/f65eaddcd428a0adef7618973d3710f05eb9904e.bin', 'https://i0.hdslb.com/bfs/openplatform/5734bd14db8581c3fd260c7f92bb05c3c2436dc7.bin', 'https://i0.hdslb.com/bfs/openplatform/bb29ef58172ed2bb27c690d720f911ca238cd55d.bin', 'https://i0.hdslb.com/bfs/openplatform/41ffa2d5d13a2b6ff1f62e863b2c5179b0265241.bin', 'https://i0.hdslb.com/bfs/openplatform/4b13e20c30ff871397b03b8da958336e398672cb.bin', 'https://i0.hdslb.com/bfs/openplatform/8d982eb9717e4b67ee2f5e686d3c3f02371827e4.bin', 'https://i0.hdslb.com/bfs/openplatform/2cc1ea0a4f0d969a96067af110ac7bcf8857160f.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '146-真是拿你没办法，哥哥重制版\真是拿你没办法啊哥哥重制版源文件_Windows.7z',
+    types: [{
+      description: '146-真是拿你没办法，哥哥重制版\真是拿你没办法啊哥哥重制版源文件_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

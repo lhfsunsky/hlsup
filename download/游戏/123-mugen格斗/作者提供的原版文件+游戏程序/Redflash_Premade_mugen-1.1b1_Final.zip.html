@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 123-mugen格斗\作者提供的原版文件+游戏程序\Redflash_Premade_mugen-1.1b1_Final.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：123-mugen格斗\作者提供的原版文件+游戏程序\Redflash_Premade_mugen-1.1b1_Final.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/1217d8d4f528a5160d6a16d8921acadb656c9fc3.bin', 'https://i0.hdslb.com/bfs/openplatform/037d1c39d82e7202ffc27ba228fdd20fd7d0ea58.bin', 'https://i0.hdslb.com/bfs/openplatform/a19ab601ced0e6bed560e57c2b569c04d21075c3.bin', 'https://i0.hdslb.com/bfs/openplatform/2f388cecf4ceb51487989e7a4018b5967d1c3945.bin', 'https://i0.hdslb.com/bfs/openplatform/3d3400fefd36f8a4be555004b658d7a21765c3db.bin', 'https://i0.hdslb.com/bfs/openplatform/41b341a025cebf2b62ac64a6ac62da3e3c5c839b.bin', 'https://i0.hdslb.com/bfs/openplatform/6f5a3878f915c566efd2cd7c563ce2bc93293b4b.bin', 'https://i0.hdslb.com/bfs/openplatform/26843f8d41280140f53ae1dcd6994ebbfe5fd8ed.bin', 'https://i0.hdslb.com/bfs/openplatform/ce5e74c53ddc885dc98ceece81a1a0ac63a5b438.bin', 'https://i0.hdslb.com/bfs/openplatform/f8452917cc34355fd66582e9512c4429a3d97716.bin', 'https://i0.hdslb.com/bfs/openplatform/d764572d2cbda98740fa72f5f462423870a08c9a.bin', 'https://i0.hdslb.com/bfs/openplatform/0a0ca3a529f7d924f5d84f3a689e04632101b812.bin', 'https://i0.hdslb.com/bfs/openplatform/5adb44d70fac6dfe1af3b4ba5d19fe8f3dd591bd.bin', 'https://i0.hdslb.com/bfs/openplatform/c4f29b09f242bf6dff998cbc1dda2cca4b2d5b61.bin', 'https://i0.hdslb.com/bfs/openplatform/998ee1da28bee10585f8382bd6656de2ba8ccfb9.bin', 'https://i0.hdslb.com/bfs/openplatform/310a82868a9ee2362aec623db5063960b4275ad2.bin', 'https://i0.hdslb.com/bfs/openplatform/7423aee382c0c69900a8de29735dddb1cc17743c.bin', 'https://i0.hdslb.com/bfs/openplatform/d482f9defba72b60af9c74d20ded102dcb308654.bin', 'https://i0.hdslb.com/bfs/openplatform/46f608cbc26141702915580eb9c01d074ec5e80a.bin', 'https://i0.hdslb.com/bfs/openplatform/56e83d171e0eb3684d87c3aee2f838bc21d09705.bin', 'https://i0.hdslb.com/bfs/openplatform/93bbcf8bcad8521d2156d335c1c62ee8e209e8a5.bin', 'https://i0.hdslb.com/bfs/openplatform/3fc32c4f30f374b4a0484ffbad8ba8fe737536d8.bin', 'https://i0.hdslb.com/bfs/openplatform/e136177b92505c32317dd16b9f0519f65acdaadf.bin', 'https://i0.hdslb.com/bfs/openplatform/dbd7b69178f1320466c8e845ac3dfaad27a915a1.bin', 'https://i0.hdslb.com/bfs/openplatform/c00e55f517e5f2698c701ee787dc3bef2dc0c8e5.bin', 'https://i0.hdslb.com/bfs/openplatform/ab6848fa443e036b2d2b9e569e6150b8ca1e3db6.bin', 'https://i0.hdslb.com/bfs/openplatform/633382317f53cad10af59a54549fe2e8d006f9b0.bin', 'https://i0.hdslb.com/bfs/openplatform/4253e1842524de81f00e4eeb56bca665c38ecfb5.bin', 'https://i0.hdslb.com/bfs/openplatform/71b2f39edf7dde329d23293cbc46c9eb36c0cf12.bin', 'https://i0.hdslb.com/bfs/openplatform/7fba389fe2a4dec9473cd8e7672e8f0263b48b28.bin', 'https://i0.hdslb.com/bfs/openplatform/755b5f03ad6c65dc1abe69ff93579df04ce2757b.bin', 'https://i0.hdslb.com/bfs/openplatform/a88e30e0cb75e00d2232a9ee9aee04dcbb1f0180.bin', 'https://i0.hdslb.com/bfs/openplatform/e1b3ccac931e0ecaa6417dfa8b5afb22302005e7.bin', 'https://i0.hdslb.com/bfs/openplatform/9bac5cb55e137bbdd7625baef55a1ed10349d7d1.bin', 'https://i0.hdslb.com/bfs/openplatform/0bb9b9986a54e73336131951af2aafd37e911f26.bin', 'https://i0.hdslb.com/bfs/openplatform/b1f70ba4c9e4f3d5251a65dcf60f26a5c6dbb4d5.bin', 'https://i0.hdslb.com/bfs/openplatform/8cfef66a6714ef4b0a1abddb813e9b14566ed043.bin', 'https://i0.hdslb.com/bfs/openplatform/ee07d99b2d5dde5d6d657555f958fe04f4677830.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '123-mugen格斗\作者提供的原版文件+游戏程序\Redflash_Premade_mugen-1.1b1_Final.zip',
+    types: [{
+      description: '123-mugen格斗\作者提供的原版文件+游戏程序\Redflash_Premade_mugen-1.1b1_Final.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

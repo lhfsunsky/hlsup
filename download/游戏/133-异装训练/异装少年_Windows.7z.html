@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 133-异装训练\异装少年_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：133-异装训练\异装少年_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/b22bda20227bc77b3465dc73fec8c26a68ce0e33.bin', 'https://i0.hdslb.com/bfs/openplatform/9400c4009a7dfb93a94b4b0a350d1b128253c018.bin', 'https://i0.hdslb.com/bfs/openplatform/b1c9e28ad04b3ce6475a420a63ccafc522659b25.bin', 'https://i0.hdslb.com/bfs/openplatform/99196f88cae42b53c329163641f2e6232f0ac641.bin', 'https://i0.hdslb.com/bfs/openplatform/6efa23825c29e752d50829c3ebe5f561fa5acbbd.bin', 'https://i0.hdslb.com/bfs/openplatform/942f34c80a677ea1cf9b7e0601ed1a910b885e67.bin', 'https://i0.hdslb.com/bfs/openplatform/afd7f879f7fac3eb0bbe87ded9280a0c0c385308.bin', 'https://i0.hdslb.com/bfs/openplatform/490a7cdc48df525efc94ce320ae45ab4e64cb111.bin', 'https://i0.hdslb.com/bfs/openplatform/1238da573700f4c793155b4d2a8c1d7800a4cd90.bin', 'https://i0.hdslb.com/bfs/openplatform/2da8b9436b4cbc194c78bf2f7a601d25f8bb52c1.bin', 'https://i0.hdslb.com/bfs/openplatform/e109699c2731f9acd22f1f124a0dc19509dc0bd8.bin', 'https://i0.hdslb.com/bfs/openplatform/43023fd19b58fcf8ca2794a00c169bcf849b503b.bin', 'https://i0.hdslb.com/bfs/openplatform/bb66872cc6d5c982d5425f1650e83927d54071e4.bin', 'https://i0.hdslb.com/bfs/openplatform/2f8cd651c1c4e3be578557cb6c7e9413e21da356.bin', 'https://i0.hdslb.com/bfs/openplatform/e2dafd17b9fe163abbd8b25579f31d548d7311d4.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '133-异装训练\异装少年_Windows.7z',
+    types: [{
+      description: '133-异装训练\异装少年_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

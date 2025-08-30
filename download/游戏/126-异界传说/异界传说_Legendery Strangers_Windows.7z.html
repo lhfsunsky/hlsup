@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 126-异界传说\异界传说_Legendery Strangers_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：126-异界传说\异界传说_Legendery Strangers_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/1db0b2f4b6496e724acf1f7decafcb00791b8b6e.bin', 'https://i0.hdslb.com/bfs/openplatform/a363898e659cdfd42995f4b959f0704107442384.bin', 'https://i0.hdslb.com/bfs/openplatform/a039506d18aa61e24cc78f9118eb68527f988015.bin', 'https://i0.hdslb.com/bfs/openplatform/81092fd45c55f336bffdacfcf51d63e6b7d8157e.bin', 'https://i0.hdslb.com/bfs/openplatform/fb6f0f78e9bcadaffc25b098a431eed83fca30da.bin', 'https://i0.hdslb.com/bfs/openplatform/934b4fbeef43d948b09689b1f64530b81545fe99.bin', 'https://i0.hdslb.com/bfs/openplatform/0d870fe97928a429a2e0173336d250c7cb0175f1.bin', 'https://i0.hdslb.com/bfs/openplatform/4e54d93836432aa4d3aa473da999b615c95f6a9d.bin', 'https://i0.hdslb.com/bfs/openplatform/a280917b52d67ed2938922ce193195f2392edb87.bin', 'https://i0.hdslb.com/bfs/openplatform/8b4bd7def5ceb47d6dca34fd912f092c827350d2.bin', 'https://i0.hdslb.com/bfs/openplatform/9659951683a383164961cc1f4b6c04527e9c0daf.bin', 'https://i0.hdslb.com/bfs/openplatform/9f99e0224ba003ecb3221706568c899a45a39e02.bin', 'https://i0.hdslb.com/bfs/openplatform/4741cf9d17cae6ddf3e11ba58108ea62ffa90325.bin', 'https://i0.hdslb.com/bfs/openplatform/5acb03611e9cbfb2ad924f21491cd2a0f9392467.bin', 'https://i0.hdslb.com/bfs/openplatform/ddaaae5398e2f56eb21ee61d9144c2b9404fd861.bin', 'https://i0.hdslb.com/bfs/openplatform/9ec149f0f8eeb8d0eab317baeeaa412e391865a0.bin', 'https://i0.hdslb.com/bfs/openplatform/9db65367d7c87c7a1f215112e595ddf506ce5154.bin', 'https://i0.hdslb.com/bfs/openplatform/934720cdcd53dd290ff74ad08249c99ab066e4ba.bin', 'https://i0.hdslb.com/bfs/openplatform/1606f5981786a4434a785119b004fad5d62b8497.bin', 'https://i0.hdslb.com/bfs/openplatform/c8296465efd0ab5da9e0096925aaa83d1e327c9f.bin', 'https://i0.hdslb.com/bfs/openplatform/834908d6ef85911e56cdc1476260c6ac7440d208.bin', 'https://i0.hdslb.com/bfs/openplatform/5a390a751573e1ef2df674a517f287d5ee1091aa.bin', 'https://i0.hdslb.com/bfs/openplatform/46e5c18368e645bf88cb20854986824bb77fdf8d.bin', 'https://i0.hdslb.com/bfs/openplatform/81afb586958db70d8da99c63e88f0d129d3ecc67.bin', 'https://i0.hdslb.com/bfs/openplatform/6a05f5bd14d8c3a8680f06bc0b9637992c3669fa.bin', 'https://i0.hdslb.com/bfs/openplatform/834b2b2b6f2ecfa550fb71bbd53beea1b93351ca.bin', 'https://i0.hdslb.com/bfs/openplatform/5463b44ab0cd9c824b49730c8b53954aa8f96e39.bin', 'https://i0.hdslb.com/bfs/openplatform/4f7b7090cfa9f410c0ca55b75143c2f133519c87.bin', 'https://i0.hdslb.com/bfs/openplatform/6822fb1e41037c74dc036517f9af5ee433d051a5.bin', 'https://i0.hdslb.com/bfs/openplatform/eb4b02060567ef99f986d5275c2981d15c21ae26.bin', 'https://i0.hdslb.com/bfs/openplatform/a30cfba83570453274b91200c6de2dc5b52c1bda.bin', 'https://i0.hdslb.com/bfs/openplatform/eb41dae3e84fdf1bfda65c7c4c01faf721ab56c8.bin', 'https://i0.hdslb.com/bfs/openplatform/45f5555116d4b56d86035b0c17f5f174b095f977.bin', 'https://i0.hdslb.com/bfs/openplatform/5fd82995c55d54feabcb8436974b400386b12695.bin', 'https://i0.hdslb.com/bfs/openplatform/61d28b42ec86ca69708ea46c142f2464daf8ab24.bin', 'https://i0.hdslb.com/bfs/openplatform/64ef49251adbd91034954ddf1b114af4eea64500.bin', 'https://i0.hdslb.com/bfs/openplatform/9502275fe8672fe1f3b7435e696ef108c0de150b.bin', 'https://i0.hdslb.com/bfs/openplatform/f861be69b70d012a82f10a67b1b3a9a5a5b72fac.bin', 'https://i0.hdslb.com/bfs/openplatform/e21ff9482a428654f14419d56a97bb5e0295ee12.bin', 'https://i0.hdslb.com/bfs/openplatform/c6ae71a07a0b93bb5cace45e5c98c4b47ee71cbf.bin', 'https://i0.hdslb.com/bfs/openplatform/fddfaaf4bc67dc0308e1716f3e67433d15d5c140.bin', 'https://i0.hdslb.com/bfs/openplatform/0313967fea466691b5b320d3465e0befe1790fa8.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '126-异界传说\异界传说_Legendery Strangers_Windows.7z',
+    types: [{
+      description: '126-异界传说\异界传说_Legendery Strangers_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

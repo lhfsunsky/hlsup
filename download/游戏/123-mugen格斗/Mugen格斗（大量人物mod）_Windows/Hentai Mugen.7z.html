@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 123-mugen格斗\Mugen格斗（大量人物mod）_Windows\Hentai Mugen.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：123-mugen格斗\Mugen格斗（大量人物mod）_Windows\Hentai Mugen.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/46309c278a3189e31518acff45fdd2c45be3f568.bin', 'https://i0.hdslb.com/bfs/openplatform/e43b3f9f4ae562e22781ef0c2b088ade4cc2a889.bin', 'https://i0.hdslb.com/bfs/openplatform/919f9a588ab5e87d6893137fa0cdf20e7f725ac8.bin', 'https://i0.hdslb.com/bfs/openplatform/a4f0051ad37ac545c98c6eeaa301e9156353ce79.bin', 'https://i0.hdslb.com/bfs/openplatform/f0b795c6ed6d674f9c4dc0632589aa9eebaa55e2.bin', 'https://i0.hdslb.com/bfs/openplatform/dda8cea9e174299ba6db800b8e6c3f335469aaa7.bin', 'https://i0.hdslb.com/bfs/openplatform/c503f4cff6ce99b5ca8a5ffe113b124b1b739af2.bin', 'https://i0.hdslb.com/bfs/openplatform/ef82c73f0e955e4cded2f80f1fb3c30fb7eea5c8.bin', 'https://i0.hdslb.com/bfs/openplatform/4e6f4987cb9e02419e5d09becf56f971504481b4.bin', 'https://i0.hdslb.com/bfs/openplatform/68984e0b0c34ccc7b79c9cc3962e68c5fb20c6bf.bin', 'https://i0.hdslb.com/bfs/openplatform/326a7b1956fc3720768842cb7b293b2ee3b38844.bin', 'https://i0.hdslb.com/bfs/openplatform/9a804b921ad1532599f507babf7ce302a2770174.bin', 'https://i0.hdslb.com/bfs/openplatform/b23a6a9d7d10edf520c8da788d09f252605660f4.bin', 'https://i0.hdslb.com/bfs/openplatform/65e8e940c5730cb07d2c730b13356ce414cf6f8a.bin', 'https://i0.hdslb.com/bfs/openplatform/4bf206ccf7f79115f47a6d4c2567f92895374b42.bin', 'https://i0.hdslb.com/bfs/openplatform/1ba9f1e78ed7494bd2ae0aa30fce8e8e3cfa6ea7.bin', 'https://i0.hdslb.com/bfs/openplatform/8ef620b9042bb4b235856d5a9b05b94ee702be88.bin', 'https://i0.hdslb.com/bfs/openplatform/f3a41099a08709730885be120e638818261f8be3.bin', 'https://i0.hdslb.com/bfs/openplatform/d41aafa37ae6ee52a13da1c535fc3779d76592af.bin', 'https://i0.hdslb.com/bfs/openplatform/5f765a48fac9cb095e53ab02d88cebdf8059224e.bin', 'https://i0.hdslb.com/bfs/openplatform/abdb8e7efb1c7ba29e7818bd5ae0fc061dcf51ce.bin', 'https://i0.hdslb.com/bfs/openplatform/c2730084265569aba6f75ca854f7320425211674.bin', 'https://i0.hdslb.com/bfs/openplatform/27c23c01d9ac83ebf427799302d755cbf58ba44a.bin', 'https://i0.hdslb.com/bfs/openplatform/71956ee9225cd48114da18b9f30e3cad646c45cf.bin', 'https://i0.hdslb.com/bfs/openplatform/6cd1bed12a0140d9063a4f0e315584fe58dddb7a.bin', 'https://i0.hdslb.com/bfs/openplatform/4b183d83373170eca4e659e1ef0203a7ed8fe061.bin', 'https://i0.hdslb.com/bfs/openplatform/d85d4ad64b771f31482f08c8e40bf50f883dcc36.bin', 'https://i0.hdslb.com/bfs/openplatform/176f74b6046ab245a9f721be706cfc7c88649c8a.bin', 'https://i0.hdslb.com/bfs/openplatform/443ee779fa741e565ac94f37835914b1bfcfaf23.bin', 'https://i0.hdslb.com/bfs/openplatform/b21c79ceb89bb249c481a3d18bda8aa1dc30e286.bin', 'https://i0.hdslb.com/bfs/openplatform/67a42e46a438cb1cdfabe9b6354b1b589ba1bba5.bin', 'https://i0.hdslb.com/bfs/openplatform/52c4183a7838308b5be4468317948d426b13bb78.bin', 'https://i0.hdslb.com/bfs/openplatform/5698bc54717c4f25e915ed1396177b3e204854df.bin', 'https://i0.hdslb.com/bfs/openplatform/52000c025c64d04f5f3c864e6a9d12b5c34bd89a.bin', 'https://i0.hdslb.com/bfs/openplatform/3bd3b547d96a10b96dd9d5ab2b86ed926efbccb7.bin', 'https://i0.hdslb.com/bfs/openplatform/64487a826fb7e9f6a8ec2e03fab1ff4f9debae8d.bin', 'https://i0.hdslb.com/bfs/openplatform/a45a553e4979e670875c2c0074f8e30cff5d4084.bin', 'https://i0.hdslb.com/bfs/openplatform/f0e14d364271a4a3fe3daaf42934d54dbc7c3f00.bin', 'https://i0.hdslb.com/bfs/openplatform/c9ac80cf786105ea422b84d831dd2af608c6502b.bin', 'https://i0.hdslb.com/bfs/openplatform/510f6e161cf6d8a20ea0e79777289ad106121734.bin', 'https://i0.hdslb.com/bfs/openplatform/e725ec34c6cc94ee3abb1906223f616130bb0a0d.bin', 'https://i0.hdslb.com/bfs/openplatform/0197e12b6f03dd7634ad611a571c583aeed6e5e5.bin', 'https://i0.hdslb.com/bfs/openplatform/88e318dff033767cdf591c717a7337f61261fea0.bin', 'https://i0.hdslb.com/bfs/openplatform/469fe340f775d3f5bb71414846f3b55bce85c840.bin', 'https://i0.hdslb.com/bfs/openplatform/a2cdb6399ecd1b19f3c9bb989e2196a3cf7ccf40.bin', 'https://i0.hdslb.com/bfs/openplatform/efea3560d23317254425f9487572783e6438aa66.bin', 'https://i0.hdslb.com/bfs/openplatform/5d2398177ffeb940aa9f4a5235a19a00f4c2a83f.bin', 'https://i0.hdslb.com/bfs/openplatform/0ee02dff6a469e5f08f7e12a5b9f0efd60b94dfc.bin', 'https://i0.hdslb.com/bfs/openplatform/370455988401270e17d3bca4f904cc49a46cbab6.bin', 'https://i0.hdslb.com/bfs/openplatform/92701d5ea991c07ebe67a5582a8f3236c85c4575.bin', 'https://i0.hdslb.com/bfs/openplatform/45f08689f72f503acf52c62c4115268d92e43242.bin', 'https://i0.hdslb.com/bfs/openplatform/0747f537185f55e9aaa3d91844625f144156aa07.bin', 'https://i0.hdslb.com/bfs/openplatform/2de9f3a452950bbeaac9f4c38518220efb15b5c8.bin', 'https://i0.hdslb.com/bfs/openplatform/292c3833b4c85da41661bc300eb69250eec946b9.bin', 'https://i0.hdslb.com/bfs/openplatform/5760da2ff0eea8c71213118484316045939f2aef.bin', 'https://i0.hdslb.com/bfs/openplatform/079ce8f500ca6d16ed978d604e4b4d5b9b832dcc.bin', 'https://i0.hdslb.com/bfs/openplatform/a3dea6cbcc2b8a42593c295cee1a9c5d286b5cb8.bin', 'https://i0.hdslb.com/bfs/openplatform/316a251e899c4494963164646e06f84e79542f83.bin', 'https://i0.hdslb.com/bfs/openplatform/a1e4deb483b167094a978d54918ab3be1a8f5f08.bin', 'https://i0.hdslb.com/bfs/openplatform/93a5e699d41f983fbbf2adb9ae2eef737903776f.bin', 'https://i0.hdslb.com/bfs/openplatform/b85628041b0b6bbff3f4c01d3fb9acfb3880e45f.bin', 'https://i0.hdslb.com/bfs/openplatform/74ef3aba829e825bd1cb28bda007201f34f958a6.bin', 'https://i0.hdslb.com/bfs/openplatform/69ece7f50f3663a63fd4e6d7fadda8b521a826ee.bin', 'https://i0.hdslb.com/bfs/openplatform/f65d64ecb5b866860fec94cdfde7cb2565b95abd.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '123-mugen格斗\Mugen格斗（大量人物mod）_Windows\Hentai Mugen.7z',
+    types: [{
+      description: '123-mugen格斗\Mugen格斗（大量人物mod）_Windows\Hentai Mugen.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

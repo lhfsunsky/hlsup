@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 160-营地生活\the camp_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：160-营地生活\the camp_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/ba366ef052a8cbe8fae280f95c83fb578d6882c6.bin', 'https://i0.hdslb.com/bfs/openplatform/f8f30d50d9d22098537bd6b027244a196d29f88d.bin', 'https://i0.hdslb.com/bfs/openplatform/e3ad1d1de41287c774faaca45a64143ea804bc1a.bin', 'https://i0.hdslb.com/bfs/openplatform/d610113b53ee634fe589c8102a793850bb95d08f.bin', 'https://i0.hdslb.com/bfs/openplatform/20c8583fcd4ac43fe19d83d380699bf678beaba2.bin', 'https://i0.hdslb.com/bfs/openplatform/689459a760a24832443ffc5c72817fc39f340e0e.bin', 'https://i0.hdslb.com/bfs/openplatform/187d74f9df3dacc20a431f05d2b4071ef758a962.bin', 'https://i0.hdslb.com/bfs/openplatform/76cd53aab20cd5c8ce2463b91057c2cf03daf510.bin', 'https://i0.hdslb.com/bfs/openplatform/ada319324e7be730480be8deab00371c86f17c07.bin', 'https://i0.hdslb.com/bfs/openplatform/756daaae102e4f992a2072041029fabeaf1e45b5.bin', 'https://i0.hdslb.com/bfs/openplatform/4cac071c964c3cf6dbd5413b880e8d991e23d468.bin', 'https://i0.hdslb.com/bfs/openplatform/f878031c532e514bfa677a2037e1402be19e1159.bin', 'https://i0.hdslb.com/bfs/openplatform/70aae44708cdfc74ea659518de62abf98727fcc8.bin', 'https://i0.hdslb.com/bfs/openplatform/6cf4a4323be0c22d3d24fc8fb65311356614e7d5.bin', 'https://i0.hdslb.com/bfs/openplatform/3475ea61eb90e671ceb9c5041acd8ccea989697d.bin', 'https://i0.hdslb.com/bfs/openplatform/e917daa1b4e4fa437fdb99020d6fa58bb0ec15e3.bin', 'https://i0.hdslb.com/bfs/openplatform/96c0bb10ec23913d52d446656384309f9e553c61.bin', 'https://i0.hdslb.com/bfs/openplatform/18b1cf5ebc46d04a63cf0680fdc0270ab20bd3af.bin', 'https://i0.hdslb.com/bfs/openplatform/fec2c64952bb1a7722ba8dc07fc069bdf58773c4.bin', 'https://i0.hdslb.com/bfs/openplatform/59838e5de035b122103caad2e6bf12d2c57acf6f.bin', 'https://i0.hdslb.com/bfs/openplatform/16d626481119b6b5431e7e6cda1a243555e51f38.bin', 'https://i0.hdslb.com/bfs/openplatform/da8682b00a6cba531d4f71468084c371a83dfc74.bin', 'https://i0.hdslb.com/bfs/openplatform/9f294fe1d6e517b617250e44a80cfb369a736569.bin', 'https://i0.hdslb.com/bfs/openplatform/16d3d59044f61cc58a623ffc928370bf659a0791.bin', 'https://i0.hdslb.com/bfs/openplatform/9b9cafa40fac88369e7af56b232b0e7a15aab122.bin', 'https://i0.hdslb.com/bfs/openplatform/c01ab73c23b6a6a8f8da9eeb98d1322eccbff36e.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '160-营地生活\the camp_Windows.7z',
+    types: [{
+      description: '160-营地生活\the camp_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

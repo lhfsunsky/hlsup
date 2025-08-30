@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 183-与连的一日\与连的一日_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：183-与连的一日\与连的一日_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/f6de941a421e79f58ed681cc18c936f1fc230cc5.bin', 'https://i0.hdslb.com/bfs/openplatform/afa0a16de697cf799870b35031c827d7086328e3.bin', 'https://i0.hdslb.com/bfs/openplatform/0fba8c8e81e7ce69ab3643ecad47aac873b0c99c.bin', 'https://i0.hdslb.com/bfs/openplatform/2906cf2fcb982f6941b4b3224b1361f14c4b0bc2.bin', 'https://i0.hdslb.com/bfs/openplatform/711464382c9bc8e70116e1c6fb73308a3fdae39a.bin', 'https://i0.hdslb.com/bfs/openplatform/2aee6aa2ae73f9d270fb6d64d289672ad72be274.bin', 'https://i0.hdslb.com/bfs/openplatform/6f434a402804b0cb1080dfe62d8f441d10777804.bin', 'https://i0.hdslb.com/bfs/openplatform/916f1a4d8729d8675368ad38e58b120ed22dba2c.bin', 'https://i0.hdslb.com/bfs/openplatform/db7c0050d6489944df789bbd05d5b0fe7744de60.bin', 'https://i0.hdslb.com/bfs/openplatform/eb89e8d2dffbc2ee1a72e309937b652c26c4cd6c.bin', 'https://i0.hdslb.com/bfs/openplatform/374c1594b7c1307f8888f3b92488f27a11d6bc94.bin', 'https://i0.hdslb.com/bfs/openplatform/bf8ba49dd8b95a8f11ae7f7ca6e886326888532c.bin', 'https://i0.hdslb.com/bfs/openplatform/67415f9beeee5af221716195a72f4f2a932654eb.bin', 'https://i0.hdslb.com/bfs/openplatform/2adcc499d7a8caa6cd145fd053296322db53b441.bin', 'https://i0.hdslb.com/bfs/openplatform/31b6cc2e5b5eb6821765ddf01f4300ff98a75098.bin', 'https://i0.hdslb.com/bfs/openplatform/0c64a4eb4641eb3339ca12fa5c8769b13fdb03d1.bin', 'https://i0.hdslb.com/bfs/openplatform/4999ddab6ed37de559a6ca02f654bc6bf12f8681.bin', 'https://i0.hdslb.com/bfs/openplatform/cdc6331ad730337bd93fa9f77e9431058a120921.bin', 'https://i0.hdslb.com/bfs/openplatform/dc092dac8d72b1900a6936222d864fcc6d24f1e6.bin', 'https://i0.hdslb.com/bfs/openplatform/5153640dcba530747024c57060a9d80b37350c86.bin', 'https://i0.hdslb.com/bfs/openplatform/cf4a44eef2b1a1c000018206d284a79126320aa4.bin', 'https://i0.hdslb.com/bfs/openplatform/40fabedacfd5e8df31b907e42bb644148ff7955d.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '183-与连的一日\与连的一日_Windows.7z',
+    types: [{
+      description: '183-与连的一日\与连的一日_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

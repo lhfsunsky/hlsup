@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 131-合成少年\合成少年_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：131-合成少年\合成少年_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/651a6688c623111801c7df5c3840e2b9c48ed499.bin', 'https://i0.hdslb.com/bfs/openplatform/bf36b31adb2eb083366e9863f6f5c5c35c0116ad.bin', 'https://i0.hdslb.com/bfs/openplatform/9983eeb11e6c633f644c07ff50b778ba96c8b36d.bin', 'https://i0.hdslb.com/bfs/openplatform/b81dbc046e1eacf86bee5fcfb34658a7e04c1118.bin', 'https://i0.hdslb.com/bfs/openplatform/28a86ba3b505d774d1b29423ab212418a728ba10.bin', 'https://i0.hdslb.com/bfs/openplatform/1fc6db4db037777b51be394a006a4af89eb1ff69.bin', 'https://i0.hdslb.com/bfs/openplatform/e4d20201bf1491c6bd64e0eb7e81a2ce3bd1b274.bin', 'https://i0.hdslb.com/bfs/openplatform/b8bd76f1702bfdeb6fe28a467d90493b3a0bf653.bin', 'https://i0.hdslb.com/bfs/openplatform/fc94a753b67829496da2324634efcf40ebc65fe1.bin', 'https://i0.hdslb.com/bfs/openplatform/e3145395335f7c71239fc5e132c7a1ed9c4dee76.bin', 'https://i0.hdslb.com/bfs/openplatform/14db3ffb62d12b91c92157cf4c8ba6b3fdb371c0.bin', 'https://i0.hdslb.com/bfs/openplatform/7e24c21a0495db1e1024116bfa14ee1e5737da1e.bin', 'https://i0.hdslb.com/bfs/openplatform/30177a68d744c1b8e12676871947d13756a557ef.bin', 'https://i0.hdslb.com/bfs/openplatform/0da02b8d44d197e49a0097739715b6da40180d34.bin', 'https://i0.hdslb.com/bfs/openplatform/bc6381172a9ada7db8b11ea880a783b88b48b99d.bin', 'https://i0.hdslb.com/bfs/openplatform/a62c43061a15f709795460353b53f84e0c8bef10.bin', 'https://i0.hdslb.com/bfs/openplatform/ef23b93fff796fa2d2c892ccef80965cff06ca54.bin', 'https://i0.hdslb.com/bfs/openplatform/179a35df6f7279fd984181a05e758199f5244bd6.bin', 'https://i0.hdslb.com/bfs/openplatform/3c906b18e62e40876841bf8d2c2ab27e2209f509.bin', 'https://i0.hdslb.com/bfs/openplatform/25a8d612f3b6bf9fdb9ab2be01bb6414e4625482.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '131-合成少年\合成少年_Windows.7z',
+    types: [{
+      description: '131-合成少年\合成少年_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

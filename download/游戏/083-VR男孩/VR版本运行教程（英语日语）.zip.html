@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 083-VR男孩\VR版本运行教程（英语日语）.zip</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：083-VR男孩\VR版本运行教程（英语日语）.zip</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/071a2997de7f2a62a42268870b1920fbf77ca23d.bin', 'https://i0.hdslb.com/bfs/openplatform/7d766709650f9406b5630f7a46d573896dacdf0c.bin', 'https://i0.hdslb.com/bfs/openplatform/cc7022e4cf18514ef034b721558a2415f8bd7f98.bin', 'https://i0.hdslb.com/bfs/openplatform/a8e81f41ed4023755d5ecc659780b2296cd6b252.bin', 'https://i0.hdslb.com/bfs/openplatform/35cd99a197ef72f43a0697781e912fe9a9b188d7.bin', 'https://i0.hdslb.com/bfs/openplatform/e1ba55179097461e40d2662e9b6bf0b052d97195.bin', 'https://i0.hdslb.com/bfs/openplatform/388311a9b2ebf28dc558fe0e5317c10e69ca9945.bin', 'https://i0.hdslb.com/bfs/openplatform/3bafe9c801d22f6005444ace7bf5ebdf6b6fe711.bin', 'https://i0.hdslb.com/bfs/openplatform/7ecf644326a59f6422eec82a4a00d05377906a8b.bin', 'https://i0.hdslb.com/bfs/openplatform/542468a8fcad34e554a8a964dd111b7fec673581.bin', 'https://i0.hdslb.com/bfs/openplatform/df2e2fbc4343e073804a4aa0c094114c55963b35.bin', 'https://i0.hdslb.com/bfs/openplatform/d438f47d7b8633d2128a98511ce9b300d788be49.bin', 'https://i0.hdslb.com/bfs/openplatform/906c53491c8e9d444bf9ac4ba12d18d2cc0991fe.bin', 'https://i0.hdslb.com/bfs/openplatform/4e40574b1b5c1a8bc929814f0cd0ac3aa1f0b29b.bin', 'https://i0.hdslb.com/bfs/openplatform/f3736c078d107f03e0a5d47150b36e48fb1d9bf6.bin', 'https://i0.hdslb.com/bfs/openplatform/632965a652a8b51448fd7b0c1f0c772e3c43ca43.bin', 'https://i0.hdslb.com/bfs/openplatform/5faa64e689526a52a03d5cfba49132389b1c3e75.bin', 'https://i0.hdslb.com/bfs/openplatform/36a45e9ff9349e254cbe15d36d176790e7ee5572.bin', 'https://i0.hdslb.com/bfs/openplatform/ec5b17805667f611ce173b1b4071ffdbe4b90c36.bin', 'https://i0.hdslb.com/bfs/openplatform/9fac1eb8b2401a577a60bb412eb612fb96ed166e.bin', 'https://i0.hdslb.com/bfs/openplatform/a2ff14cb74075973a3dade8a27ffc74d5d22c48f.bin', 'https://i0.hdslb.com/bfs/openplatform/ec59a73d443ceb4d739eeb26912f720805732401.bin', 'https://i0.hdslb.com/bfs/openplatform/96010a28818eee41715d614184e93ab2d54cbbbd.bin', 'https://i0.hdslb.com/bfs/openplatform/42291ee0f482f9e60561e37df1f2bf7b7caf5990.bin', 'https://i0.hdslb.com/bfs/openplatform/c3287c6f63bacd44a1120002da7fff443959bd0c.bin', 'https://i0.hdslb.com/bfs/openplatform/a42129357dee1d948e4b5430fc22fe35035eeb57.bin', 'https://i0.hdslb.com/bfs/openplatform/aeca8daf4fa552dc43337033c8c801398834ef4b.bin', 'https://i0.hdslb.com/bfs/openplatform/93759ffe0d8ad2b5418aa882c48dc88c57bfec27.bin', 'https://i0.hdslb.com/bfs/openplatform/3e33e2450c1431eebeff50bdd984de920f86b722.bin', 'https://i0.hdslb.com/bfs/openplatform/8e1b7b27b174fae2eeb886239d70c93e17823f54.bin', 'https://i0.hdslb.com/bfs/openplatform/c21e3e9a743a6d5c4aa821e7d18b221d9a8a1615.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '083-VR男孩\VR版本运行教程（英语日语）.zip',
+    types: [{
+      description: '083-VR男孩\VR版本运行教程（英语日语）.zip 文件',
+      accept: {'*/*': ['.zip']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

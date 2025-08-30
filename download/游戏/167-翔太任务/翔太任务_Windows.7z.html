@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 167-翔太任务\翔太任务_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：167-翔太任务\翔太任务_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/59efd7961472672ea0e6da09ef4ce9ed7405983d.bin', 'https://i0.hdslb.com/bfs/openplatform/f6a1965e1f83019c3a4da9d430cef2b6a603e5a5.bin', 'https://i0.hdslb.com/bfs/openplatform/25849e691d8bd5d36675ab6e520ae90e5a633faa.bin', 'https://i0.hdslb.com/bfs/openplatform/3934cb2eaad217103c5b2310efc89f7573aa00ac.bin', 'https://i0.hdslb.com/bfs/openplatform/33d3d46981615aafe9ff0f44fd8db4f3c8fea274.bin', 'https://i0.hdslb.com/bfs/openplatform/d41f83c10419b3fb6477da71301dbbc49ccd2ca8.bin', 'https://i0.hdslb.com/bfs/openplatform/983c247cd0b5f9e93efe42dcb44a66f529e53f35.bin', 'https://i0.hdslb.com/bfs/openplatform/1a550bc93e623ee4e8b7107aab67afcc24d71482.bin', 'https://i0.hdslb.com/bfs/openplatform/a5bfe9c410a9b643c7bccfd98b4fc15d256125ea.bin', 'https://i0.hdslb.com/bfs/openplatform/63b27a1f7511544b271f7ba69753f68667e67faa.bin', 'https://i0.hdslb.com/bfs/openplatform/e44ca21888e9fe5616bc60c6c2d437f5ef9b8d08.bin', 'https://i0.hdslb.com/bfs/openplatform/21dfb14c8583aa75c4a55a37a3136deb01a577b8.bin', 'https://i0.hdslb.com/bfs/openplatform/c0c0ae5be53584f17b219766aa215f04bf52b6e4.bin', 'https://i0.hdslb.com/bfs/openplatform/9cf400a190a5738f0264d050b82ac75ca0664bae.bin', 'https://i0.hdslb.com/bfs/openplatform/8158f8edad1dc1981d4ade46e8f5110a8ce52cea.bin', 'https://i0.hdslb.com/bfs/openplatform/81147501ee51980acee8a6b35fd6d6e50dea4a45.bin', 'https://i0.hdslb.com/bfs/openplatform/2677ea455670ff62cbdf22db85442a23b757c7d7.bin', 'https://i0.hdslb.com/bfs/openplatform/3397179991592245803fb0f7cc2d7d8d3870020e.bin', 'https://i0.hdslb.com/bfs/openplatform/ba6f3a5ce5d0532a81b0ced3a9c7d8d5ffcd4fe1.bin', 'https://i0.hdslb.com/bfs/openplatform/e7601518c52ae3a452aade391f1551fa3dcb6cd2.bin', 'https://i0.hdslb.com/bfs/openplatform/4c843147a3594128d8dfc0ab6ca84356b5c98e08.bin', 'https://i0.hdslb.com/bfs/openplatform/2200ddee8b4cf38755e0523c74e3c3c4f5c52858.bin', 'https://i0.hdslb.com/bfs/openplatform/c5c8f101ccb0a3afd6252cea9238b5af945a784b.bin', 'https://i0.hdslb.com/bfs/openplatform/b757bd2cb7a5d4908d181e8b702049bde2af8cfa.bin', 'https://i0.hdslb.com/bfs/openplatform/17e23424d97cb5a907024a6fd7054797e9cec8ed.bin', 'https://i0.hdslb.com/bfs/openplatform/1dd6c36e0a209dff06a567e7478892b8c2e4c2ee.bin', 'https://i0.hdslb.com/bfs/openplatform/27642218c6cec01d3671ef550cda57a624ebb86e.bin', 'https://i0.hdslb.com/bfs/openplatform/ac13cc8057339dc6ddd2ee393996a565b7fd577c.bin', 'https://i0.hdslb.com/bfs/openplatform/1673cc9d2b433d3ab22808a1e8d6fb0ca9588730.bin', 'https://i0.hdslb.com/bfs/openplatform/9eacc52ccad5e0ebf250dc3c9cfd44e86386e89a.bin', 'https://i0.hdslb.com/bfs/openplatform/393bd2aadbda616276628ba90c3cc113d6afb5ac.bin', 'https://i0.hdslb.com/bfs/openplatform/103b79a539993289eba096061dedbd64dbca1306.bin', 'https://i0.hdslb.com/bfs/openplatform/774a38935be446d440cb41c89ca677624c5a52d0.bin', 'https://i0.hdslb.com/bfs/openplatform/c739d17f4b68c2e6b2a8be1b272014db0bf36e72.bin', 'https://i0.hdslb.com/bfs/openplatform/9f7dea79dd30159fcb836f6f3938ae0398c57dcd.bin', 'https://i0.hdslb.com/bfs/openplatform/9ed3f4da6da1129024d90a99d00389b738263443.bin', 'https://i0.hdslb.com/bfs/openplatform/9b7a3b418678f7d6dc3f489ff6dd2b87625b0a05.bin', 'https://i0.hdslb.com/bfs/openplatform/6a05ad5a6129d524276662e041aa9132a3d28df4.bin', 'https://i0.hdslb.com/bfs/openplatform/f63547e5151931988a3fa58a2cdb629852c01816.bin', 'https://i0.hdslb.com/bfs/openplatform/2b7405d6ffbc5125e2309e64f2297108b8b2bb27.bin', 'https://i0.hdslb.com/bfs/openplatform/8bd4d52025d2dc9a177859dd66b61812d9c225f0.bin', 'https://i0.hdslb.com/bfs/openplatform/febeac3d85743e94c255b3cd3d543b90202f5d9b.bin', 'https://i0.hdslb.com/bfs/openplatform/17c287ee34855e3b05916ae74af1a87d70423e58.bin', 'https://i0.hdslb.com/bfs/openplatform/7772eb147d3725db1ee293e6b964720aac9a932e.bin', 'https://i0.hdslb.com/bfs/openplatform/982fb8974e3cb6e979ba86eb87e754afdcd168aa.bin', 'https://i0.hdslb.com/bfs/openplatform/773f489fdd359084f8bb6f510c0cf5ae5073f1bb.bin', 'https://i0.hdslb.com/bfs/openplatform/0851d7bbccd68de4aa97e79fa9dbe9eb97ff75e5.bin', 'https://i0.hdslb.com/bfs/openplatform/66ea8b7c2b8ae60caa0ea008124caf6c6572d561.bin', 'https://i0.hdslb.com/bfs/openplatform/41ec554cd4340075044b5bcaae891107c9fcb64f.bin', 'https://i0.hdslb.com/bfs/openplatform/3d201bd84104008db6f4fa052ca1525229e46c20.bin', 'https://i0.hdslb.com/bfs/openplatform/71d703fcc0fa51c58cebc0c024d30d95a9ad9b56.bin', 'https://i0.hdslb.com/bfs/openplatform/f60b03abf07b05ecafc50dd8e50ee5bd6fb1978d.bin', 'https://i0.hdslb.com/bfs/openplatform/5ff46ef99ea4a0e1c7e0f4f8d3809698e03c3e2a.bin', 'https://i0.hdslb.com/bfs/openplatform/1bcc02bbb1da2c173e233cfbf7b5b09846a560ae.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '167-翔太任务\翔太任务_Windows.7z',
+    types: [{
+      description: '167-翔太任务\翔太任务_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

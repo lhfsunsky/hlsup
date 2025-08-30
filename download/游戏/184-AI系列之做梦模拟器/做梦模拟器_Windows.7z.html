@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 184-AI系列之做梦模拟器\做梦模拟器_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：184-AI系列之做梦模拟器\做梦模拟器_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/3bb71f44e4da620df00f11a49c0b5bb9fd583092.bin', 'https://i0.hdslb.com/bfs/openplatform/a8f1b054c2025d1aba68c365f6b878d523a75959.bin', 'https://i0.hdslb.com/bfs/openplatform/fc122bc3976023467064f4ecc508f0a80fb378d2.bin', 'https://i0.hdslb.com/bfs/openplatform/dba0d1f9de22277a2567d06e1753eb846e0628e8.bin', 'https://i0.hdslb.com/bfs/openplatform/024b1934a415d370c9c044d5343b40f75e6d3308.bin', 'https://i0.hdslb.com/bfs/openplatform/28de8dfbbf17b3549cf17722942f8ec0b7a0ea7e.bin', 'https://i0.hdslb.com/bfs/openplatform/b83a0e16d578f7fcbb952dc2dfe6db33bf256974.bin', 'https://i0.hdslb.com/bfs/openplatform/baf44ef8da22b9d846472f064131c6c9ca1cfbd6.bin', 'https://i0.hdslb.com/bfs/openplatform/869b9a64209852465cc72df29558d1ef27b21e4c.bin', 'https://i0.hdslb.com/bfs/openplatform/4c4389b0a9ebd8294b0c6df2b28e9a5e1f2189ab.bin', 'https://i0.hdslb.com/bfs/openplatform/0e74c1c241a398bafa2f859491320a7a81ae75d8.bin', 'https://i0.hdslb.com/bfs/openplatform/b5d6e964439323605add41036c0ab73b172ee295.bin', 'https://i0.hdslb.com/bfs/openplatform/62a392c57e61252a7db89064b7cdad4d01256ad0.bin', 'https://i0.hdslb.com/bfs/openplatform/4e223c1bd7e8ee6f3c290a4a6b34b25a91d44f4a.bin', 'https://i0.hdslb.com/bfs/openplatform/7c2572efd9c10c5a5ba8c7fac26234502222ab4c.bin', 'https://i0.hdslb.com/bfs/openplatform/15183185e4472febeffa60b3cf3a164d27fbb712.bin', 'https://i0.hdslb.com/bfs/openplatform/b500d4e4daac19715c9d70faf1c99c76e1dc22ed.bin', 'https://i0.hdslb.com/bfs/openplatform/cb9325652c36dfe309a04d75b69a0e3dc143cf4d.bin', 'https://i0.hdslb.com/bfs/openplatform/48cb303e1b0029f14f729af61f0a1584f031f421.bin', 'https://i0.hdslb.com/bfs/openplatform/d9101f7743f803068752d81bdf5a4f772fdda2f1.bin', 'https://i0.hdslb.com/bfs/openplatform/c947211f00473e2506effbe2a64cf5d6c819c34d.bin', 'https://i0.hdslb.com/bfs/openplatform/eb23a51a4c6eec1f728e5bde3a420bb9aab3819a.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '184-AI系列之做梦模拟器\做梦模拟器_Windows.7z',
+    types: [{
+      description: '184-AI系列之做梦模拟器\做梦模拟器_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

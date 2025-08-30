@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 128-异类故事\异类故事_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：128-异类故事\异类故事_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/c6f721cabf4b2c428802818311c51690eb2b2b18.bin', 'https://i0.hdslb.com/bfs/openplatform/eb084a5651c8b3b71b91ab2cbe4a0b5e5dafa39b.bin', 'https://i0.hdslb.com/bfs/openplatform/af14891f256c21353fd021f0b943919c94669f2d.bin', 'https://i0.hdslb.com/bfs/openplatform/1d6f14592619f149cea5daaab2a997557919c6b5.bin', 'https://i0.hdslb.com/bfs/openplatform/ae9217ce7cc8812971c155d0920afcf44772e413.bin', 'https://i0.hdslb.com/bfs/openplatform/d236980f49495edcd198dae765879df5214b3539.bin', 'https://i0.hdslb.com/bfs/openplatform/bb8c2b2dfd2233d4d4a5c8bb9da7ab7a2240814c.bin', 'https://i0.hdslb.com/bfs/openplatform/4cc6ea5774361915cfb7e939409dcbc4992ff439.bin', 'https://i0.hdslb.com/bfs/openplatform/4b881e2ee6731afd926b3ca4944101cbc9dd8941.bin', 'https://i0.hdslb.com/bfs/openplatform/934944bcfa42f172c405fa7d41b3ed141c16a27f.bin', 'https://i0.hdslb.com/bfs/openplatform/24f7a1ac653e7215d85fbe10f9fb63564b35f9d5.bin', 'https://i0.hdslb.com/bfs/openplatform/ba9d8fd1a1ea7e46090182bf78424a5249df879c.bin', 'https://i0.hdslb.com/bfs/openplatform/b4824924b87e21b1ee1997b3cb383ecebf0ba0c9.bin', 'https://i0.hdslb.com/bfs/openplatform/1673688cb3459e259c803b64da9134642b5a933b.bin', 'https://i0.hdslb.com/bfs/openplatform/e6a847b690709c37a1a833b03c218168ff106967.bin', 'https://i0.hdslb.com/bfs/openplatform/a71a66cdef7e5014a0ef5639535edc18b481d1e2.bin', 'https://i0.hdslb.com/bfs/openplatform/3a0df24d3fe3b7db836579d5516a6b8eb311a436.bin', 'https://i0.hdslb.com/bfs/openplatform/04a71d9dc9ab6c4fe96b507c8cda3f4af7f8a237.bin', 'https://i0.hdslb.com/bfs/openplatform/fd0042636213e29e5686ad52605ff14b3ede589c.bin', 'https://i0.hdslb.com/bfs/openplatform/e01de37a4adec149aae77dba911ca3f111dbe0a2.bin', 'https://i0.hdslb.com/bfs/openplatform/fc32270cbe2445ba2c8d48d0670a4d0314ca715a.bin', 'https://i0.hdslb.com/bfs/openplatform/16ead6209589460e5ed9e24e9bc34a22f6d90648.bin', 'https://i0.hdslb.com/bfs/openplatform/96f006459992e782d5dd56bb310a27cc727a7a03.bin', 'https://i0.hdslb.com/bfs/openplatform/723cf01ce52377674add160ba443fb6e425e2311.bin', 'https://i0.hdslb.com/bfs/openplatform/ab5336dabf7452777e89952fae5a79e6cd98fd1a.bin', 'https://i0.hdslb.com/bfs/openplatform/45bca906b60c97fde0784eec7ab7200834b60113.bin', 'https://i0.hdslb.com/bfs/openplatform/bb977d1f2567f5f8345a4a32959c0cd1bc2a10a6.bin', 'https://i0.hdslb.com/bfs/openplatform/61e996fae2c98ec2a9bd71e4627c36f2abfcbf4b.bin', 'https://i0.hdslb.com/bfs/openplatform/a5a9a5bb7504b5d12516a2137afeef8064c2ea9c.bin', 'https://i0.hdslb.com/bfs/openplatform/b71c06030fefeaa77c93e5dbbfdd91d98354702b.bin', 'https://i0.hdslb.com/bfs/openplatform/119bd7925d2b9292ab0032f722e929899c8e76ed.bin', 'https://i0.hdslb.com/bfs/openplatform/9ea113649f085d811e4e8846e599813251a78b44.bin', 'https://i0.hdslb.com/bfs/openplatform/766e416cfab23376c85ccdefeae5bd35eb271eeb.bin', 'https://i0.hdslb.com/bfs/openplatform/7c48ce94b3f7836662115fe9c2f7a75d724e898e.bin', 'https://i0.hdslb.com/bfs/openplatform/7a598a18bac2e2cfe29744b9259bfcdc6fa88980.bin', 'https://i0.hdslb.com/bfs/openplatform/0310446e78ae717c1a935b7cb8a8fbfd60ca3293.bin', 'https://i0.hdslb.com/bfs/openplatform/086433833776a445d48bc98a5b3a9ac3efe60ff0.bin', 'https://i0.hdslb.com/bfs/openplatform/8aaa3a92ec5eb65f565380ace28018c26d836475.bin', 'https://i0.hdslb.com/bfs/openplatform/272fa82f2c5c293964ed293f1e29539546f16ea5.bin', 'https://i0.hdslb.com/bfs/openplatform/d1a253162695f086290c090db9997d1be4855f88.bin', 'https://i0.hdslb.com/bfs/openplatform/ca28c472d0666bc464d761de81290be769f8aab1.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '128-异类故事\异类故事_Windows.7z',
+    types: [{
+      description: '128-异类故事\异类故事_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

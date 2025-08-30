@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 161-异装学院\异装学院_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：161-异装学院\异装学院_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/18f6c85af6831548777549cd6cf6df56fafc5c3c.bin', 'https://i0.hdslb.com/bfs/openplatform/989ac74b3c5b01c6ca9844fb024d9014008e1cde.bin', 'https://i0.hdslb.com/bfs/openplatform/e890eb791a1056bdf915d59d79180199e18db0fb.bin', 'https://i0.hdslb.com/bfs/openplatform/b9a3e19afd259fb9b7383a923df2e9ce3496e5c5.bin', 'https://i0.hdslb.com/bfs/openplatform/9c9ef48ffb0e2040525e6bfc0a743cabd0c83687.bin', 'https://i0.hdslb.com/bfs/openplatform/e20ba2bc87b00414edb6dbcec0dda72c37234bdc.bin', 'https://i0.hdslb.com/bfs/openplatform/9c275f4b4a79a310bdd7928190edab8ce32de3e6.bin', 'https://i0.hdslb.com/bfs/openplatform/5d2894bf1b9c65ff8745f56a26a533ca4f81b761.bin', 'https://i0.hdslb.com/bfs/openplatform/f123a1f1b7246ffc031ccd4437c5c373ce825635.bin', 'https://i0.hdslb.com/bfs/openplatform/d95e908e00066784c1553a9569b22b6ee304e715.bin', 'https://i0.hdslb.com/bfs/openplatform/9819e5958baecd77eadb033df56999beb15c1ad5.bin', 'https://i0.hdslb.com/bfs/openplatform/d9fe95257baffbdebbffaecca4b2347fa417570b.bin', 'https://i0.hdslb.com/bfs/openplatform/0ad886daa2ff02e341d7bbb5baf8c3a9a09e9a2f.bin', 'https://i0.hdslb.com/bfs/openplatform/de9c2a139a90a6e2942b1e98999090acb635e3d4.bin', 'https://i0.hdslb.com/bfs/openplatform/d9647cd55bce2af2b4c47a2553bb59030c5d6dcb.bin', 'https://i0.hdslb.com/bfs/openplatform/1ed5089af513e531435fb1bac7c88ab9115c6e18.bin', 'https://i0.hdslb.com/bfs/openplatform/aced64a0d9c3b5ce48963ad98f1b6259a265cdc9.bin', 'https://i0.hdslb.com/bfs/openplatform/c24dcccff1a937259e86f40141a399b304363c2d.bin', 'https://i0.hdslb.com/bfs/openplatform/d87eb4f52978d864cc75eb4ec28badef018ca8dc.bin', 'https://i0.hdslb.com/bfs/openplatform/3ac1760d9c53f88f0fbe1586a5385303d291a699.bin', 'https://i0.hdslb.com/bfs/openplatform/30778b4f46eecde4f569faf1022f5b7c0a450111.bin', 'https://i0.hdslb.com/bfs/openplatform/e2d29c24fbc918031c1d7acacbfdc2bb20c7078b.bin', 'https://i0.hdslb.com/bfs/openplatform/f5e50231291531846c51ce12bcd89600b68b508e.bin', 'https://i0.hdslb.com/bfs/openplatform/b82d7fbb08ecf4bbd7edfa302b1eb931f0755bf5.bin', 'https://i0.hdslb.com/bfs/openplatform/90aec06471855e4953f9b941b367a12b07f30192.bin', 'https://i0.hdslb.com/bfs/openplatform/d2a362d7cfe1b35eff66f231d95ea77aee4b8eee.bin', 'https://i0.hdslb.com/bfs/openplatform/c48566b15eb08c4f0954293697e4b8433a9d0f35.bin', 'https://i0.hdslb.com/bfs/openplatform/3b98965bc77dea81b8c4bfe00d2cf2007f5a0d84.bin', 'https://i0.hdslb.com/bfs/openplatform/6b8409f0d9cfc5cb3f42fd0c1251ed0a2baa6ce3.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '161-异装学院\异装学院_Windows.7z',
+    types: [{
+      description: '161-异装学院\异装学院_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

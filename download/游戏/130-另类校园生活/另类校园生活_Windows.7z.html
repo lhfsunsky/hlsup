@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 130-另类校园生活\另类校园生活_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：130-另类校园生活\另类校园生活_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/9c7f8db8bbd1af2a3eb07fcb77ae2f12f7edd51c.bin', 'https://i0.hdslb.com/bfs/openplatform/e33b806015e6b961d6e9638d35b00125101ea6e9.bin', 'https://i0.hdslb.com/bfs/openplatform/fb02bed33c3eab4fba7dc709b3e9bd7cf6d8ece9.bin', 'https://i0.hdslb.com/bfs/openplatform/30cca7105893e6455c37513adf77dd2f02b34080.bin', 'https://i0.hdslb.com/bfs/openplatform/39379390500ef772e5b7974e10056c9e584e0e28.bin', 'https://i0.hdslb.com/bfs/openplatform/985918025c6f0424d1cf6aa169bd694dbe0a10e2.bin', 'https://i0.hdslb.com/bfs/openplatform/c8f5597ec979d5674ad6b3d5ca497bc3dfa948ef.bin', 'https://i0.hdslb.com/bfs/openplatform/b07cf0588889584caaf2e6f725977c6c462cd157.bin', 'https://i0.hdslb.com/bfs/openplatform/a0a88082237f014aef1f948cf4109ffe3fd6c89a.bin', 'https://i0.hdslb.com/bfs/openplatform/0160fc8d9d1049cb3291138346f75fe7d587e8ce.bin', 'https://i0.hdslb.com/bfs/openplatform/7c6d45d41e9c452c945d98f264c9ace73f988cc5.bin', 'https://i0.hdslb.com/bfs/openplatform/d8ee3486b28c9f3dc8dbda2e806cda87e882f073.bin', 'https://i0.hdslb.com/bfs/openplatform/eb96dc73309c1083b3d44cc5cc4f6e30a9ecec63.bin', 'https://i0.hdslb.com/bfs/openplatform/e8bdc551821ef145b02cf53d4016f511dd99b53f.bin', 'https://i0.hdslb.com/bfs/openplatform/7cc2dc50e934c87427220796749d4244dd349554.bin', 'https://i0.hdslb.com/bfs/openplatform/a0c6da04c1346c16479582bf90ac5837cb640815.bin', 'https://i0.hdslb.com/bfs/openplatform/395069c7946309f7bf27105a91b9f76ab0091edc.bin', 'https://i0.hdslb.com/bfs/openplatform/a2e014a5ce7bcab9248acef2ba33b6e0cafc7cbd.bin', 'https://i0.hdslb.com/bfs/openplatform/70143918a17f0b22713fead445d5a77aac47ea30.bin', 'https://i0.hdslb.com/bfs/openplatform/0bf6083e9dec5dbe4d3e0d1af864a2448403859d.bin', 'https://i0.hdslb.com/bfs/openplatform/d8fa2b7245b439e68e7a30716ac64e0603aee0ff.bin', 'https://i0.hdslb.com/bfs/openplatform/23213b6454bd28319affeb1550b1ff2a33c5e552.bin', 'https://i0.hdslb.com/bfs/openplatform/3b4e69008e012122701ae4d3369fb0f5533aad72.bin', 'https://i0.hdslb.com/bfs/openplatform/1efe82760329005187633d14298b3e7b076db9fd.bin', 'https://i0.hdslb.com/bfs/openplatform/25bb1f02a46d67968f98977b129fc342f59b68d7.bin', 'https://i0.hdslb.com/bfs/openplatform/06468931d801fe0bd2b9f6480604f29e7027a4cb.bin', 'https://i0.hdslb.com/bfs/openplatform/0c8143ce405a0efdd3cfd5609399b71ec1400549.bin', 'https://i0.hdslb.com/bfs/openplatform/d34b458f8dc7b5828d5ab212b282121b65104c5c.bin', 'https://i0.hdslb.com/bfs/openplatform/600b6ffad62a299ed799872b0084ec32b4c4ddd0.bin', 'https://i0.hdslb.com/bfs/openplatform/046e2549ebaf0de43b7c852619db1a0705ffabc6.bin', 'https://i0.hdslb.com/bfs/openplatform/9ae5cb3b3a6d4fad2325c5f084c0ccf6a05e0f47.bin', 'https://i0.hdslb.com/bfs/openplatform/a3f50900a8e11238b877702a77c2195e204fe293.bin', 'https://i0.hdslb.com/bfs/openplatform/de762d8e62321dcf7c9884f631f161a6339519ff.bin', 'https://i0.hdslb.com/bfs/openplatform/ec38502b765d7a7fb38fc837401c072d5cf4a652.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '130-另类校园生活\另类校园生活_Windows.7z',
+    types: [{
+      description: '130-另类校园生活\另类校园生活_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>
