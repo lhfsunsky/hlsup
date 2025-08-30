@@ -1,6 +1,6 @@
 export default {
   async fetch(request, env) {
-    return env.MY_SITE_ASSETS.fetch(request);
+    return env.__my-worker-workers_sites_assets.fetch(request);
   }
 };
 

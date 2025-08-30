@@ -6,6 +6,6 @@ main = "src/index.js"
 bucket = "./public"
 
 [[kv_namespaces]]
-binding = "MY_SITE_ASSETS"
+binding = "__my-worker-workers_sites_assets"
 id = "f8e9d611b3b84875864e3b93f0939eab"
 
