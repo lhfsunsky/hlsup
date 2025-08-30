@@ -1,5 +1,9 @@
 export default {
-  async fetch(request, env, ctx) {
-    return env.ASSETS.fetch(request);  // 把请求交给静态资源处理
+  async fetch(request, env) {
+    if (!env.ASSETS) {
+      return new Response("Assets not bound", { status: 500 });
+    }
+    return env.ASSETS.fetch(request);
   }
 }
+
