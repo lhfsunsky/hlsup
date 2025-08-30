@@ -4,6 +4,8 @@ main = "src/index.js"
 # Pages 静态站点
 [site]
 bucket = "./public"
-
+[[kv_namespaces]]
+binding = "__STATIC_CONTENT"   # 这里必须和 Worker 脚本里 env 一致
+id = "f8e9d611b3b84875864e3b93f0939eab"
 
 
