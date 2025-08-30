@@ -2,12 +2,12 @@
   "name": "my-worker",
   "version": "1.0.0",
   "private": true,
+  "devDependencies": {
+    "wrangler": "4.31.0"
+  },
   "scripts": {
     "build": "echo 'No build needed'",
     "deploy": "npx wrangler publish"
-  },
-  "devDependencies": {
-    "wrangler": "4.7.0"
   }
 }
 
