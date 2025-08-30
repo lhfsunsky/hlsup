@@ -1,8 +1,5 @@
 name = "my-worker"
-main = "src/index.js"
 compatibility_date = "2025-08-30"
-[env.production]
-[assets]
-directory = "public"
 
-
+[site]
+bucket = "./public"   # 静态文件目录，可以改成 ./public 或 ./dist
