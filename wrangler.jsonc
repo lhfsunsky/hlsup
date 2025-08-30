@@ -1,0 +1,19 @@
+{
+  "name": "my-worker",
+  "main": "src/index.js",
+  "compatibility_date": "2025-08-30",
+  "observability": {
+    "enabled": true
+  },
+
+  // Add this to your wrangler.jsonc
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "f8e9d611b3b84875864e3b93f0939eab",
+      
+      // Optional: preview_id used when running `wrangler dev` for local dev
+      "preview_id": "<ID_OF_PREVIEW_KV_NAMESPACE_FOR_LOCAL_DEVELOPMENT>"
+    }
+  ]
+}
