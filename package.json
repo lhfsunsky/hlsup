@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "echo 'No build needed'",
-    "deploy": "wrangler publish"
+    "deploy": "npx wrangler publish"
   },
   "devDependencies": {
     "wrangler": "4.31.0"
