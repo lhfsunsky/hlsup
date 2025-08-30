@@ -1,17 +1,19 @@
 export default {
-  async fetch(request, env) {
-    // 可以在这里拦截请求，比如添加 header
-    const response = await fetch(request);
+  async fetch(request) {
+    const url = new URL(request.url);
 
-    // Example: 给所有响应加上安全 header
-    const newHeaders = new Headers(response.headers);
-    newHeaders.set("X-Custom-Header", "Hello Worker");
+    // Pages 会自动提供 public/ 下的文件访问
+    // 这里我们直接 fetch 自身请求
+    const response = await fetch(url.toString());
+
+    // 可以修改响应，例如加 header
+    const headers = new Headers(response.headers);
+    headers.set("X-Custom-Header", "Hello Worker");
 
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
-      headers: newHeaders
+      headers,
     });
-  }
+  },
 };
-
