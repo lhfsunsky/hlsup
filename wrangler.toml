@@ -1,9 +1,0 @@
-name = "my-worker"
-compatibility_date = "2025-08-30"
-main = "src/index.js"
-# Pages 静态站点
-[site]
-bucket = "./public"
-
-
-
