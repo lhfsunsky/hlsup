@@ -1,7 +1,8 @@
 export default {
   async fetch(request, env) {
-    return env.__STATIC_CONTENT.fetch(request);
+    return env.MY_SITE_ASSETS.fetch(request);
   }
 };
+
 
 
