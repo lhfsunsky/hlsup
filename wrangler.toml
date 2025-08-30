@@ -1,7 +1,9 @@
 name = "my-worker"
-main = "src/index.js"
 compatibility_date = "2025-08-30"
 
-[assets]
-directory = "public"
+# Pages 静态站点
+[site]
+bucket = "./public"
+entry-point = "src"
+
 
