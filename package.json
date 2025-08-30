@@ -1,5 +1,5 @@
 {
-  "name": "html-worker",
+  "name": "my-worker",
   "version": "1.0.0",
   "private": true,
   "scripts": {
