@@ -1,7 +1,10 @@
+import indexHtml from "../public/index.html?raw";
+
 export default {
-  async fetch(request) {
-    return new Response("Hello Worker!", {
-      headers: { "Content-Type": "text/plain" }
+  async fetch(request, env) {
+    return new Response(indexHtml, {
+      headers: { "Content-Type": "text/html; charset=utf-8" }
     });
   }
 };
+
