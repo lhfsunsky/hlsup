@@ -5,14 +5,12 @@ main = "src/index.js"
 [site]
 bucket = "./public"
 
-  // Add this to your wrangler.jsonc
-  "kv_namespaces": [
-    {
-      "binding": "KV",
-      "id": "f8e9d611b3b84875864e3b93f0939eab",
-      
-      // Optional: preview_id used when running `wrangler dev` for local dev
-      "preview_id": "<ID_OF_PREVIEW_KV_NAMESPACE_FOR_LOCAL_DEVELOPMENT>"
-    }
-  ]
+
+"kv_namespaces": [
+{
+    "binding": "KV",
+    "id": "f8e9d611b3b84875864e3b93f0939eab",
+    "preview_id": "<ID_OF_PREVIEW_KV_NAMESPACE_FOR_LOCAL_DEVELOPMENT>"
+}
+]
 
