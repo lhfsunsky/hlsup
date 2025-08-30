@@ -1,6 +1,8 @@
-name = "my-worker"
-main = "src/index.js"   # 这里写一个最小 Worker 脚本，不然 wrangler 以为是 Pages
+name = "html-worker"
+main = "src/index.js"
 compatibility_date = "2025-08-30"
+
 [assets]
 directory = "public"
+
 
