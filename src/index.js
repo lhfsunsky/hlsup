@@ -4,18 +4,20 @@ export default {
     // 默认访问 / 时返回 index.html
     const path = url.pathname === "/" ? "index.html" : url.pathname.slice(1);
 
+    // 从 KV 获取文件
     const file = await env.KV.get(path);
     if (!file) {
-      return new Response("File not found", { status: 404 });
+      return new Response("File not found: " + path, { status: 404 });
     }
 
-    // 根据文件类型设置 Content-Type
+    // 根据文件扩展名设置 Content-Type
     const ext = path.split(".").pop();
-    const contentType = ext === "html" ? "text/html"
-                      : ext === "js" ? "application/javascript"
-                      : ext === "css" ? "text/css"
-                      : ext === "m3u8" ? "application/vnd.apple.mpegurl"
-                      : "application/octet-stream";
+    const contentType =
+      ext === "html" ? "text/html" :
+      ext === "css" ? "text/css" :
+      ext === "js" ? "application/javascript" :
+      ext === "m3u8" ? "application/vnd.apple.mpegurl" :
+      "application/octet-stream";
 
     return new Response(file, {
       headers: { "Content-Type": contentType },
