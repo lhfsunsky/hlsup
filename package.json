@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "echo 'No build needed'"
+    "build": "echo 'No build needed'",
+    "deploy": "wrangler publish"
+  },
+  "devDependencies": {
+    "wrangler": "4.31.0"
   }
 }
+
