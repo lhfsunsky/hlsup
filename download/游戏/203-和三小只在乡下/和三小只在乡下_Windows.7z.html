@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 203-和三小只在乡下\和三小只在乡下_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：203-和三小只在乡下\和三小只在乡下_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/193215b5be6429b7f12651d0555fb86ffe1e40e9.bin', 'https://i0.hdslb.com/bfs/openplatform/0249d7a92e8ca55cf0fad6aace5fa16ba3eac4f1.bin', 'https://i0.hdslb.com/bfs/openplatform/9e16d6f2ca86179db93681f67d3e1cd1766716ac.bin', 'https://i0.hdslb.com/bfs/openplatform/42bfdb451d5a58057fed0850a48ea0aac2febb6e.bin', 'https://i0.hdslb.com/bfs/openplatform/59750cd36d33b786a6049850cb55ff0ce4b425ab.bin', 'https://i0.hdslb.com/bfs/openplatform/35499073d53298d5cb0b178442d187da58b60819.bin', 'https://i0.hdslb.com/bfs/openplatform/d89a94a608520a26d4cb451ad1fc79385f9939e6.bin', 'https://i0.hdslb.com/bfs/openplatform/a4fa4cecb166cda6c4a5503e2ec42d86193d1975.bin', 'https://i0.hdslb.com/bfs/openplatform/05834ae4f5631303c6d422faf05c610ba4a44e2c.bin', 'https://i0.hdslb.com/bfs/openplatform/72da664b0bac6019d8f75557f0d396940c763f76.bin', 'https://i0.hdslb.com/bfs/openplatform/e920d9afee9f4249df69dd6e532915f942114fd2.bin', 'https://i0.hdslb.com/bfs/openplatform/9a8daad163dc6becfd0e64d896e1ca1857b21b43.bin', 'https://i0.hdslb.com/bfs/openplatform/b463cc48818e9f3f0b6caabaa0a7c2da4398295f.bin', 'https://i0.hdslb.com/bfs/openplatform/9f90537b01ef05da5d2c1f71e96ad49bea4e1db7.bin', 'https://i0.hdslb.com/bfs/openplatform/63b34dd852283d79af8f8e8b272e6b315660a2fc.bin', 'https://i0.hdslb.com/bfs/openplatform/410f59dc0e9c03eb2d6048705f10acff1cb1c2a3.bin', 'https://i0.hdslb.com/bfs/openplatform/73858d576679596478e9c5c5101dab8a7cd09285.bin', 'https://i0.hdslb.com/bfs/openplatform/0f84e2bbf4c2a69ab6e1b10a45387ab43b620d95.bin', 'https://i0.hdslb.com/bfs/openplatform/454b4495844670dc0814b06fbc006b14d78fab73.bin', 'https://i0.hdslb.com/bfs/openplatform/5baaee8c81abe37b05d6ac678d54f615e29aea2b.bin', 'https://i0.hdslb.com/bfs/openplatform/acb7acd1653f804c91e3f5f9ca6b12ecd4dbfebf.bin', 'https://i0.hdslb.com/bfs/openplatform/99bf013a895af2434c28fd3245e94b33f19ec5a7.bin', 'https://i0.hdslb.com/bfs/openplatform/b2f69e16d0c9f48113a8612f2cf919ce278e11d0.bin', 'https://i0.hdslb.com/bfs/openplatform/4b7be6df0c77bd8726b60cd28db1fa5af46cc431.bin', 'https://i0.hdslb.com/bfs/openplatform/edfe95d9fb1bf89c3e0cc9cc71154b6a6fe62220.bin', 'https://i0.hdslb.com/bfs/openplatform/59ac26e0cfc013036b27848a599b5514aa7eaeb7.bin', 'https://i0.hdslb.com/bfs/openplatform/6f6f5895cb4a796540e09339c813a73e552feb1d.bin', 'https://i0.hdslb.com/bfs/openplatform/63e1a1361f328b77a197744eb1a28ecaf2f69d8b.bin', 'https://i0.hdslb.com/bfs/openplatform/7c9238fe5d2b18bd026b3c3302c53844ac05882e.bin', 'https://i0.hdslb.com/bfs/openplatform/a6fd3554788bb1c60a14077cadcbb3867e6e71cb.bin', 'https://i0.hdslb.com/bfs/openplatform/48e02bbdf08be51cd8af4d1310dda8622c4c4bb7.bin', 'https://i0.hdslb.com/bfs/openplatform/9d1eecc7e9912700d527aaa43975ded262f814fa.bin', 'https://i0.hdslb.com/bfs/openplatform/3695d3366a529066b731c5ba09d5bc0afd657633.bin', 'https://i0.hdslb.com/bfs/openplatform/52fe5152038b6861914cd02747b4ccbba0a26cd7.bin', 'https://i0.hdslb.com/bfs/openplatform/4b31259f928bf665cbc541a01aea60de9b12bb55.bin', 'https://i0.hdslb.com/bfs/openplatform/f1e0716b53d5ac591d959afb25a1364bc36a4aa6.bin', 'https://i0.hdslb.com/bfs/openplatform/bfd277d890532950a22cf431ca5a5605f5ac09fd.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '203-和三小只在乡下\和三小只在乡下_Windows.7z',
+    types: [{
+      description: '203-和三小只在乡下\和三小只在乡下_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

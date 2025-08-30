@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 201-miracle herat\Miracle Heart_Windows02.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：201-miracle herat\Miracle Heart_Windows02.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/145bacfa155002ccb70bf395557912c1a534d741.bin', 'https://i0.hdslb.com/bfs/openplatform/d83fedd609e48695390b976eaad2fc8bf0ac8bbd.bin', 'https://i0.hdslb.com/bfs/openplatform/1b166d5b3b26bbfddf97b82d93a2b497e1ec5421.bin', 'https://i0.hdslb.com/bfs/openplatform/be0acca756e4b941d13ff4766a15fc567975721d.bin', 'https://i0.hdslb.com/bfs/openplatform/a1e5038bca3b3376f113046e372635240aa82f3e.bin', 'https://i0.hdslb.com/bfs/openplatform/e252b6765d244e7e6d715f759dce97cf08621b10.bin', 'https://i0.hdslb.com/bfs/openplatform/6e32808bd1a9359e8c982265d8147d08156b081d.bin', 'https://i0.hdslb.com/bfs/openplatform/30b3ef3c54b5197891d9ebd67e86ace55de1014f.bin', 'https://i0.hdslb.com/bfs/openplatform/c2264b9c8dc6753c21c23cd070bdc7d0db4c2bb8.bin', 'https://i0.hdslb.com/bfs/openplatform/a1391138de17857f82ff2c0bda6079a13d57301a.bin', 'https://i0.hdslb.com/bfs/openplatform/542692086a22acdf2bc7db03859e8c111b555fa4.bin', 'https://i0.hdslb.com/bfs/openplatform/745deff7edbbae7df889901e03d92cbd73244bf9.bin', 'https://i0.hdslb.com/bfs/openplatform/d18752bf236fcfbfa2d2e0107bdde03887782759.bin', 'https://i0.hdslb.com/bfs/openplatform/b111adef1b896ccce3184cf37c53209545210efa.bin', 'https://i0.hdslb.com/bfs/openplatform/81474875a7af807e01e036cec5aa50cc38fab6bd.bin', 'https://i0.hdslb.com/bfs/openplatform/3ee39dd458c5a3f64ab7138883e4ddc80944e9e3.bin', 'https://i0.hdslb.com/bfs/openplatform/3a313280d4d70718382614dd5950d064a2924c8b.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '201-miracle herat\Miracle Heart_Windows02.7z',
+    types: [{
+      description: '201-miracle herat\Miracle Heart_Windows02.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>

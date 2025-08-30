@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8" /><title>恢复 207-家教同人\家教同人游戏_Windows.7z</title><meta name="referrer" content="no-referrer"></head>
+<body>
+<h1>下载并恢复文件：207-家教同人\家教同人游戏_Windows.7z</h1>
+<button id="startBtn">开始下载合并</button>
+<progress id="progress" max="100" value="0" style="width: 100%;"></progress>
+<p id="status"></p>
+
+<script>
+const urls = ['https://i0.hdslb.com/bfs/openplatform/d3ea07f99b35b30f9e4f92a1c4c6071b8ca716dd.bin', 'https://i0.hdslb.com/bfs/openplatform/3366f770754c23d163e6b62b74e7ce4daf35540f.bin', 'https://i0.hdslb.com/bfs/openplatform/e70d69fb842ebd2f609301d2d98447d022a10c33.bin', 'https://i0.hdslb.com/bfs/openplatform/8ea8b6f0ecafce2c8ef716f96fd1ca8062232854.bin', 'https://i0.hdslb.com/bfs/openplatform/2b302d1af7250919571ad80e412a97690b4aa798.bin', 'https://i0.hdslb.com/bfs/openplatform/1fa8f7b9d71653c3b3d507d4e03e837f14555fa1.bin', 'https://i0.hdslb.com/bfs/openplatform/f9a7f12658a63ecd3491e1f075cbc389210dbf35.bin', 'https://i0.hdslb.com/bfs/openplatform/a96fc8ce8bf293d0776095e52c42af2407e03292.bin', 'https://i0.hdslb.com/bfs/openplatform/87465cdad0fc39d63240eddc0e55d1f3f714b043.bin', 'https://i0.hdslb.com/bfs/openplatform/8eb3c03a2cee59fdd4e460fd81b9dc70929da161.bin', 'https://i0.hdslb.com/bfs/openplatform/454affed5220f8567ff55b2a5af3e0e2a00aa8e6.bin', 'https://i0.hdslb.com/bfs/openplatform/13c9e188e23efedcd6bfd65312ae2ebf41a53e6a.bin', 'https://i0.hdslb.com/bfs/openplatform/3a193c43b7fd6bbd43b705ce930e70627e55339f.bin', 'https://i0.hdslb.com/bfs/openplatform/f0a8f53151093b09f7cbdb5aed73c8640884a758.bin', 'https://i0.hdslb.com/bfs/openplatform/c31fd0937b74525a880f6fb601cd506e359300f4.bin', 'https://i0.hdslb.com/bfs/openplatform/0162bd70316e113e5a9845d2125c1d95805e3685.bin', 'https://i0.hdslb.com/bfs/openplatform/88c5df2ffd17fd6970b949956ccf3ed912fd1656.bin', 'https://i0.hdslb.com/bfs/openplatform/a4cc7694cb032d6147900f1132bcaec6dcafa409.bin', 'https://i0.hdslb.com/bfs/openplatform/401b8255ff670e5bb45502b6ce40befa69ea0b0c.bin', 'https://i0.hdslb.com/bfs/openplatform/b71557060ed12da6c456ffc32f49397fb297e6d3.bin', 'https://i0.hdslb.com/bfs/openplatform/be4d9efd97605150f10fac00fe903e81fe07adf7.bin', 'https://i0.hdslb.com/bfs/openplatform/e238d503781aabe2f53e74c134e36cadf2f14e31.bin'];
+const maskKey = 0xAA;
+
+async function downloadAndMerge() {
+  if (!window.showSaveFilePicker) {
+    alert("当前浏览器不支持 File System Access API，请使用 Chrome 或 Edge 的最新版本。");
+    return;
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: '207-家教同人\家教同人游戏_Windows.7z',
+    types: [{
+      description: '207-家教同人\家教同人游戏_Windows.7z 文件',
+      accept: {'*/*': ['.7z']}
+    }]
+  });
+  const writable = await fileHandle.createWritable();
+
+  const progressElem = document.getElementById('progress');
+  const statusElem = document.getElementById('status');
+
+  let totalBytes = 0;
+  let downloadedBytes = 0;
+
+  for (const url of urls) {
+    const headResp = await fetch(url, { method: 'HEAD' });
+    if (!headResp.ok) {
+      statusElem.textContent = `无法获取分片大小: ${url}`;
+      return;
+    }
+    totalBytes += parseInt(headResp.headers.get('Content-Length') || '0');
+  }
+  progressElem.max = totalBytes;
+
+  try {
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`下载失败: ${url}`);
+
+      const reader = resp.body.getReader();
+      let done = false;
+
+      while (!done) {
+        const {value, done: doneReading} = await reader.read();
+        if (value) {
+          let chunk = value;
+          if (i === 0) {
+            chunk = new Uint8Array(chunk);
+            for (let j = 0; j < chunk.length; j++) {
+              chunk[j] ^= maskKey;
+            }
+          }
+          await writable.write(chunk);
+          downloadedBytes += chunk.length;
+          progressElem.value = downloadedBytes;
+          statusElem.textContent = `已下载 ${downloadedBytes} / ${totalBytes} 字节 (${((downloadedBytes/totalBytes)*100).toFixed(2)}%)`;
+        }
+        done = doneReading;
+      }
+    }
+    await writable.close();
+    statusElem.textContent = "下载并合并完成！文件已保存。";
+  } catch (e) {
+    statusElem.textContent = "错误：" + e.message;
+    await writable.close();
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', downloadAndMerge);
+</script>
+</body>
+</html>
