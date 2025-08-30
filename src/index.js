@@ -1,7 +1,16 @@
 export default {
   async fetch(request, env) {
-    const html = await env.KV.get("index.html");
-    if (!html) return new Response("File not found", { status: 404 });
-    return new Response(html, { headers: { "Content-Type": "text/html" } });
+    const url = new URL(request.url);
+    const path = url.pathname === "/" ? "index.html" : url.pathname.slice(1);
+
+    const file = await env.KV.get(path);
+    if (!file) {
+      return new Response("File not found: " + path, { status: 404 });
+    }
+
+    return new Response(file, {
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    });
   },
 };
+
