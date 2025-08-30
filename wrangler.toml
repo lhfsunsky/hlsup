@@ -1,5 +1,4 @@
 name = "my-worker"
 compatibility_date = "2025-08-30"
-
-[site]
-bucket = "."   # 静态文件目录，可以改成 ./public 或 ./dist
+[assets]
+directory = "."
